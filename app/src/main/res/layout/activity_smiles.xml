@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/confetti_container"
+
+    android:layout_marginTop="80sp"
+    android:layout_marginStart="25sp"
+    android:layout_width="350dp"
+    android:layout_height="400dp"
+    android:background="@drawable/rounded_bg"
+
+    tools:context=".SmilesActivity">
+
+    <Button
+        android:id="@+id/btn1_alarming"
+        android:onClick="getBtn1_alarming"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😰"
+        android:textSize="35sp"
+        android:layout_marginStart="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn2_verysad"
+        android:onClick="getBtn2_verysad"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="🙁"
+        android:textSize="35sp"
+        android:layout_marginStart="135sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn3_sad"
+        android:onClick="getBtn3_sad"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😔"
+        android:textSize="35sp"
+        android:layout_marginStart="245sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn4_neutral"
+        android:onClick="getBtn4_neutral"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😐"
+        android:textSize="35sp"
+        android:layout_marginStart="25sp"
+        android:layout_marginTop="100sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn5_angry"
+        android:onClick="getBtn5_angry"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😡"
+        android:textSize="35sp"
+        android:layout_marginStart="135sp"
+        android:layout_marginTop="100sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn6_happy"
+        android:onClick="getbtn6_happy"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="🙂"
+        android:textSize="35sp"
+        android:layout_marginStart="245sp"
+        android:layout_marginTop="100sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+
+    <Button
+        android:id="@+id/btn7_surprised"
+        android:onClick="getbtn7_surprised"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😱"
+        android:textSize="35sp"
+        android:layout_marginStart="25sp"
+        android:layout_marginTop="200sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn8_varyhappy"
+        android:onClick="getbtn8_varyhappy"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="😃"
+        android:textSize="35sp"
+        android:layout_marginStart="135sp"
+        android:layout_marginTop="200sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn9_besthappy"
+        android:onClick="getbtn9_besthappy"
+        android:layout_width="85sp"
+        android:layout_height="85sp"
+        android:background="@drawable/round_btn"
+        android:text="🤩"
+        android:textSize="35sp"
+        android:layout_marginStart="245sp"
+        android:layout_marginTop="200sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:onClick="btnOk"
+        android:layout_width="150sp"
+        android:layout_height="70sp"
+        android:background="@drawable/btn_ok"
+        android:text="ок"
+        android:textSize="35sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="100sp"
+        android:layout_marginTop="300sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.045"
+       />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

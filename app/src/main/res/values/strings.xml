@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Настин Ежедневник</string>
+    <string name="title">Название</string>
+    <string name="descr">Описание</string>
+    <string name="tasks">ЗАДАЧИ</string>
+    <string name="yourAccount">ВАШ АККАУНТ</string>
+    <string name="login">Логин:</string>
+    <string name="pass">Пароль:</string>
+    <string name="calendar">КАЛЕНДАРЬ📅</string>
+    <string name="yourDay">ВАШ ДЕНЬ</string>
+    <string name="records">ДНЕВНИК</string>
+    <string name="authorization">Авторизация</string>
+    <string name="user">пользователь</string>
+    <string name="passlittle">пароль</string>
+    <string name="signin">войти</string>
+    <string name="registration">Регистрация</string>
+    <string name="repeatPass">повторите пароль</string>
+    <string name="signup">Зарегистрироваться</string>
+    <string name="haveAcc">уже есть аккаунт?</string>
+    <string name="note">ЗАПИСЬ</string>
+    <string name="selectDate">Выбрать дату:</string>
+    <string name="del">УДАЛИТЬ</string>
+    <string name="story">ИСТОРИЯ</string>
+    <string name="rateDay">oцени свой день ⬆️</string>
+
+
+</resources>
