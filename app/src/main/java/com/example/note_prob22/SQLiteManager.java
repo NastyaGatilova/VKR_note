@@ -484,9 +484,17 @@ public class SQLiteManager extends SQLiteOpenHelper
         sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, ID_RECORD +" =? and "+  USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
 
 
+    }
+
+    public void updateSmileInDB(Record rec)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+      contentValues.put(SMILE_RECORD, rec.getSmile());
 
 
-
+        sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, ID_RECORD +" =? and "+  USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
 
 
     }
@@ -523,8 +531,10 @@ public class SQLiteManager extends SQLiteOpenHelper
     @SuppressLint("Range")
     public String checkSmile(int recordId) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String query = "SELECT smile FROM Record WHERE id = " + recordId;
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" + " AND "+ ID_RECORD + " = "+ recordId, new String[]{USER_REMEMBER});
         String smiley = "";
         if (cursor.moveToFirst()) {
             smiley = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));

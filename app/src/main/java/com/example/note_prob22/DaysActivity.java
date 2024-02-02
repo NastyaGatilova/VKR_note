@@ -86,6 +86,7 @@ public class DaysActivity extends AppCompatActivity
                 Record selectedRec = (Record) dayInfoList.getItemAtPosition(position);
                 Intent editNoteIntent = new Intent(getApplicationContext(), DayInfoDetailActivity.class);
                 editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
+                editNoteIntent.putExtra("date", selectedRec.getDate());
 //                Log.d("--Help--", "selectedRec.getId="+selectedRec.getId());
                 startActivity(editNoteIntent);
             }

@@ -26,9 +26,9 @@ import java.util.Locale;
 public class SmilesActivity extends AppCompatActivity {
 
     public static int selectSmile = 0;
-    public static String selectSmilePicture = "";
+    public static String selectSmilePicture = "+";
     private int currentSmile =0;
-    private String currentSmilePicture = "";
+    private String currentSmilePicture = "+";
 
     private Record selectedSmileRecord;
     SQLiteManager sqDB;
@@ -243,7 +243,7 @@ public class SmilesActivity extends AppCompatActivity {
         selectSmile = currentSmile;
         selectSmilePicture = currentSmilePicture;
 
-        Log.d("--Help--", "selectSmilePicture="+selectSmilePicture);
+
 
 
         finish();
