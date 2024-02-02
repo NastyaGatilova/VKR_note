@@ -120,7 +120,7 @@ public class DayInfoDetailActivity extends DaysActivity {
 
         if (selectedDayNote != null)
         {
-        //    Log.d("--Help--", "Запись не пустая");
+
             Log.d("--Help--", "Процесс обновления записи");
 //            Log.d("--Help--", "Cмайлик " + sqDB.checkSmile(passedNoteID)+  " для записи id="+ passedNoteID);
 
