@@ -37,11 +37,9 @@ public class DayInfoDetailActivity extends DaysActivity {
 
     SQLiteManager sqDB;
 
-    private boolean flagUpdate=false;
+    private boolean saveBtnFlag=false;
 
-    private String dayBeforeYesterdayStr = "";
 
-    private String dayYesterdayStr = "";
 
     private TextView dateTV;
     @Override
@@ -91,22 +89,6 @@ public class DayInfoDetailActivity extends DaysActivity {
 
 
 
-
-
-
-
-
-//        Intent previousIntent = getIntent();
-//
-//        int passedNoteID = previousIntent.getIntExtra(Record.NOTE_EDIT_EXTRA, -1);
-//
-//        if ( sqDB.checkSmile(passedNoteID) == "") smileBtn.setText("+");
-//        else
-//            smileBtn.setText(sqDB.checkSmile(passedNoteID));
-//
-//
-//      Log.d("--Help--", "ID=" + passedNoteID + "smile =" +  sqDB.checkSmile(passedNoteID));
-
     }
 
     private void chechEmptyRecordOrNot()
@@ -121,24 +103,17 @@ public class DayInfoDetailActivity extends DaysActivity {
         if (selectedDayNote != null)
         {
 
-            Log.d("--Help--", "Процесс обновления записи");
-//            Log.d("--Help--", "Cмайлик " + sqDB.checkSmile(passedNoteID)+  " для записи id="+ passedNoteID);
+            Log.d("--Help--", "Процесс обновления записи");;
 
 
-           // smileBtn.setText(sqDB.checkSmile(passedNoteID));
             titleEditText2.setText(selectedDayNote.getTitle());
             descEditText2.setText(selectedDayNote.getDescription());
 
             Log.d("--Help--", "selectsmile!!!!!="+selectSmilePicture);
-            if (selectSmilePicture != "+") smileBtn.setText(selectSmilePicture);
-            else smileBtn.setText(selectedDayNote.getSmile());
 
+            if ((selectSmilePicture != "+")) smileBtn.setText(selectSmilePicture);
 
-
-
-
-
-
+            else  smileBtn.setText(selectedDayNote.getSmile());
 
         }
         else
@@ -153,7 +128,7 @@ public class DayInfoDetailActivity extends DaysActivity {
         }
 
 
-
+        selectSmilePicture="+";
 
 
     }
@@ -184,42 +159,12 @@ public class DayInfoDetailActivity extends DaysActivity {
 
 
 
-//    private void checkForEditNote()
-//    {
-//        Intent previousIntent = getIntent();
-//
-//        int passedNoteID = previousIntent.getIntExtra(Record.NOTE_EDIT_EXTRA, -1);
-//        selectedDayNote = Record.getNoteDayForID(passedNoteID);
-//
-//       // smileBtn.setText(selectSmilePicture);
-//
-//
-//        if (selectedDayNote != null)
-//        {
-////            titleEditText2.setText(selectedDayNote.getTitle());
-////            descEditText2.setText(selectedDayNote.getDescription());
-////           smileBtn.setText(selectedDayNote.getSmile());
-//
-//
-//
-//        }
-//        else
-//        {
-//           // if (selectSmilePicture == "") smileBtn.setText("+");
-////            deleteButton2.setVisibility(View.INVISIBLE);
-//
-//
-//
-//           // smileBtn.setText("+");
-//
-//        }
-//    }
-
 
 
 
     public void saveRecord(View view)
     {
+        saveBtnFlag = true;
 
        Date currentDate = new Date();
 
@@ -233,8 +178,6 @@ public class DayInfoDetailActivity extends DaysActivity {
         String date = dateFormat.format(currentDate);
 
 
-  //     String smile = String.valueOf(selectSmilePicture);;
-//        String smile = sqDB.checkSmile(passedNoteID)\
         String smile = "";
         if ((smileBtn.getText()) != "+")
         smile = String.valueOf(smileBtn.getText());
@@ -254,12 +197,12 @@ public class DayInfoDetailActivity extends DaysActivity {
             selectedDayNote.setTitle(title);
             selectedDayNote.setDescription(desc);
             selectedDayNote.setSmile(smile);
-          //  sqLiteManager.updateSmileInDB(selectedDayNote);
+
 
 
             sqLiteManager.updateRecordInDB(selectedDayNote);
         }
-        selectSmilePicture="+";
+
         finish();
     }
 
@@ -270,7 +213,6 @@ public class DayInfoDetailActivity extends DaysActivity {
         delet = 1;
         selectedDayNote.setDeleted(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        // sqLiteManager.updateRecordInDB(selectedDayNote);
         sqLiteManager.deleteRecordFromDB(selectedDayNote);
         finish();
     }
