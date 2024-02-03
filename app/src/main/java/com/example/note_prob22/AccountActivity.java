@@ -1,5 +1,6 @@
 package com.example.note_prob22;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -38,25 +39,10 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
 
-        Button button = findViewById(R.id.button);
-        final View confettiContainer = findViewById(R.id.confetti_container);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        Button button = findViewById(R.id.button);
+//        final View confettiContainer = findViewById(R.id.confetti_container);
 
 
-
-
-                CommonConfetti.rainingConfetti((ViewGroup) confettiContainer, new int[] {Color.RED, Color.GREEN, Color.BLUE})
-                        .infinite();
-
-
-
-
-
-            }
-        });
 
 
 
@@ -68,9 +54,30 @@ public class AccountActivity extends AppCompatActivity {
 
         TextView login = (TextView) findViewById(R.id.login);
         TextView pass = (TextView) findViewById(R.id.password);
-        login.append(SQLiteManager.USER_REMEMBER);
-        pass.append(SQLiteManager.PASS_REMEMBER);
 
+
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AccountActivity.this);
+                builder.setTitle("Логин");
+                builder.setMessage(SQLiteManager.USER_REMEMBER);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            }
+        });
+
+        pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AccountActivity.this);
+                builder.setTitle("Пароль");
+                builder.setMessage(SQLiteManager.PASS_REMEMBER);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            }
+        });
     }
 
 

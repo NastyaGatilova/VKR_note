@@ -54,18 +54,9 @@ public class DayInfoDetailActivity extends DaysActivity {
             titleEditText2.setText(editTextValue);
             String descEditText2 = savedInstanceState.getString("descEditText2");
             titleEditText2.setText(descEditText2);
-          //  String smile = savedInstanceState.getString("smileBtn");
-         //   smileBtn.setText(smile);
         }
         sqDB = new SQLiteManager(this);
 
-
-        //chechEmptyRecordOrNot();
-
-
-       // checkForEditNote();
-
-      //  dateNowForTextView();
     }
 
 
@@ -74,20 +65,9 @@ public class DayInfoDetailActivity extends DaysActivity {
         super.onResume();
 
         Intent previousIntent = getIntent();
-
-        int passedNoteID = previousIntent.getIntExtra(Record.NOTE_EDIT_EXTRA, -1);
         String date = previousIntent.getStringExtra("date");
         dateTV.setText(date);
-//        Log.d("--Help--", "checkSmile=" + sqDB.checkSmile(passedNoteID));
-
-
-
-
-
         chechEmptyRecordOrNot();
-
-
-
 
     }
 
@@ -138,7 +118,6 @@ public class DayInfoDetailActivity extends DaysActivity {
         super.onSaveInstanceState(outState);
         outState.putString("titleEditText2", titleEditText2.getText().toString());
         outState.putString("descEditText2", descEditText2.getText().toString());
-       // outState.putString("smileBtn", smileBtn.getText().toString());
     }
 
     private void initWg(){
@@ -221,15 +200,8 @@ public class DayInfoDetailActivity extends DaysActivity {
 
     public void chooseSmile(View view)
     {
-
-        Intent previousIntent = getIntent();
-
-
         Intent intent = new Intent(this, SmilesActivity.class);
         startActivity(intent);
-
-
-
     }
 }
 

@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/hearts"
+    android:background="@drawable/img"
     android:orientation="vertical"
-    android:id="@+id/confetti_container"
 
     tools:context=".AccountActivity">
 
@@ -46,47 +45,56 @@
         android:layout_height="wrap_content"
         android:text="@string/login"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="15dp"
         android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:gravity="left"
+        android:layout_marginStart="100sp"
+        android:layout_marginTop="15dp"
         />
 
     <TextView
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/calmGreen"
-        android:textSize="25dp"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
         android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="9dp"
+        android:inputType="textPassword"
+        android:text="**********"
+        android:layout_marginStart="100sp"
+        android:layout_marginEnd="100sp"
+        android:background="@drawable/edittextbackground"
+
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/pass"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="15dp"
         android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="9dp"
+        android:gravity="left"
+        android:layout_marginStart="100sp"
         />
     <TextView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/calmGreen"
-        android:textSize="25dp"
+        android:inputType="textPassword"
+        android:text="**********"
+        android:background="@drawable/edittextbackground"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
         android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginStart="100sp"
+        android:layout_marginEnd="100sp"
         />
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Праздник"/>
+
+
+
 
 
 
