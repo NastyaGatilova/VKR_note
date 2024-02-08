@@ -29,10 +29,12 @@ public class NoteDaysAdapter extends ArrayAdapter<Record>
         TextView title = convertView.findViewById(R.id.cellTitle2);
         TextView desc = convertView.findViewById(R.id.cellDesc2);
         TextView date = convertView.findViewById(R.id.cellDate2);
+        TextView smile = convertView.findViewById(R.id.cellSmile2);
 
         title.setText(rec.getTitle());
         desc.setText(rec.getDescription());
         date.setText(rec.getDate());
+        smile.setText(rec.getSmile());
 
         return convertView;
     }

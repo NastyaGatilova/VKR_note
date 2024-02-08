@@ -143,46 +143,54 @@ public class DayInfoDetailActivity extends DaysActivity {
 
     public void saveRecord(View view)
     {
-        saveBtnFlag = true;
 
-       Date currentDate = new Date();
-
-        // задаем формат вывода даты
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        String title = String.valueOf(titleEditText2.getText());
-        String desc = String.valueOf(descEditText2.getText());
-
-
-        String date = dateFormat.format(currentDate);
-
-
-        String smile = "";
-        if ((smileBtn.getText()) != "+")
-        smile = String.valueOf(smileBtn.getText());
-        else smile="";
-
-        if(selectedDayNote == null)
-        {
-            int id = Record.noteDayArrayList.size();
-            Record newRec = new Record(id, title, desc, smile, date );
-            Record.noteDayArrayList.add(newRec);
-            sqLiteManager.addRecordToDatabase(newRec);
-
+        if ((titleEditText2.getText().toString().trim().length()== 0)  && (descEditText2.getText().toString().trim().length() == 0) && (smileBtn.getText()=="+")){
+            Toast.makeText(getApplicationContext(), "Нельзя сохранить пустую запись!", Toast.LENGTH_SHORT).show();
+            finish();
         }
-        else
-        {
+        else{
+            saveBtnFlag = true;
 
-            selectedDayNote.setTitle(title);
-            selectedDayNote.setDescription(desc);
-            selectedDayNote.setSmile(smile);
+            Date currentDate = new Date();
+
+            // задаем формат вывода даты
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+            String title = String.valueOf(titleEditText2.getText());
+            String desc = String.valueOf(descEditText2.getText());
+
+
+            String date = dateFormat.format(currentDate);
+
+
+            String smile = "";
+            if ((smileBtn.getText()) != "+")
+                smile = String.valueOf(smileBtn.getText());
+            else smile="";
+
+            if(selectedDayNote == null)
+            {
+                int id = Record.noteDayArrayList.size();
+                Record newRec = new Record(id, title, desc, smile, date );
+                Record.noteDayArrayList.add(newRec);
+                sqLiteManager.addRecordToDatabase(newRec);
+
+            }
+            else
+            {
+
+                selectedDayNote.setTitle(title);
+                selectedDayNote.setDescription(desc);
+                selectedDayNote.setSmile(smile);
 
 
 
-            sqLiteManager.updateRecordInDB(selectedDayNote);
+                sqLiteManager.updateRecordInDB(selectedDayNote);
+            }
+
+            finish();
         }
 
-        finish();
     }
 
 

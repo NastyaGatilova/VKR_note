@@ -92,38 +92,38 @@ public class NoteDetailActivity extends AppCompatActivity
 
     public void saveNote(View view)
     {
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        String title = String.valueOf(titleEditText.getText());
-        String desc = String.valueOf(descEditText.getText());
-        String date = String.valueOf(dateButton.getText());
-
-
-
-
-        if(selectedNote == null)
-        {
-            int id = Note.noteArrayList.size();
-            Note newNote = new Note(id, title, desc, date);
-            Note.noteArrayList.add(newNote);
-            sqLiteManager.addNoteToDatabase(newNote);
-
-
+        if ((titleEditText.getText().toString().trim().length()== 0)  && (descEditText.getText().toString().trim().length() == 0)){
+            Toast.makeText(getApplicationContext(), "Нельзя сохранить пустую запись!", Toast.LENGTH_SHORT).show();
+            finish();
         }
-        else
-        {
-            selectedNote.setTitle(title);
-            selectedNote.setDescription(desc);
-            selectedNote.setDate(date);
+        else {
+            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+            String title = String.valueOf(titleEditText.getText());
+            String desc = String.valueOf(descEditText.getText());
+            String date = String.valueOf(dateButton.getText());
 
-            sqLiteManager.updateNoteInDB(selectedNote);
+
+
+
+            if(selectedNote == null)
+            {
+                int id = Note.noteArrayList.size();
+                Note newNote = new Note(id, title, desc, date);
+                Note.noteArrayList.add(newNote);
+                sqLiteManager.addNoteToDatabase(newNote);
+
+
+            }
+            else
+            {
+                selectedNote.setTitle(title);
+                selectedNote.setDescription(desc);
+                selectedNote.setDate(date);
+
+                sqLiteManager.updateNoteInDB(selectedNote);
+            }
+            finish();
         }
-
-
-
-
-
-
-        finish();
     }
 
 
