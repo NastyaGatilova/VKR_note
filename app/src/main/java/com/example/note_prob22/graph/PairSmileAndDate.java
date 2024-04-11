@@ -1,19 +1,22 @@
 package com.example.note_prob22.graph;
 
-public class PairSmileAndDate {
-    private String smile;
-    private String dates;
+import java.util.Date;
 
-    public PairSmileAndDate(String smile, String dates) {
-        this.smile = smile;
+public class PairSmileAndDate {
+    private Integer smile;
+    private Date dates;
+
+    public PairSmileAndDate(Date dates, Integer smile) {
         this.dates = dates;
+        this.smile = smile;
+
     }
 
-    public String getSmile() {
+    public Integer getSmile() {
         return smile;
     }
 
-    public String getDates() {
+    public Date getDates() {
         return dates;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.note_prob22;
 
 
+import static com.example.note_prob22.SmilesActivity.selectSmile;
 import static com.example.note_prob22.SmilesActivity.selectSmilePicture;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -129,8 +131,7 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
 
-    public void saveRecord(View view)
-    {
+    public void saveRecord(View view) throws ParseException {
 
         if ((titleEditText2.getText().toString().trim().length()== 0)  && (descEditText2.getText().toString().trim().length() == 0) && (smileBtn.getText()=="+")){
             Toast.makeText(getApplicationContext(), "Нельзя сохранить пустую запись!", Toast.LENGTH_SHORT).show();
@@ -148,13 +149,22 @@ public class DiaryDetailActivity extends DiaryActivity {
             String desc = String.valueOf(descEditText2.getText());
 
 
+
+
+
             String date = dateFormat.format(currentDate);
 
 
+
+
+
             String smile = "";
-            if ((smileBtn.getText()) != "+")
+            if ((smileBtn.getText()) != "+") {
                 smile = String.valueOf(smileBtn.getText());
+            }
             else smile="";
+
+
 
             if(selectedDayNote == null)
             {

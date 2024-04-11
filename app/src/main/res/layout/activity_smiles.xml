@@ -115,20 +115,20 @@
 
     <Button
         android:id="@+id/btn7_surprised"
-        android:onClick="getbtn7_surprised"
         android:layout_width="85sp"
         android:layout_height="85sp"
-        android:background="@drawable/round_btn"
-        android:text="😱"
-        android:textSize="35sp"
         android:layout_marginStart="25sp"
         android:layout_marginTop="200sp"
+        android:background="@drawable/round_btn"
+        android:onClick="getbtn7_surprised"
+        android:text="😱"
+        android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.045" />
+        app:layout_constraintVertical_bias="0.043" />
 
     <Button
         android:id="@+id/btn8_varyhappy"

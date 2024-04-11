@@ -603,33 +603,75 @@ public List<Date> dateFromTableRecordForGrafik() throws ParseException {
 }
 
 
-    public List<String> dateFromTableRecordForGrafikString()  {
+    public List<PairSmileAndDate> dateAndSmileFromTableRecordForGrafik()  {
         SQLiteDatabase db = getReadableDatabase();
         List<String> dateList = new ArrayList<>();
         List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
 
-        Cursor cursor = db.rawQuery("SELECT "  +DATE_RECORD +" ,"+ SMILE_RECORD+
+        Cursor cursor = db.rawQuery("SELECT "  +ID_RECORD +" ,"+ SMILE_RECORD+ " ,"+ DATE_RECORD+
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
-                + " where " + USERNAME_USERS_RECORD + " =?" , new String[]{USER_REMEMBER});
+                + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY "+ DATE_RECORD, new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
             do {
-                //String data = "";
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    //data += cursor.getString(i) + " ";
-                    dateList.add(cursor.getString(i));
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+              //  String logMessage = "ID: " + id + ", Smile: " + smile + ", Date: " + date;
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
                 }
-                // Log.d("--Help--", "DATE AND SMILE FROM DB = "+data);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+                try {
+                    Date d1 = sdf.parse(date);
+                    pairList.add(new PairSmileAndDate(d1,smileNum ));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+               // Log.d("--Help--", logMessage);
             } while (cursor.moveToNext());
+        } else {
+            Log.d("--Help--", "No records found");
         }
         cursor.close();
 
-
-
-
-        for (String date : dateList) {
-            Log.d("--Help--", "Даты формата String и смайл: " +date);
+//        for (String date : dateList) {
+//            Log.d("--Help--", "Даты формата String и смайл: " +date);
+//        }
+        for (PairSmileAndDate pair : pairList) {
+            Log.d("--Help--", "Date: " + pair.getDates() + ", Smile: " + pair.getSmile());
         }
-        return dateList;
+
+        return pairList;
     }
 
 
@@ -645,7 +687,11 @@ public List<Date> dateFromTableRecordForGrafik() throws ParseException {
 
 
 
-
+    public void deleteLastRecord() {
+        String query = "DELETE FROM " + TABLE_NAME_RECORD + " WHERE " + ID_RECORD + " = (SELECT MAX(" + ID_RECORD + ") FROM " + TABLE_NAME_RECORD + ")";
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(query);
+    }
 }
 
 

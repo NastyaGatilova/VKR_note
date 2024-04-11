@@ -246,6 +246,8 @@ public class SmilesActivity extends AppCompatActivity {
 
 
 
+
+
         finish();
 
 

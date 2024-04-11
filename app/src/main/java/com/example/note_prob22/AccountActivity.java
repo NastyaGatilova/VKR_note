@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.note_prob22.graph.GraphViewHelper;
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.github.jinatonic.confetti.ConfettiView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
@@ -86,14 +87,15 @@ public class AccountActivity extends AppCompatActivity {
         TextView pass = findViewById(R.id.password);
      //   GraphView graph = findViewById(R.id.graph);
      //   Button btnAddDate = findViewById(R.id.btnAddDate);
-        insertButton = findViewById(R.id.btnAddDate);
+
 
         // showGraph( graph ,sdf);
         graphView = findViewById(R.id.graph);
-        exqInsert();
-        graphView.addSeries(series);
 
 
+        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+
+        GraphViewHelper.fillGraphViewWithData(graphView,  sqLiteManager.dateAndSmileFromTableRecordForGrafik());
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +120,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
 
-        String dateStringNew = "24 февр. 2024";
+
 
 
 //        btnAddDate.setOnClickListener(new View.OnClickListener() {
@@ -142,64 +144,15 @@ public class AccountActivity extends AppCompatActivity {
 
     }
 
-    private void exqInsert() {
-        insertButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int xVal =9;
-                int yVal = 2;
-
-                sqLiteManager.insertDataGraph(xVal, yVal);
-                series.resetData(getDataPoint());
 
 
 
-            }
-        });
-    }
 
-//    private DataPoint[] getDataPoint() {
-//        String[] columns= {"xValues", "yValues"};
-//        Cursor cursor1 = db.query("myTable",columns,null,null,null,null,null);
-//        DataPoint[] dp = new DataPoint[cursor1.getCount()];
-//        for (int i=0;i<cursor1.getCount();i++){
-//            cursor.moveToNext();
-//            dp[i]= new DataPoint(cursor1.getInt(0), cursor1.getInt(1));
-//        }
-//        return dp;
-//    }
-
-    private DataPoint[] getDataPoint() {
-        String[] columns = {"xValues", "yValues"};
-        Cursor cursor1 = db.query("myTable", columns, null, null, null, null, null);
-        DataPoint[] dp = new DataPoint[cursor1.getCount()];
-
-        if (cursor1.moveToFirst()) {
-            int xIndex = cursor1.getColumnIndex("xValues");
-            int yIndex = cursor1.getColumnIndex("yValues");
-
-            for (int i = 0; i < cursor1.getCount(); i++) {
-                dp[i] = new DataPoint(cursor1.getInt(xIndex), cursor1.getInt(yIndex));
-                cursor1.moveToNext();
-            }
-        }
-
-        cursor1.close(); // Не забудьте закрыть курсор после использования
-
-        return dp;
-    }
 
 
 
 //    private void showGraph(GraphView graph, SimpleDateFormat sdf){
-////        String dateString1 = "02.02.2024";
-////        String dateString2 = "03.02.2024";
-////        String dateString3 = "08.02.2024";
-////        String dateString4 = "18.02.2024";
-////        String dateString5 = "19.02.2024";
-////        String dateString6 = "21.02.2024";
-////        String dateString7 = "22.02.2024";
+//
 //
 //        String dateString1 = "02 февр. 2024";
 //        String dateString2 = "03 февр. 2024";
@@ -286,15 +239,8 @@ public class AccountActivity extends AppCompatActivity {
 //            throw new RuntimeException(e);
 //        }
 //    }
-//
-//    private void addDataPoint(GraphView graph, Date date){
-//      series2.appendData(new DataPoint(date, 8), true, 100);
-//     //   graph.getViewport().setMinX(d1.getTime()-100);
-//
-//        graph.getViewport().setMaxX(date.getTime()+100);
-//
-//
-//    }
+
+
 
 
     public void click_del_users(View view) {

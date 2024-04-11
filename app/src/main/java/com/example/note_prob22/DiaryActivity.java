@@ -44,6 +44,7 @@ public class DiaryActivity extends AppCompatActivity
 
 
 
+
     }
 
 
@@ -90,7 +91,28 @@ public class DiaryActivity extends AppCompatActivity
 
     }
 
-
+//ее удалить потом
+//    private void addRecImitation(){
+//        Record newRec = new Record(4, "вмаа", "sshhs", "😰", "05 апр. 2024" );
+//        Record newRec2 = new Record(5, "вмаа", "sshhs", "😃", "06 апр. 2024" );
+//        Record newRec3 = new Record(6, "вмаа", "sshhs", "🙂", "07 апр. 2024" );
+//        Record newRec4 = new Record(7, "вмаа", "sshhs", "🙂", "08 апр. 2024" );
+//        Record newRec5 = new Record(8, "вмаа", "sshhs", "😃", "09 апр. 2024" );
+//
+//        Record.noteDayArrayList.add(newRec);
+//        Record.noteDayArrayList.add(newRec2);
+//        Record.noteDayArrayList.add(newRec3);
+//        Record.noteDayArrayList.add(newRec4);
+//        Record.noteDayArrayList.add(newRec5);
+//
+//        dbm.addRecordToDatabase(newRec);
+//        dbm.addRecordToDatabase(newRec2);
+//        dbm.addRecordToDatabase(newRec3);
+//        dbm.addRecordToDatabase(newRec4);
+//        dbm.addRecordToDatabase(newRec5);
+//
+//
+//    }
 
 
     public void newInfo(View view)
@@ -109,24 +131,23 @@ public class DiaryActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
 
-            dbm.dateFromTableRecordForGrafikString();
+            dbm.dateAndSmileFromTableRecordForGrafik();
 
-        String inputDate = "02 февр. 2024";
-        String outputFormat = "dd.MM.yyyy";
-
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM. yyyy", new Locale("ru")); // Укажите соответствующий язык
-        SimpleDateFormat outputFormat2 = new SimpleDateFormat(outputFormat);
-
-        try {
-            Date date = inputFormat.parse(inputDate);
-            String outputDate = outputFormat2.format(date);
-            Log.d("--Help--", outputDate);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("--Help--", "error");
-
-        }
+//        String inputDate = "02 февр. 2024";
+//        String outputFormat = "dd.MM.yyyy";
+//        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM. yyyy", new Locale("ru")); // Укажите соответствующий язык
+//        SimpleDateFormat outputFormat2 = new SimpleDateFormat(outputFormat);
+//
+//        try {
+//            Date date = inputFormat.parse(inputDate);
+//            String outputDate = outputFormat2.format(date);
+//            Log.d("--Help--", outputDate);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            Log.d("--Help--", "error");
+//
+//        }
 
     }
 
