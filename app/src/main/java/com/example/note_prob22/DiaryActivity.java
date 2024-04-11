@@ -1,25 +1,21 @@
 package com.example.note_prob22;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
-public class DaysActivity extends AppCompatActivity
+public class DiaryActivity extends AppCompatActivity
 {
     private ListView dayInfoList;
 
@@ -33,7 +29,7 @@ public class DaysActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_days);
+        setContentView(R.layout.activity_diary);
         initWidgets();
         loadFromDBToMemory();
         setNoteDaysAdapter();
@@ -69,7 +65,7 @@ public class DaysActivity extends AppCompatActivity
 
     public void setNoteDaysAdapter()
     {
-        NoteDaysAdapter noteDaysAdapterAdapter = new NoteDaysAdapter(getApplicationContext(), Record.nonDeletedDayNotes());
+        DiaryAdapter noteDaysAdapterAdapter = new DiaryAdapter(getApplicationContext(), Record.nonDeletedDayNotes());
         dayInfoList.setAdapter(noteDaysAdapterAdapter);
 
 
@@ -84,7 +80,7 @@ public class DaysActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
                 Record selectedRec = (Record) dayInfoList.getItemAtPosition(position);
-                Intent editNoteIntent = new Intent(getApplicationContext(), DayInfoDetailActivity.class);
+                Intent editNoteIntent = new Intent(getApplicationContext(), DiaryDetailActivity.class);
                 editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
                 editNoteIntent.putExtra("date", selectedRec.getDate());
 //                Log.d("--Help--", "selectedRec.getId="+selectedRec.getId());
@@ -99,20 +95,40 @@ public class DaysActivity extends AppCompatActivity
 
     public void newInfo(View view)
     {
-        Intent newNoteIntent = new Intent(this, DayInfoDetailActivity.class);
+        Intent newNoteIntent = new Intent(this, DiaryDetailActivity.class);
         startActivity(newNoteIntent);
 
     }
 
 
 
+//график должен    в OnStope
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+            dbm.dateFromTableRecordForGrafikString();
 
+        String inputDate = "02 февр. 2024";
+        String outputFormat = "dd.MM.yyyy";
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM. yyyy", new Locale("ru")); // Укажите соответствующий язык
+        SimpleDateFormat outputFormat2 = new SimpleDateFormat(outputFormat);
 
+        try {
+            Date date = inputFormat.parse(inputDate);
+            String outputDate = outputFormat2.format(date);
+            Log.d("--Help--", outputDate);
 
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("--Help--", "error");
+
+        }
+
+    }
 
 
 

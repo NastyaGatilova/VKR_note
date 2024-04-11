@@ -2,8 +2,7 @@ package com.example.note_prob22;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.NotificationManager;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Calendar;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -111,7 +108,7 @@ public  void showCalendar(View view) {
     }
 
     public void showDaysActivity(View view) {
-        Intent newNoteIntent = new Intent(this, DaysActivity.class);
+        Intent newNoteIntent = new Intent(this, DiaryActivity.class);
         startActivity(newNoteIntent);
 
     }
@@ -188,7 +185,7 @@ public  void showCalendar(View view) {
         int count = adapter.getCount();
         for (int i = 0; i < count; i++) {
             Note data = (Note) adapter.getItem(i);
-            Log.d("--Help--", "Задачи: Title: " + data.getTitle() + ", Description: " + data.getDescription());
+      //      Log.d("--Help--", "Задачи: Title: " + data.getTitle() + ", Description: " + data.getDescription());
         }
 
     }

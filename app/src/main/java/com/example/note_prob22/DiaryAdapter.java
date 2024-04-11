@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class NoteDaysAdapter extends ArrayAdapter<Record>
+public class DiaryAdapter extends ArrayAdapter<Record>
 {
-    public NoteDaysAdapter(Context context, List<Record> notes)
+    public DiaryAdapter(Context context, List<Record> notes)
     {
         super(context, 0, notes);
     }
@@ -24,7 +24,7 @@ public class NoteDaysAdapter extends ArrayAdapter<Record>
     {
         Record rec = getItem(position);
         if(convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.dayifo_cell, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_cell, parent, false);
 
         TextView title = convertView.findViewById(R.id.cellTitle2);
         TextView desc = convertView.findViewById(R.id.cellDesc2);

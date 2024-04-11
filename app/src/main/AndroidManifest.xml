@@ -19,10 +19,10 @@
 
           />
         <activity
-            android:name=".DayInfoDetailActivity"
+            android:name=".DiaryDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".DaysActivity"
+            android:name=".DiaryActivity"
             android:exported="false" />
         <activity
             android:name=".CalendarActivity"

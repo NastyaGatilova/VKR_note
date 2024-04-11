@@ -4,31 +4,19 @@ package com.example.note_prob22;
 import static com.example.note_prob22.SmilesActivity.selectSmilePicture;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
-import android.transition.Fade;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.TooltipCompat;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DayInfoDetailActivity extends DaysActivity {
+public class DiaryDetailActivity extends DiaryActivity {
     public static int delet = 0;
     private Record selectedDayNote;
     private Button saveButton2;
@@ -46,7 +34,7 @@ public class DayInfoDetailActivity extends DaysActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_day_info_detail);
+        setContentView(R.layout.activity_diary_detail);
         initWg();
 
         if (savedInstanceState != null) {
@@ -83,13 +71,13 @@ public class DayInfoDetailActivity extends DaysActivity {
         if (selectedDayNote != null)
         {
 
-            Log.d("--Help--", "Процесс обновления записи");;
+          //  Log.d("--Help--", "Процесс обновления записи");;
 
 
             titleEditText2.setText(selectedDayNote.getTitle());
             descEditText2.setText(selectedDayNote.getDescription());
 
-            Log.d("--Help--", "selectsmile!!!!!="+selectSmilePicture);
+          //  Log.d("--Help--", "selectsmile!!!!!="+selectSmilePicture);
 
             if ((selectSmilePicture != "+")) smileBtn.setText(selectSmilePicture);
 
@@ -98,8 +86,8 @@ public class DayInfoDetailActivity extends DaysActivity {
         }
         else
         {
-            Log.d("--Help--", "Запись новая");
-            Log.d("--Help--", "selectSmile="+selectSmilePicture);
+         //   Log.d("--Help--", "Запись новая");
+         //   Log.d("--Help--", "selectSmile="+selectSmilePicture);
             smileBtn.setText(selectSmilePicture);
             dateNowForTextView();
             deleteButton2.setVisibility(View.INVISIBLE);

@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.note_prob22.graph.PairSmileAndDate;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class SQLiteManager extends SQLiteOpenHelper
@@ -26,7 +29,7 @@ public class SQLiteManager extends SQLiteOpenHelper
     private static SQLiteManager sqLiteManager;
 
     private static final String DATABASE_NAME = "TODO_19";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String USERS = "Users";
     public static final String USERNAME = "username";
@@ -69,6 +72,11 @@ public class SQLiteManager extends SQLiteOpenHelper
     public static final String DATE_RECORD = "date";
     public static final String USERNAME_USERS_RECORD = "username_users";
 //
+
+  //дл графика таблица
+    public static final String TABLE_GRAPH = "Graph";
+    public static final String X_DATES = "xDates";
+    public static final String Y_NUMS = "yNums";
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -174,6 +182,21 @@ public class SQLiteManager extends SQLiteOpenHelper
         sqLiteDatabase.execSQL(sql3.toString());
 
 
+        //Создание таблицы графика "Table_graph
+//        StringBuilder sql4;
+//        sql4 = new StringBuilder()
+//                .append("CREATE TABLE if not exists ")
+//                .append(TABLE_NAME_RECORD)
+//                .append("(")
+//                .append(X_DATES)
+//                .append(" INT, ")
+//                .append(Y_NUMS)
+//                .append(" INT) ");
+//
+//        sqLiteDatabase.execSQL(sql4.toString());
+        String createTable = "create table myTable(xValues INTEGER, yValues INTEGER)";
+        sqLiteDatabase.execSQL(createTable);
+
     }
 
     @Override
@@ -185,6 +208,8 @@ public class SQLiteManager extends SQLiteOpenHelper
         sqLiteDatabase.execSQL("drop table if exists " + USERS);
         //
         sqLiteDatabase.execSQL("drop table if exists " + TABLE_NAME_RECORD);
+        //
+        //sqLiteDatabase.execSQL("drop table if exists " + TABLE_GRAPH);
         onCreate(sqLiteDatabase);
     }
 
@@ -247,7 +272,7 @@ public class SQLiteManager extends SQLiteOpenHelper
                     int id = result.getInt(1);
                     String title = result.getString(2);
                     String desc = result.getString(3);
-                   String date = result.getString(4);
+                    String date = result.getString(4);
                     String stringDeleted = result.getString(5);
                     Date deleted = getDateFromString(stringDeleted);
 
@@ -258,10 +283,6 @@ public class SQLiteManager extends SQLiteOpenHelper
            }
         }
     }
-
-
-
-
 
 
 
@@ -317,8 +338,6 @@ public class SQLiteManager extends SQLiteOpenHelper
         sqLiteDatabase.delete(TABLE_NAME_NOTE, USERNAME_USERS + " =? ",new String[]{USER_REMEMBER});
         sqLiteDatabase.delete(TABLE_STORY,USERNAME_USERS_STORY + " =? ", new String[]{USER_REMEMBER});
     }
-
-
 
 
     private String getStringFromDate(Date date)
@@ -455,7 +474,7 @@ public class SQLiteManager extends SQLiteOpenHelper
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
                     data += cursor.getString(i) + " ";
                 }
-                Log.d("--Help--", "DB= "+data);
+               // Log.d("--Help--", "DB= "+data);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -544,11 +563,85 @@ public class SQLiteManager extends SQLiteOpenHelper
         return smiley;
     }
 
+//вывод всех дат из дневника для графика
+public List<Date> dateFromTableRecordForGrafik() throws ParseException {
+    SQLiteDatabase db = getReadableDatabase();
+    List<String> dateList = new ArrayList<>();
+
+    Cursor cursor = db.rawQuery("SELECT "  +DATE_RECORD +
+              " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+            + " where " + USERNAME_USERS_RECORD + " =?" , new String[]{USER_REMEMBER});
+    if (cursor.moveToFirst()) {
+        do {
+            //String data = "";
+            for (int i = 0; i < cursor.getColumnCount(); i++) {
+                //data += cursor.getString(i) + " ";
+                dateList.add(cursor.getString(i));
+            }
+           // Log.d("--Help--", "DATE AND SMILE FROM DB = "+data);
+        } while (cursor.moveToNext());
+    }
+    cursor.close();
+
+
+    List<Date> dates = new ArrayList<>();
+    SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru", "RU"));
+    for (String dateString : dateList) {
+        try {
+            Date date = inputFormat.parse(dateString);
+            dates.add(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Обработка исключения, если входная строка не соответствует шаблону
+        }
+    }
+
+    for (Date date : dates) {
+        Log.d("--Help--", "Даты формата Date: " +date);
+    }
+    return dates;
+}
+
+
+    public List<String> dateFromTableRecordForGrafikString()  {
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> dateList = new ArrayList<>();
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT "  +DATE_RECORD +" ,"+ SMILE_RECORD+
+                " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" , new String[]{USER_REMEMBER});
+        if (cursor.moveToFirst()) {
+            do {
+                //String data = "";
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    //data += cursor.getString(i) + " ";
+                    dateList.add(cursor.getString(i));
+                }
+                // Log.d("--Help--", "DATE AND SMILE FROM DB = "+data);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
 
 
 
 
+        for (String date : dateList) {
+            Log.d("--Help--", "Даты формата String и смайл: " +date);
+        }
+        return dateList;
+    }
 
+
+//добавление данныч в граифик
+    public void insertDataGraph(int valX, int valY){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("xValues", valX);
+        contentValues.put("yValues", valY);
+
+        db.insert("myTable", null,contentValues);
+    }
 
 
 
