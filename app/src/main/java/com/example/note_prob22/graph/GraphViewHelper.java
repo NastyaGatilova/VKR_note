@@ -1,5 +1,6 @@
 package com.example.note_prob22.graph;
 
+import android.graphics.Color;
 import android.util.Pair;
 
 import com.jjoe64.graphview.GraphView;
@@ -27,8 +28,8 @@ public class GraphViewHelper {
 
             series.appendData(dataPoint, true, data.size());
             series.setDrawDataPoints(true);
-
-
+            series.setDrawBackground(true);
+            series.setBackgroundColor(Color.parseColor("#C188E9F5"));
         }
 
         graphView.addSeries(series);
@@ -40,12 +41,16 @@ public class GraphViewHelper {
         graphView.getViewport().setMinY(0);
         graphView.getViewport().setMaxY(9);
 
+
 //        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+        graphView.getGridLabelRenderer().setLabelFormatter(new CustomLabelFormatter());
         graphView.getGridLabelRenderer().setHumanRounding(false);
         graphView.getGridLabelRenderer().setNumHorizontalLabels(2); // only 4 because of the space
         graphView.getGridLabelRenderer().setNumVerticalLabels(10); // only 4 because of the space
 
         graphView.getViewport().setScrollable(true);
         graphView.getViewport().setScalable(true) ;
+
+
     }
 }

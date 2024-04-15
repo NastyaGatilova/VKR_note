@@ -22,6 +22,9 @@
     <string name="del">УДАЛИТЬ</string>
     <string name="story">ИСТОРИЯ</string>
     <string name="rateDay">oцени свой день ⬆️</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
 
 
 </resources>

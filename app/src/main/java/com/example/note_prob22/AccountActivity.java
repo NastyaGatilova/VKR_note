@@ -1,5 +1,6 @@
 package com.example.note_prob22;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,13 +18,16 @@ import android.os.Bundle;
 import android.os.DropBoxManager;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.note_prob22.graph.GraphViewHelper;
@@ -58,7 +62,7 @@ public class AccountActivity extends AppCompatActivity {
     SQLiteManager sqLiteManager;
     SQLiteDatabase db;
     Cursor cursor;
-    Button insertButton;
+    Button insertButton,btnChoosePeriod;
     EditText x;
     EditText y;
     GraphView graphView;
@@ -85,6 +89,7 @@ public class AccountActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
         TextView login = findViewById(R.id.login);
         TextView pass = findViewById(R.id.password);
+        btnChoosePeriod = findViewById(R.id.btnChoosePeriod);
      //   GraphView graph = findViewById(R.id.graph);
      //   Button btnAddDate = findViewById(R.id.btnAddDate);
 
@@ -118,6 +123,7 @@ public class AccountActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+        showPopupMenuProfile();
 
 
 
@@ -240,7 +246,32 @@ public class AccountActivity extends AppCompatActivity {
 //        }
 //    }
 
+    public void showPopupMenuProfile() {
+        PopupMenu popupMenu2 = new PopupMenu(this,btnChoosePeriod);
+        popupMenu2.getMenuInflater().inflate(R.menu.popup_menu, popupMenu2.getMenu());
+        popupMenu2.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.week:
+                        Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.month:
+                        Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.year:
+                        Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
 
+
+
+        btnChoosePeriod.setOnClickListener(v -> popupMenu2.show());
+    }
 
 
     public void click_del_users(View view) {
