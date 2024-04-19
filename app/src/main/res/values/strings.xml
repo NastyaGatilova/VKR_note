@@ -25,6 +25,12 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
+    <string name="statisticMounth"><u>Статистика за месяц</u></string>
+    <string name="statisticYear"><u>Статистика за год</u></string>
+    <string name="statisticWeek"><u>Статистика за неделю</u></string>
+    <string name="noData">Данных недостаточно для выбранного периода.\n Начните заполнять Дневник и увидите статистку
+        изменения ваших эмоций 📊</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

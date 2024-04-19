@@ -28,6 +28,8 @@ public class CustomLabelFormatter extends DefaultLabelFormatter {
         } else {
 
             switch ((int) value) {
+                case 0:
+                    return "";
                 case 1:
                     return "😰";
                 case 2:

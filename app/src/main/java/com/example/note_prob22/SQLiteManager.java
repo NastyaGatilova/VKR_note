@@ -19,8 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 public class SQLiteManager extends SQLiteOpenHelper
@@ -28,8 +30,8 @@ public class SQLiteManager extends SQLiteOpenHelper
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_19";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "TODO_21";
+    private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
     public static final String USERNAME = "username";
@@ -596,9 +598,6 @@ public List<Date> dateFromTableRecordForGrafik() throws ParseException {
         }
     }
 
-    for (Date date : dates) {
-        Log.d("--Help--", "Даты формата Date: " +date);
-    }
     return dates;
 }
 
@@ -656,35 +655,356 @@ public List<Date> dateFromTableRecordForGrafik() throws ParseException {
                     throw new RuntimeException(e);
                 }
 
-
-               // Log.d("--Help--", logMessage);
             } while (cursor.moveToNext());
         } else {
             Log.d("--Help--", "No records found");
         }
         cursor.close();
 
-//        for (String date : dateList) {
-//            Log.d("--Help--", "Даты формата String и смайл: " +date);
-//        }
-        for (PairSmileAndDate pair : pairList) {
-            Log.d("--Help--", "Date: " + pair.getDates() + ", Smile: " + pair.getSmile());
-        }
 
         return pairList;
     }
 
 
-//добавление данныч в граифик
-    public void insertDataGraph(int valX, int valY){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("xValues", valX);
-        contentValues.put("yValues", valY);
+    public List<PairSmileAndDate> dateAndSmileFromTableRecordForGrafikLastWeek() {
+        SQLiteDatabase db = getReadableDatabase();
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
 
-        db.insert("myTable", null,contentValues);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -8);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String lastWeekDate = sdf.format(calendar.getTime());
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+                        " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME +
+                        " WHERE " + USERNAME_USERS_RECORD + " = ? AND " + DATE_RECORD + " >= ?" + " ORDER BY " + DATE_RECORD,
+                new String[]{USER_REMEMBER, lastWeekDate});
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+
+                try {
+                    Date d1 = sdf.parse(date);
+                    pairList.add(new PairSmileAndDate(d1, smileNum));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("--Help--", "No records found");
+        }
+        cursor.close();
+
+
+
+
+
+        return pairList;
     }
 
+    public boolean checkLastMonthQuery() {
+        Calendar calendar = Calendar.getInstance();
+        SQLiteDatabase db = getReadableDatabase();
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String lastMonthDate = sdf.format(calendar.getTime());
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +
+                        " WHERE " + DATE_RECORD + " >= ?",
+                new String[]{lastMonthDate});
+
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            if (count > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            Log.d("--Help--", "Error executing query");
+            return false;
+        }
+
+    }
+
+    public boolean checkLastWeekQuery() {
+        Calendar calendar = Calendar.getInstance();
+        SQLiteDatabase db = getReadableDatabase();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String lastMonthDate = sdf.format(calendar.getTime());
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +
+                        " WHERE " + DATE_RECORD + " >= ?",
+                new String[]{lastMonthDate});
+
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            if (count > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            Log.d("--Help--", "Error executing query week");
+            return false;
+        }
+
+    }
+
+    public boolean isTableEmpty() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD, null);
+
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            if (count == 0) {
+                Log.d("--Help--", "Table is empty");
+                return true;
+            } else if (count == 1) {
+                Log.d("--Help--", "1 record");
+                return true;
+            }
+            else {
+                return false;
+            }
+        } else {
+            Log.d("--Help--", "Error executing query");
+            return false;
+        }
+
+    }
+
+//    public List<PairSmileAndDate> dateAndSmileFromTableRecordForGrafikLastMounth() {
+//        SQLiteDatabase db = getReadableDatabase();
+//        List<PairSmileAndDate> pairList = new ArrayList<>();
+//        int smileNum = 0;
+//
+//
+//
+//        Calendar calendar = Calendar.getInstance();
+//
+//        calendar.add(Calendar.DAY_OF_YEAR, -30);
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+//        String lastWeekDate = sdf.format(calendar.getTime());
+//
+//        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+//                        " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME +
+//                        " WHERE " + USERNAME_USERS_RECORD + " = ? AND " + DATE_RECORD + " >= ?" + " ORDER BY " + DATE_RECORD,
+//                new String[]{USER_REMEMBER, lastWeekDate});
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+//                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+//                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+//
+//                switch (smile) {
+//                    case "\uD83D\uDE30":
+//                        smileNum = 1;
+//                        break;
+//                    case "\uD83D\uDE41":
+//                        smileNum = 2;
+//                        break;
+//                    case "\uD83D\uDE14":
+//                        smileNum = 3;
+//                        break;
+//                    case "\uD83D\uDE10":
+//                        smileNum = 4;
+//                        break;
+//                    case "\uD83D\uDE21":
+//                        smileNum = 5;
+//                        break;
+//                    case "\uD83D\uDE42":
+//                        smileNum = 6;
+//                        break;
+//                    case "\uD83D\uDE31":
+//                        smileNum = 7;
+//                        break;
+//                    case "\uD83D\uDE03":
+//                        smileNum = 8;
+//                        break;
+//                    case "\uD83E\uDD29":
+//                        smileNum = 9;
+//                        break;
+//                }
+//
+//                try {
+//                    Date d1 = sdf.parse(date);
+//                    pairList.add(new PairSmileAndDate(d1, smileNum));
+//                } catch (ParseException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            } while (cursor.moveToNext());
+//        } else {
+//            Log.d("--Help--", "No records found");
+//        }
+//        cursor.close();
+//
+//        for (PairSmileAndDate pair : pairList) {
+//            Log.d("--Help--", "Date lasr month: " + pair.getDates() + ", Smile: " + pair.getSmile());
+//        }
+//
+//
+//        return pairList;
+//    }
+
+
+   public List<PairSmileAndDate> get30UniqRecordFromDb(){
+       int smileNum = 0;
+       SQLiteDatabase db = this.getReadableDatabase();
+       SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+       List<PairSmileAndDate> pairList = new ArrayList<>();
+       String query = "SELECT " +ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 30";
+       Cursor cursor = db.rawQuery(query, null);
+
+       if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+
+                try {
+                    Date d1 = sdf.parse(date);
+                    pairList.add(new PairSmileAndDate(d1, smileNum));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("--Help--", "Error get30UniqRecordFromDb");
+        }
+       for (PairSmileAndDate pair : pairList) {
+            Log.d("--Help--", "Uni 30 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
+        }
+       cursor.close();
+       return pairList;
+   }
+
+    public List<PairSmileAndDate> get7UniqRecordFromDb(){
+        int smileNum = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        String query = "SELECT " +ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+
+                try {
+                    Date d1 = sdf.parse(date);
+                    pairList.add(new PairSmileAndDate(d1, smileNum));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("--Help--", "Error get7UniqRecordFromDb");
+        }
+        for (PairSmileAndDate pair : pairList) {
+            Log.d("--Help--", "Uni 7 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
+        }
+        cursor.close();
+        return pairList;
+    }
 
 
     public void deleteLastRecord() {
