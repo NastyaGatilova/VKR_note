@@ -14,7 +14,7 @@ public class Record
     private String description;
     private Date deleted;
     private String date;
-
+    private String time;
     private String smile;
 
 

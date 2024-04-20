@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity
         dbm = new SQLiteManager(this);
 
 
-        dbm.deleteRecordInDB();
+        // dbm.deleteRecordInDB();
 
 
 

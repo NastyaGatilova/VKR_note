@@ -1,6 +1,5 @@
 package com.example.note_prob22.graph;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,8 +13,6 @@ import com.example.note_prob22.R;
 import com.example.note_prob22.SQLiteManager;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 public class GraphYearFragment extends Fragment {
@@ -48,7 +45,7 @@ public class GraphYearFragment extends Fragment {
             noData.setVisibility(View.GONE);
 
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
-            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.dateAndSmileFromTableRecordForGrafik());
+            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndSmileFromTableRecordForGrafik());
         }
 
 

@@ -1,6 +1,5 @@
 package com.example.note_prob22;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -10,55 +9,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.DropBoxManager;
-import android.os.Handler;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import com.example.note_prob22.graph.GraphViewHelper;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
+import com.example.note_prob22.graph.HourCustomLabelFormatter;
 import com.example.note_prob22.graph.HourGraphViewHelper;
-import com.github.jinatonic.confetti.CommonConfetti;
-import com.github.jinatonic.confetti.ConfettiView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ValueRange;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 
 public class AccountActivity extends AppCompatActivity {
@@ -71,6 +39,8 @@ public class AccountActivity extends AppCompatActivity {
 
     //    private LineGraphSeries<DataPoint> series2;
     //private XYPlot plot;
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +81,11 @@ public class AccountActivity extends AppCompatActivity {
             graphView.setVisibility(View.VISIBLE);
 
 
-            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
-            HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.dateAndSmileFromTableRecordForGrafik());
+          graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
+          HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
+
+
+
         }
 
 

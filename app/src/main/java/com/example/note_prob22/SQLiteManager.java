@@ -19,17 +19,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 
 public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_21";
+    private static final String DATABASE_NAME = "TODO_25";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
@@ -71,6 +69,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String SMILE_RECORD = "smile";
     public static final String DELETED_RECORD = "deleted";
     public static final String DATE_RECORD = "date";
+
+    public static final String TIME_RECORD = "time";
     public static final String USERNAME_USERS_RECORD = "username_users";
 //
 
@@ -156,6 +156,26 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         //Создание таблицы "Record"
         StringBuilder sql3;
+//        sql3 = new StringBuilder()
+//                .append("CREATE TABLE if not exists ")
+//                .append(TABLE_NAME_RECORD)
+//                .append("(")
+//                .append(COUNTER_RECORD)
+//                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+//                .append(ID_RECORD)
+//                .append(" INT, ")
+//                .append(TITLE_RECORD)
+//                .append(" TEXT, ")
+//                .append(DESC_RECORD)
+//                .append(" TEXT, ")
+//                .append(SMILE_RECORD)
+//                .append(" INT, ")
+//                .append(DATE_RECORD)
+//                .append(" TEXT, ")
+//                .append(DELETED_RECORD)
+//                .append(" TEXT, ")
+//                .append(USERNAME_USERS_RECORD)
+//                .append(" TEXT) ");
         sql3 = new StringBuilder()
                 .append("CREATE TABLE if not exists ")
                 .append(TABLE_NAME_RECORD)
@@ -172,6 +192,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" INT, ")
                 .append(DATE_RECORD)
                 .append(" TEXT, ")
+                .append(TIME_RECORD)
+                .append(" DATETIME, ")
                 .append(DELETED_RECORD)
                 .append(" TEXT, ")
                 .append(USERNAME_USERS_RECORD)
@@ -388,12 +410,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void addRecordToDatabase(Record rec) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
+        String currentTime = timeFormat.format(new Date());
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_RECORD, rec.getId());
         contentValues.put(TITLE_RECORD, rec.getTitle());
         contentValues.put(DESC_RECORD, rec.getDescription());
         contentValues.put(SMILE_RECORD, rec.getSmile());
         contentValues.put(DATE_RECORD, rec.getDate());
+        contentValues.put(TIME_RECORD, currentTime);
         contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
         contentValues.put(USERNAME_USERS_RECORD, USER_REMEMBER);
 
@@ -407,8 +434,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateRecordListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", "
-                + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+                ", "+ DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER})) {
             Record.noteDayArrayList.clear();
             if (result.getCount() != 0) {
@@ -432,7 +459,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void recordFromDB() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", "
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", "+ TIME_RECORD + ", "
                 + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
@@ -441,20 +468,41 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
                     data += cursor.getString(i) + " ";
                 }
-                // Log.d("--Help--", "DB= "+data);
+                 Log.d("--Help--", "DB= "+data);
             } while (cursor.moveToNext());
         }
         cursor.close();
     }
 
+//    public void getTimeAndSmileFromDB() {
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT "  + ID_RECORD + "," + SMILE_RECORD + ", "+ TIME_RECORD + ", "
+//                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+//                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
+//        if (cursor.moveToFirst()) {
+//            do {
+//                String data = "";
+//                for (int i = 0; i < cursor.getColumnCount(); i++) {
+//                    data += cursor.getString(i) + " ";
+//                }
+//                Log.d("--Help--", "DB= "+data);
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//    }
+
 
     public void updateRecordInDB(Record rec) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
+        String currentTime = timeFormat.format(new Date());
+
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_RECORD, rec.getId());
         contentValues.put(TITLE_RECORD, rec.getTitle());
         contentValues.put(DESC_RECORD, rec.getDescription());
         contentValues.put(SMILE_RECORD, rec.getSmile());
+        contentValues.put(TIME_RECORD, currentTime);
         contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
         sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
 
@@ -551,7 +599,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     }
 
 
-    public List<PairSmileAndDate> dateAndSmileFromTableRecordForGrafik() {
+    public List<PairSmileAndDate> getDateAndSmileFromTableRecordForGrafik() {
         SQLiteDatabase db = getReadableDatabase();
         List<String> dateList = new ArrayList<>();
         List<PairSmileAndDate> pairList = new ArrayList<>();
@@ -606,7 +654,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         } else {
-            Log.d("--Help--", "No records found");
+            Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
         }
         cursor.close();
 
@@ -672,16 +720,16 @@ public class SQLiteManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
             if (count == 0) {
-                Log.d("--Help--", "Table is empty");
+            //    Log.d("--Help--", "Table is empty");
                 return true;
             } else if (count == 1) {
-                Log.d("--Help--", "1 record");
+             //   Log.d("--Help--", "1 record");
                 return true;
             } else {
                 return false;
             }
         } else {
-            Log.d("--Help--", "Error executing query");
+           // Log.d("--Help--", "Error executing query");
             return false;
         }
 
@@ -742,9 +790,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
         } else {
             Log.d("--Help--", "Error get30UniqRecordFromDb");
         }
-        for (PairSmileAndDate pair : pairList) {
-            Log.d("--Help--", "Uni 30 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
-        }
+//        for (PairSmileAndDate pair : pairList) {
+//            Log.d("--Help--", "Uni 30 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
+//        }
         cursor.close();
         return pairList;
     }
@@ -803,12 +851,113 @@ public class SQLiteManager extends SQLiteOpenHelper {
         } else {
             Log.d("--Help--", "Error get7UniqRecordFromDb");
         }
-        for (PairSmileAndDate pair : pairList) {
-            Log.d("--Help--", "Uni 7 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
-        }
+//        for (PairSmileAndDate pair : pairList) {
+//            Log.d("--Help--", "Uni 7 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
+//        }
         cursor.close();
         return pairList;
     }
+
+    public void getTimeAndSmileFromDB() {
+
+        SQLiteDatabase db = getReadableDatabase();
+
+
+        Date currentDate = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+        String date = dateFormat.format(currentDate);
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
+                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME
+                + " WHERE " + USERNAME_USERS_RECORD + " = ? AND  " + DATE_RECORD +" = ?", new String[]{USER_REMEMBER, date});
+
+        if (cursor.moveToFirst()) {
+            do {
+                String data = "";
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    data += cursor.getString(i) + " ";
+                }
+                Log.d("--Help--", "DB= " + data);
+            } while (cursor.moveToNext());
+        }
+        else  Log.d("--Help--", "Error  getTimeAndSmileFromDB()");
+        cursor.close();
+
+
+    }
+
+    public List<PairSmileAndDate> getTimeAndSmileForGrafikHours() {
+        SQLiteDatabase db = getReadableDatabase();
+        Date currentDate = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+        String date = dateFormat.format(currentDate);
+
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
+                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME
+                + " WHERE " + USERNAME_USERS_RECORD + " = ? AND  " + DATE_RECORD +" = ?", new String[]{USER_REMEMBER, date});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex(TIME_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
+                try {
+                    Date d1 = sdf.parse(time);
+                    pairList.add(new PairSmileAndDate(d1, smileNum));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+        }
+
+                for (PairSmileAndDate pair : pairList) {
+            Log.d("--Help--", "Time: " + pair.getDates() + ", Smile: " + pair.getSmile());
+        }
+        cursor.close();
+
+
+        return pairList;
+    }
+
+
 
 
     public void deleteLastRecord() {

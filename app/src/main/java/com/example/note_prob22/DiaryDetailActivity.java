@@ -144,9 +144,12 @@ public class DiaryDetailActivity extends DiaryActivity {
 
             // задаем формат вывода даты
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+
+
             SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
             String title = String.valueOf(titleEditText2.getText());
             String desc = String.valueOf(descEditText2.getText());
+
 
 
 
@@ -169,7 +172,7 @@ public class DiaryDetailActivity extends DiaryActivity {
             if(selectedDayNote == null)
             {
                 int id = Record.noteDayArrayList.size();
-                Record newRec = new Record(id, title, desc, smile, date );
+                Record newRec = new Record(id, title, desc, smile, date);
                 Record.noteDayArrayList.add(newRec);
                 sqLiteManager.addRecordToDatabase(newRec);
 
@@ -180,6 +183,7 @@ public class DiaryDetailActivity extends DiaryActivity {
                 selectedDayNote.setTitle(title);
                 selectedDayNote.setDescription(desc);
                 selectedDayNote.setSmile(smile);
+
 
 
 
