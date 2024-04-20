@@ -35,6 +35,7 @@ public class GraphMounthFragment extends Fragment {
        if (sqLiteManager.checkLastMonthQuery()){
            graphView.setVisibility(View.VISIBLE);
            tv.setVisibility(View.GONE);
+           graphView.setTitle("Статистика за месяц \uD83C\uDF24");
            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get30UniqRecordFromDb());
        }else {

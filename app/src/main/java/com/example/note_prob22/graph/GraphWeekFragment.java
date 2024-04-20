@@ -36,6 +36,7 @@ public class GraphWeekFragment extends Fragment {
         if (sqLiteManager.checkLastWeekQuery()){
             graphView.setVisibility(View.VISIBLE);
             noData.setVisibility(View.GONE);
+            graphView.setTitle("Cтатистика за неделю \uD83C\uDF25");
 
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
             GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get7UniqRecordFromDb());

@@ -43,7 +43,7 @@ public class GraphYearFragment extends Fragment {
 
             graphView.setVisibility(View.VISIBLE);
             noData.setVisibility(View.GONE);
-
+            graphView.setTitle("Cтатистика за год ☀");
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
             GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndSmileFromTableRecordForGrafik());
         }

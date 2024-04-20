@@ -6,21 +6,20 @@
     tools:context=".graph.GraphWeekFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/statisticWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/statisticMounth"
         android:textColor="@color/teal_200"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:gravity="center|top"
-        android:layout_marginTop="10dp"
-        />
+        android:textSize="12dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="12dp"/>
     <TextView
         android:layout_width="11dp"
         android:layout_height="19dp"
         android:layout_marginTop="12dp"
         android:layout_gravity="start"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="30dp"
         android:background="@drawable/left"/>
 
     <TextView
@@ -40,7 +39,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="450dp"
         android:padding="4dp"
         android:visibility="gone"
         />

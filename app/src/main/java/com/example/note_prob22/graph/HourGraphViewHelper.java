@@ -49,7 +49,7 @@ public class HourGraphViewHelper {
 
             String roundedTime = format.format(calendar.getTime());
 
-            Log.d("--Help--", "roundedTime ="+roundedTime);
+            // Log.d("--Help--", "roundedTime ="+roundedTime);
 
             switch ((String) roundedTime) {
                 case "00:00":
@@ -141,9 +141,11 @@ public class HourGraphViewHelper {
 
 
         }
-
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+        String currentTime = timeFormat.format(new Date());
 
         graphView.removeAllSeries();
+        graphView.setTitle("Статистика за " + currentTime + " \uD83D\uDCCA");
         graphView.addSeries(series);
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setMinX(0);
