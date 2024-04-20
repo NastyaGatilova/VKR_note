@@ -22,6 +22,12 @@ public class HourGraphViewHelper {
 
     public static void fillGraphViewWithHour(GraphView graphView, List<PairSmileAndDate> data) {
 
+        int datevalue = -1;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm", new Locale("ru"));
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+        String currentTime = timeFormat.format(new Date());
+
         Collections.sort(data, new Comparator<PairSmileAndDate>() {
             @Override
             public int compare(PairSmileAndDate o1, PairSmileAndDate o2) {
@@ -29,9 +35,10 @@ public class HourGraphViewHelper {
             }
         });
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<>();
-        Integer datevalue = 0;
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+
+
+
         for (PairSmileAndDate pair : data) {
 
             Date date = pair.getDates();
@@ -49,9 +56,11 @@ public class HourGraphViewHelper {
 
             String roundedTime = format.format(calendar.getTime());
 
-            // Log.d("--Help--", "roundedTime ="+roundedTime);
 
-            switch ((String) roundedTime) {
+            Log.d("--Help--", "roundedTime ="+roundedTime  + " Полное время = " + date + " Смайл =" + value);
+
+
+            switch (roundedTime) {
                 case "00:00":
                     datevalue = 0;
                     break;
@@ -125,28 +134,30 @@ public class HourGraphViewHelper {
                     datevalue = 23;
                     break;
                 default:
-                    datevalue = 23;
+                    datevalue = 0;
                     break;
+
             }
 
-            DataPoint dataPoint = new DataPoint(datevalue, value);
-
-            series.appendData(dataPoint, true, data.size());
 
 
 
+            BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[] {
 
+                    new DataPoint(datevalue, value)
+            });
+            graphView.addSeries(series);
 
-
-
-
+            series.setDrawValuesOnTop(true);
+            series.setValuesOnTopColor(Color.RED);
         }
-        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
-        String currentTime = timeFormat.format(new Date());
 
-        graphView.removeAllSeries();
+
+
+
+
         graphView.setTitle("Статистика за " + currentTime + " \uD83D\uDCCA");
-        graphView.addSeries(series);
+
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setMinX(0);
         graphView.getViewport().setMaxX(23);
@@ -162,5 +173,12 @@ public class HourGraphViewHelper {
 
         graphView.getViewport().setScrollable(true);
         graphView.getViewport().setScalable(true);
+
+
+
+
+
     }
 }
+
+

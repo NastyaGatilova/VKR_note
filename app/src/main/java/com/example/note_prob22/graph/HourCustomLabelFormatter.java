@@ -19,8 +19,6 @@ public class HourCustomLabelFormatter extends DefaultLabelFormatter {
     public String formatLabel(double value, boolean isValueX) {
         if (isValueX) {
 
-
-;
            // return String.valueOf((int) value);
             switch ((int) value) {
                 case 0:

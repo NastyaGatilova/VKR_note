@@ -26,6 +26,7 @@ import com.jjoe64.graphview.series.DataPoint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -71,22 +72,15 @@ public class AccountActivity extends AppCompatActivity {
        // viewPager2.setUserInputEnabled(false);
 
 
-        if (sqLiteManager.isTableEmpty()){
-
-            graphView.setVisibility(View.GONE);
-
-        }
-        else{
-
-            graphView.setVisibility(View.VISIBLE);
-
-
-          graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
-          HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
 
 
 
-        }
+
+         //   graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
+           HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
+
+
+
 
 
 

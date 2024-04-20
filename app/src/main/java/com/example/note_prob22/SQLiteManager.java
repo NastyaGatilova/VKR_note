@@ -671,8 +671,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         String lastMonthDate = sdf.format(calendar.getTime());
 
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +
-                        " WHERE " + DATE_RECORD + " >= ?",
-                new String[]{lastMonthDate});
+                        " WHERE " + DATE_RECORD + " >= ?" + " and " + USERNAME_USERS_RECORD + " =?",
+                new String[]{lastMonthDate, USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
@@ -696,8 +696,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         String lastMonthDate = sdf.format(calendar.getTime());
 
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +
-                        " WHERE " + DATE_RECORD + " >= ?",
-                new String[]{lastMonthDate});
+                        " WHERE " + DATE_RECORD + " >= ?" + " and "+ USERNAME_USERS_RECORD + " =?" ,
+                new String[]{lastMonthDate, USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
@@ -715,7 +715,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public boolean isTableEmpty() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD, null);
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +  " where " + USERNAME_USERS_RECORD + " =?" , new String[]{USER_REMEMBER});
+
+//
 
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
@@ -741,8 +743,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 30";
-        Cursor cursor = db.rawQuery(query, null);
+        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where "+ USERNAME_USERS_RECORD + " =?" +" GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 30";
+        Cursor cursor = db.rawQuery(query, new String[]{USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             do {
@@ -802,8 +804,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
-        Cursor cursor = db.rawQuery(query, null);
+        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where "+ USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
+        Cursor cursor = db.rawQuery(query,  new String[]{USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             do {
