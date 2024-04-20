@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.note_prob22.graph.GraphViewHelper;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
+import com.example.note_prob22.graph.HourGraphViewHelper;
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.github.jinatonic.confetti.ConfettiView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
@@ -83,8 +84,8 @@ public class AccountActivity extends AppCompatActivity {
 
         TextView login = findViewById(R.id.login);
         TextView pass = findViewById(R.id.password);
-        btnChoosePeriod = findViewById(R.id.btnChoosePeriod);
-        //GraphView graphView = findViewById(R.id.graph);
+
+        GraphView graphView = findViewById(R.id.graph);
         ViewPager2 viewPager2 = findViewById(R.id.viewPager);
 
 
@@ -100,8 +101,19 @@ public class AccountActivity extends AppCompatActivity {
        // viewPager2.setUserInputEnabled(false);
 
 
-       // graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-       // GraphViewHelper.fillGraphViewWithData(graphView,  sqLiteManager.dateAndSmileFromTableRecordForGrafik());
+        if (sqLiteManager.isTableEmpty()){
+
+            graphView.setVisibility(View.GONE);
+
+        }
+        else{
+
+            graphView.setVisibility(View.VISIBLE);
+
+
+            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
+            HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.dateAndSmileFromTableRecordForGrafik());
+        }
 
 
 
