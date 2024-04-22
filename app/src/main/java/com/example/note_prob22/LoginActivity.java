@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.note_prob22.db.SQLiteManager;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText username, password;
     Button signin;
-    SQLiteManager  DB;
+    SQLiteManager DB;
 
 
     @Override

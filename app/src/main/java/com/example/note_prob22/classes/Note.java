@@ -1,4 +1,4 @@
-package com.example.note_prob22;
+package com.example.note_prob22.classes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +7,7 @@ public class Note
 {
     public static ArrayList<Note> noteArrayList = new ArrayList<>();
   //  public static ArrayList<Note> noteDayArrayList = new ArrayList<>();
+    public static ArrayList<Note> noteArrayListWithForCalendar = new ArrayList<>();
     public static String NOTE_EDIT_EXTRA =  "noteEdit";
 
     private int id;

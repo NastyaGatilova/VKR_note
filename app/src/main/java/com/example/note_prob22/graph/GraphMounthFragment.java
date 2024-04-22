@@ -1,6 +1,5 @@
 package com.example.note_prob22.graph;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.note_prob22.R;
-import com.example.note_prob22.SQLiteManager;
+import com.example.note_prob22.db.SQLiteManager;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 

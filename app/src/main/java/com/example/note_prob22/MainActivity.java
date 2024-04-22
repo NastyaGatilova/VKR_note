@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.note_prob22.db.SQLiteManager;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText username, password, repassword;

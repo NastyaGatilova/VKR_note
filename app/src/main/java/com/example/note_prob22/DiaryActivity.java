@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.note_prob22.adapters.DiaryAdapter;
+import com.example.note_prob22.classes.Record;
+import com.example.note_prob22.db.SQLiteManager;
+
 
 public class DiaryActivity extends AppCompatActivity
 {

@@ -28,10 +28,19 @@
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="onClick"
         android:selectedWeekBackgroundColor="@color/red"
         android:weekNumberColor="@color/purple_500"
         android:weekSeparatorLineColor="@color/salad" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="10dp"
+        android:divider="#009688"
+        android:dividerHeight="3dp" />
 
 </LinearLayout>

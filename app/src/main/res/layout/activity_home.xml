@@ -67,7 +67,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
             android:divider="#009688"
-            android:dividerHeight="3dp"></ListView>
+            android:dividerHeight="3dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/exitbtn"

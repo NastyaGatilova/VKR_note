@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.note_prob22.db.SQLiteManager;
+
 
 public class StoryActivity extends AppCompatActivity {
  SQLiteManager sql;

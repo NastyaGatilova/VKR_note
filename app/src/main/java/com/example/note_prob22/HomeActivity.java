@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.note_prob22.adapters.NoteAdapter;
+import com.example.note_prob22.classes.Note;
+import com.example.note_prob22.db.SQLiteManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -182,12 +185,8 @@ public  void showCalendar(View view) {
         super.onResume();
         setNoteAdapter();
 
-        NoteAdapter adapter = (NoteAdapter) noteListView.getAdapter();
-        int count = adapter.getCount();
-        for (int i = 0; i < count; i++) {
-            Note data = (Note) adapter.getItem(i);
-      //      Log.d("--Help--", "Задачи: Title: " + data.getTitle() + ", Description: " + data.getDescription());
-        }
+        //loadFromDBToMemory();
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.example.note_prob22;
+package com.example.note_prob22.classes;
 
 import java.util.ArrayList;
 import java.util.Date;

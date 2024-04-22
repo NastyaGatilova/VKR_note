@@ -1,4 +1,4 @@
-package com.example.note_prob22;
+package com.example.note_prob22.db;
 
 
 import static com.example.note_prob22.NoteDetailActivity.delet;
@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.note_prob22.classes.Note;
+import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.graph.PairSmileAndDate;
 
 import java.text.DateFormat;
@@ -284,11 +286,72 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Date deleted = getDateFromString(stringDeleted);
 
                     Note note = new Note(id, title, desc, date, deleted);
+                    //Log.d("--Help--", "Db = "+ id + " "+date);
                     Note.noteArrayList.add(note);
                 }
 
             }
         }
+    }
+
+
+    public void populateNoteListArrayForCalendar(String userDate) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_NOTE + "," + ID_NOTE + "," + TITLE_NODE + ", " + DESC_NODE + ", " + DATE_NODE + ", "
+                  + USERNAME_USERS + " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
+                + " where " + USERNAME_USERS + " =?"+ " and " + DATE_NODE + " =?", new String[]{USER_REMEMBER, userDate})) {
+            Note.noteArrayListWithForCalendar.clear();
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+                    int id = result.getInt(1);
+                    String title = result.getString(2);
+                    String desc = result.getString(3);
+                    String date = result.getString(4);
+
+
+
+                    Note note = new Note(id, title, desc, date);
+                    Log.d("--Help--", "Пользовательская дата= " + userDate + " ; Записи = "+ id + " "+ " "+ title + " ; " +date);
+                    Note.noteArrayListWithForCalendar.add(note);
+                }
+
+            }
+        }
+    }
+
+    public List<Note> getNoteWithUserDate(String userDate) {
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Note> dataList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_NOTE + " ," + TITLE_NODE + " ," + DESC_NODE + " ," +DATE_NODE+
+                " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
+                + " where " + USERNAME_USERS + " =?" + " and " +DATE_NODE + " =?" , new String[]{USER_REMEMBER, userDate});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_NOTE));
+                @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(TITLE_NODE));
+                @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DESC_NODE));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_NODE));
+
+                //Log.d("--Help--", " id =" + id + " title=" +title + " desc=" +desc + " date=" + date);
+                Note note = new Note(id, title, desc, date);
+                dataList.add(note);
+
+            } while (cursor.moveToNext());
+            for (int i = 0; i < dataList.size(); i++) {
+                Note note = dataList.get(i);
+                Log.d("NoteList", "Note " + (i + 1) + ": " + note.getTitle() + " (" + note.getDate() + ")");
+            }
+        } else {
+            Log.d("--Help--", "Error getNoteWithUserDate()");
+        }
+        cursor.close();
+
+        return dataList;
+
+
+
     }
 
 
@@ -532,20 +595,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
-    // @SuppressLint("Range")
-//    public String getSmileyForRecord(int recordId) {
-//        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-//        String query = "SELECT smile FROM Record WHERE id = " + recordId;
-//        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-//        String smiley = "";
-//        if (cursor.moveToFirst()) {
-//            smiley = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
-//        }
-//        cursor.close();
-//        sqLiteDatabase.close();
-//        return smiley;
-//    }
-
     @SuppressLint("Range")
     public String checkSmile(int recordId) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
@@ -563,45 +612,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     }
 
     //вывод всех дат из дневника для графика
-    public List<Date> dateFromTableRecordForGrafik() throws ParseException {
-        SQLiteDatabase db = getReadableDatabase();
-        List<String> dateList = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT " + DATE_RECORD +
-                " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
-                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
-        if (cursor.moveToFirst()) {
-            do {
-                //String data = "";
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    //data += cursor.getString(i) + " ";
-                    dateList.add(cursor.getString(i));
-                }
-                // Log.d("--Help--", "DATE AND SMILE FROM DB = "+data);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-
-        List<Date> dates = new ArrayList<>();
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru", "RU"));
-        for (String dateString : dateList) {
-            try {
-                Date date = inputFormat.parse(dateString);
-                dates.add(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                // Обработка исключения, если входная строка не соответствует шаблону
-            }
-        }
-
-        return dates;
-    }
-
 
     public List<PairSmileAndDate> getDateAndSmileFromTableRecordForGrafik() {
         SQLiteDatabase db = getReadableDatabase();
-        List<String> dateList = new ArrayList<>();
         List<PairSmileAndDate> pairList = new ArrayList<>();
         int smileNum = 0;
 
@@ -614,7 +627,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
-                //  String logMessage = "ID: " + id + ", Smile: " + smile + ", Date: " + date;
                 switch (smile) {
                     case "\uD83D\uDE30":
                         smileNum = 1;
@@ -654,7 +666,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         } else {
-            Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+            //Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
         }
         cursor.close();
 
@@ -682,7 +694,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 return false;
             }
         } else {
-            Log.d("--Help--", "Error executing query");
+           // Log.d("--Help--", "Error executing query");
             return false;
         }
 
@@ -707,7 +719,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 return false;
             }
         } else {
-            Log.d("--Help--", "Error executing query week");
+            //Log.d("--Help--", "Error executing query week");
             return false;
         }
 
@@ -716,8 +728,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public boolean isTableEmpty() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +  " where " + USERNAME_USERS_RECORD + " =?" , new String[]{USER_REMEMBER});
-
-//
 
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
@@ -880,10 +890,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
                     data += cursor.getString(i) + " ";
                 }
-                Log.d("--Help--", "DB= " + data);
+              //  Log.d("--Help--", "DB= " + data);
             } while (cursor.moveToNext());
         }
-        else  Log.d("--Help--", "Error  getTimeAndSmileFromDB()");
+        else // Log.d("--Help--", "Error  getTimeAndSmileFromDB()");
         cursor.close();
 
 
@@ -947,12 +957,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         } else {
-            Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+           // Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
         }
 
-                for (PairSmileAndDate pair : pairList) {
-            Log.d("--Help--", "Time: " + pair.getDates() + ", Smile: " + pair.getSmile());
-        }
+//                for (PairSmileAndDate pair : pairList) {
+//            Log.d("--Help--", "Time: " + pair.getDates() + ", Smile: " + pair.getSmile());
+//        }
         cursor.close();
 
 

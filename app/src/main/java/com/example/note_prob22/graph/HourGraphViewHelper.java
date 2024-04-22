@@ -150,6 +150,7 @@ public class HourGraphViewHelper {
 
             series.setDrawValuesOnTop(true);
             series.setValuesOnTopColor(Color.RED);
+            series.setSpacing(50);
         }
 
 

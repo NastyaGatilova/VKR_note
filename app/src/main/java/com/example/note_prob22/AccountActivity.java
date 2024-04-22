@@ -15,19 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
-import com.example.note_prob22.graph.HourCustomLabelFormatter;
 import com.example.note_prob22.graph.HourGraphViewHelper;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.BarGraphSeries;
-import com.jjoe64.graphview.series.DataPoint;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class AccountActivity extends AppCompatActivity {
@@ -76,11 +70,8 @@ public class AccountActivity extends AppCompatActivity {
 
 
 
-         //   graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
-           HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
-
-
-
+        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter((this)));
+        HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
 
 
 

@@ -1,27 +1,16 @@
 package com.example.note_prob22;
 
-import static com.example.note_prob22.Record.noteDayArrayList;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.note_prob22.classes.Record;
+import com.example.note_prob22.db.SQLiteManager;
 import com.github.jinatonic.confetti.CommonConfetti;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class SmilesActivity extends AppCompatActivity {
 

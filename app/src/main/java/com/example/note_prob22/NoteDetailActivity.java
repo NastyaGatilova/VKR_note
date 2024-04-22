@@ -1,27 +1,20 @@
 package com.example.note_prob22;
 
-import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
-import static androidx.core.app.NotificationCompat.PRIORITY_LOW;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.note_prob22.classes.Note;
+import com.example.note_prob22.db.SQLiteManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
