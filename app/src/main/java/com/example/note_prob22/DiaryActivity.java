@@ -1,6 +1,8 @@
 package com.example.note_prob22;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -9,13 +11,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.note_prob22.adapters.DiaryAdapter;
+import com.example.note_prob22.adapters.NoteAdapter;
+import com.example.note_prob22.adapters.RecyclerViewItemClickListener;
+import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.db.SQLiteManager;
 
 
 public class DiaryActivity extends AppCompatActivity
 {
-    private ListView dayInfoList;
+    //private ListView dayInfoList;
+
+    RecyclerView dayInfoListRc;
+    DiaryAdapter diaryAdapter;
 
 
     SQLiteManager dbm;
@@ -30,17 +38,33 @@ public class DiaryActivity extends AppCompatActivity
         setContentView(R.layout.activity_diary);
         initWidgets();
         loadFromDBToMemory();
-        setNoteDaysAdapter();
-        setOnClickListener();
-
-
-
+       // setNoteDaysAdapter();
+        //setOnClickListener();
 
         dbm = new SQLiteManager(this);
-       //  dbm.deleteRecordInDB();
+        //  dbm.deleteRecordInDB();
         //dbm.recordFromDB();
         dbm.getTimeAndSmileFromDB();
         dbm.getTimeAndSmileForGrafikHours();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        dayInfoListRc.setLayoutManager(layoutManager);
+
+        diaryAdapter = new DiaryAdapter(Record.noteDayArrayList);
+        dayInfoListRc.setAdapter(diaryAdapter);
+
+
+
+        dayInfoListRc.addOnItemTouchListener(new RecyclerViewItemClickListener(this, dayInfoListRc, new RecyclerViewItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Record selectedRec = (Record) diaryAdapter.getItem(position);
+                Intent editNoteIntent = new Intent(getApplicationContext(), DiaryDetailActivity.class);
+                editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
+                editNoteIntent.putExtra("date", selectedRec.getDate());
+                startActivity(editNoteIntent);
+            }
+        }));
+
 
 
 
@@ -51,8 +75,8 @@ public class DiaryActivity extends AppCompatActivity
     private void initWidgets()
     {
 
-     dayInfoList = findViewById(R.id.dayInfoList);
-
+   //  dayInfoList = findViewById(R.id.dayInfoList);
+        dayInfoListRc = findViewById(R.id.dayInfoListRc);
     }
 
     private void loadFromDBToMemory()
@@ -64,32 +88,32 @@ public class DiaryActivity extends AppCompatActivity
     }
 
 
-    public void setNoteDaysAdapter()
-    {
-        DiaryAdapter noteDaysAdapterAdapter = new DiaryAdapter(getApplicationContext(), Record.nonDeletedDayNotes());
-        dayInfoList.setAdapter(noteDaysAdapterAdapter);
+//    public void setNoteDaysAdapter()
+//    {
+//        DiaryAdapter noteDaysAdapterAdapter = new DiaryAdapter(getApplicationContext(), Record.nonDeletedDayNotes());
+//        dayInfoList.setAdapter(noteDaysAdapterAdapter);
+//
+//
+//    }
 
 
-    }
-
-
-    private void setOnClickListener()
-    {
-        dayInfoList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
-                Record selectedRec = (Record) dayInfoList.getItemAtPosition(position);
-                Intent editNoteIntent = new Intent(getApplicationContext(), DiaryDetailActivity.class);
-                editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
-                editNoteIntent.putExtra("date", selectedRec.getDate());
-//                Log.d("--Help--", "selectedRec.getId="+selectedRec.getId());
-                startActivity(editNoteIntent);
-            }
-        });
-
-    }
+//    private void setOnClickListener()
+//    {
+//        dayInfoList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+//            {
+//                Record selectedRec = (Record) dayInfoList.getItemAtPosition(position);
+//                Intent editNoteIntent = new Intent(getApplicationContext(), DiaryDetailActivity.class);
+//                editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
+//                editNoteIntent.putExtra("date", selectedRec.getDate());
+////                Log.d("--Help--", "selectedRec.getId="+selectedRec.getId());
+//                startActivity(editNoteIntent);
+//            }
+//        });
+//
+//    }
 
 //ее удалить потом
     private void addRecImitation(){
@@ -255,7 +279,8 @@ public class DiaryActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        setNoteDaysAdapter();
+//        setNoteDaysAdapter();
+        diaryAdapter.notifyDataSetChanged();
 
 //        NoteDaysAdapter adapter = (NoteDaysAdapter) dayInfoList.getAdapter();
 //        int count = adapter.getCount();

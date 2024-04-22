@@ -27,7 +27,7 @@ public class NoteAdapterForCalendar extends RecyclerView.Adapter<NoteAdapterForC
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_cell, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_calendar_cell, parent, false);
         return new NoteViewHolder(view);
     }
 

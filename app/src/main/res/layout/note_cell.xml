@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/noteCardView"
     android:layout_width="match_parent"
-    android:padding="15dp"
-    android:layout_height="95dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="85dp"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@color/white"
+    android:layout_margin="4dp"
+    >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-        android:padding="5dp">
 
 
         <TextView
             android:id="@+id/cellDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="120dp"
             android:text="1"
             android:textColor="@color/head"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/cellTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/cellDate"
+            android:layout_gravity="start|top"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Title"
@@ -38,15 +39,17 @@
 
         <TextView
             android:id="@+id/cellDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cellTitle"
             android:text="desc"
             android:maxLines="1"
+            android:layout_gravity="start|bottom"
+            android:layout_marginStart="31dp"
+            android:layout_marginBottom="19dp"
             />
 
 
 
-    </RelativeLayout>
 
-</LinearLayout>
+
+</androidx.cardview.widget.CardView>

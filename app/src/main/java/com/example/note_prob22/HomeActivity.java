@@ -2,7 +2,10 @@ package com.example.note_prob22;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
@@ -11,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.note_prob22.adapters.NoteAdapter;
+import com.example.note_prob22.adapters.NoteAdapterForCalendar;
+import com.example.note_prob22.adapters.RecyclerViewItemClickListener;
 import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.db.SQLiteManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,10 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeActivity extends AppCompatActivity
 {
-    private ListView noteListView;
+   // private ListView noteListView;
+   RecyclerView recyclerView;
     public FloatingActionButton  exitbtn;
 
      SQLiteManager dbm;
+
+    NoteAdapter noteAdapter;
 
 
 
@@ -33,14 +41,33 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         initWidgets();
         loadFromDBToMemory();
-        setNoteAdapter();
-        setOnClickListener();
+        //setNoteAdapter();
+
+        //setOnClickListener();
 
 
         dbm = new SQLiteManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
+        noteAdapter = new NoteAdapter(Note.noteArrayList);
+        recyclerView.setAdapter(noteAdapter);
 
         // dbm.deleteRecordInDB();
+
+
+
+        recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this, recyclerView, new RecyclerViewItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Note selectedNote = (Note) noteAdapter.getItem(position);
+                Intent editNoteIntent = new Intent(getApplicationContext(), NoteDetailActivity.class);
+                editNoteIntent.putExtra(Note.NOTE_EDIT_EXTRA, selectedNote.getId());
+                startActivity(editNoteIntent);
+            }
+        }));
+
+
 
 
 
@@ -51,7 +78,8 @@ public class HomeActivity extends AppCompatActivity
     private void initWidgets()
     {
 
-        noteListView = findViewById(R.id.noteListView);
+       // noteListView = findViewById(R.id.noteListView);
+        recyclerView = findViewById(R.id.noteRcView);
         exitbtn = findViewById(R.id.exitbtn);
 
 
@@ -66,28 +94,30 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void setNoteAdapter()
-    {
-        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), Note.nonDeletedNotes());
-        noteListView.setAdapter(noteAdapter);
-    }
+//    private void setNoteAdapter()
+//    {
+//        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), Note.nonDeletedNotes());
+//        noteListView.setAdapter(noteAdapter);
+//    }
 
 
-    private void setOnClickListener()
-    {
-        noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
-                Note selectedNote = (Note) noteListView.getItemAtPosition(position);
-                Intent editNoteIntent = new Intent(getApplicationContext(), NoteDetailActivity.class);
-                editNoteIntent.putExtra(Note.NOTE_EDIT_EXTRA, selectedNote.getId());
-                startActivity(editNoteIntent);
-            }
-        });
 
-    }
+//    private void setOnClickListener()
+//    {
+//        noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+//            {
+//                Note selectedNote = (Note) noteListView.getItemAtPosition(position);
+//                Intent editNoteIntent = new Intent(getApplicationContext(), NoteDetailActivity.class);
+//                editNoteIntent.putExtra(Note.NOTE_EDIT_EXTRA, selectedNote.getId());
+//                startActivity(editNoteIntent);
+//            }
+//        });
+//
+//    }
+
 
 
 
@@ -145,22 +175,58 @@ public  void showCalendar(View view) {
 
 
 
-    public  void  delNote(View view){
+//    public  void  delNote(View view){
+//
+//                AlertDialog.Builder a_builder = new AlertDialog.Builder(HomeActivity.this);
+//        a_builder.setMessage("Вы хотите удалить ВСЕ записи?")
+//                .setCancelable(false)
+//                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), Note.nonDeletedNotes());
+//                        noteListView.setAdapter(noteAdapter);
+//
+//                        for(int i=0; i< Note.noteArrayList.size();i++){
+//                            noteAdapter.remove(Note.noteArrayList.get(i));
+//                        }
+//                        Note.noteArrayList.clear();
+//
+//                        noteAdapter.notifyDataSetChanged();
+//                        dbm.deleteNoteInDB();
+//                    }
+//                })
+//                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        AlertDialog alert = a_builder.create();
+//        alert.show();
+//
+//
+//    }
 
-                AlertDialog.Builder a_builder = new AlertDialog.Builder(HomeActivity.this);
+
+    public void delNote(View view) {
+        AlertDialog.Builder a_builder = new AlertDialog.Builder(HomeActivity.this);
         a_builder.setMessage("Вы хотите удалить ВСЕ записи?")
                 .setCancelable(false)
                 .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @SuppressLint("NotifyDataSetChanged")
                     public void onClick(DialogInterface dialog, int which) {
-                        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), Note.nonDeletedNotes());
-                        noteListView.setAdapter(noteAdapter);
-
-                        for(int i=0; i< Note.noteArrayList.size();i++){
-                            noteAdapter.remove(Note.noteArrayList.get(i));
-                        }
+                        // Удаление всех записей из адаптера
+//                        for(int i = 0; i < noteAdapter.getItemCount(); i++) {
+//                            Note note = noteAdapter.getItem(i);
+//                            noteAdapter.clearData(note);
+//                        }
+                        noteAdapter.clearData();
+                        // Очистка списка записей
                         Note.noteArrayList.clear();
 
+                        // Уведомление адаптера об изменениях
                         noteAdapter.notifyDataSetChanged();
+
+                        // Удаление записей из базы данных
                         dbm.deleteNoteInDB();
                     }
                 })
@@ -172,20 +238,20 @@ public  void showCalendar(View view) {
 
         AlertDialog alert = a_builder.create();
         alert.show();
-
-
     }
 
 
 
 
-        @Override
+
+    @Override
     protected void onResume()
     {
         super.onResume();
-        setNoteAdapter();
+       // setNoteAdapter();
 
         //loadFromDBToMemory();
+        noteAdapter.notifyDataSetChanged();
 
 
     }

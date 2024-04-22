@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/noteCardView"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recCardView"
     android:layout_height="85dp"
     app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="@color/design_default_color_on_primary"
+    app:cardBackgroundColor="@color/lighGreen"
+
     android:layout_margin="4dp"
     >
 
 
 
     <TextView
-        android:id="@+id/cellSmile2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="15dp"
-        android:text=""
-        android:textSize="40sp"
-
-
-        />
-    <TextView
-        android:id="@+id/cellDate2"
+        android:id="@+id/cellDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="120dp"
-        android:text=""
+        android:text="1"
         android:textColor="@color/head"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/cellTitle2"
-        android:layout_width="200dp"
+        android:id="@+id/cellTitle"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start|top"
-        android:layout_marginStart="65dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text=""
+        android:text="Title"
         android:textColor="@color/green"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -49,15 +39,17 @@
         />
 
     <TextView
-        android:id="@+id/cellDesc2"
-        android:layout_width="200dp"
+        android:id="@+id/cellDesc"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="desc"
         android:maxLines="1"
         android:layout_gravity="start|bottom"
-        android:layout_marginStart="67dp"
+        android:layout_marginStart="31dp"
         android:layout_marginBottom="19dp"
         />
+
+
 
 
 

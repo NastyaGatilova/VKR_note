@@ -60,13 +60,21 @@
         android:layout_height="match_parent">
 
 
-        <ListView
-            android:id="@+id/noteListView"
+<!--        <ListView-->
+<!--            android:id="@+id/noteListView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="3dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:dividerHeight="3dp" />-->
+<!--            android:divider="#009688"-->
+<!--            android:dividerHeight="3dp" -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/noteRcView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
-            android:divider="#009688"
             android:dividerHeight="3dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

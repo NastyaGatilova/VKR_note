@@ -105,6 +105,8 @@ public class NoteDetailActivity extends AppCompatActivity
                 Note.noteArrayList.add(newNote);
                 sqLiteManager.addNoteToDatabase(newNote);
 
+               ;
+
 
             }
             else
