@@ -19,6 +19,11 @@
 
     <color name="lighGreen">#e1e7dd</color>
 
+    <color name="grey2">#E2E2E2</color>
+    <color name="greyTitle">#4C4E4B</color>
+    <color name="greyDescr">#939592</color>
+    <color name="red2">#FF6060</color>
+
 
 
 

@@ -312,13 +312,15 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
 
                     Note note = new Note(id, title, desc, date);
-                    Log.d("--Help--", "Пользовательская дата= " + userDate + " ; Записи = "+ id + " "+ " "+ title + " ; " +date);
+                    // Log.d("--Help--", "Пользовательская дата= " + userDate + " ; Записи = "+ id + " "+ " "+ title + " ; " +date);
                     Note.noteArrayListWithForCalendar.add(note);
                 }
 
             }
         }
     }
+
+
 
     public List<Note> getNoteWithUserDate(String userDate) {
         SQLiteDatabase db = getReadableDatabase();
@@ -969,7 +971,30 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return pairList;
     }
 
+    public String showSmileForDate(String userDate) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + ","  + DATE_RECORD + ", " + SMILE_RECORD + ", "
+                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS + " =?"+ " and " + DATE_RECORD + " =?" + " ORDER BY " + SMILE_RECORD + " DESC LIMIT 1", new String[]{USER_REMEMBER, userDate})) {
+
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+                    int id = result.getInt(1);
+                    String date = result.getString(2);
+                    String smile = result.getString(3);
+
+
+
+
+                    Log.d("--Help--", "Для подсказки Smile= " + userDate + " ; Записи = "+ id + " "+ " "+ date + " ; " +smile);
+                    return smile;
+                }
+
+            }
+        }
+        return "";
+    }
 
 
     public void deleteLastRecord() {
