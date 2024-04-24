@@ -29,7 +29,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_25";
+    private static final String DATABASE_NAME = "TODO_26";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
@@ -65,7 +65,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String TABLE_NAME_RECORD = "Record";
     public static final String COUNTER_RECORD = "counterRec";
     public static final String ID_RECORD = "id";
-    public static final String TITLE_RECORD = "title";
+    public static final String FEELINGS_RECORD = "feelings";
+
+    public static final String EVENTS_RECORD = "events";
     public static final String DESC_RECORD = "descr";
 
     public static final String SMILE_RECORD = "smile";
@@ -76,10 +78,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String USERNAME_USERS_RECORD = "username_users";
 //
 
-    //дл графика таблица
-    public static final String TABLE_GRAPH = "Graph";
-    public static final String X_DATES = "xDates";
-    public static final String Y_NUMS = "yNums";
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -158,26 +156,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         //Создание таблицы "Record"
         StringBuilder sql3;
-//        sql3 = new StringBuilder()
-//                .append("CREATE TABLE if not exists ")
-//                .append(TABLE_NAME_RECORD)
-//                .append("(")
-//                .append(COUNTER_RECORD)
-//                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-//                .append(ID_RECORD)
-//                .append(" INT, ")
-//                .append(TITLE_RECORD)
-//                .append(" TEXT, ")
-//                .append(DESC_RECORD)
-//                .append(" TEXT, ")
-//                .append(SMILE_RECORD)
-//                .append(" INT, ")
-//                .append(DATE_RECORD)
-//                .append(" TEXT, ")
-//                .append(DELETED_RECORD)
-//                .append(" TEXT, ")
-//                .append(USERNAME_USERS_RECORD)
-//                .append(" TEXT) ");
+
         sql3 = new StringBuilder()
                 .append("CREATE TABLE if not exists ")
                 .append(TABLE_NAME_RECORD)
@@ -186,7 +165,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_RECORD)
                 .append(" INT, ")
-                .append(TITLE_RECORD)
+                .append(FEELINGS_RECORD)
+                .append(" TEXT, ")
+                .append(EVENTS_RECORD)
                 .append(" TEXT, ")
                 .append(DESC_RECORD)
                 .append(" TEXT, ")
@@ -204,20 +185,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql3.toString());
 
 
-        //Создание таблицы графика "Table_graph
-//        StringBuilder sql4;
-//        sql4 = new StringBuilder()
-//                .append("CREATE TABLE if not exists ")
-//                .append(TABLE_NAME_RECORD)
-//                .append("(")
-//                .append(X_DATES)
-//                .append(" INT, ")
-//                .append(Y_NUMS)
-//                .append(" INT) ");
-//
-//        sqLiteDatabase.execSQL(sql4.toString());
-//        String createTable = "create table myTable(xValues INTEGER, yValues INTEGER)";
-//        sqLiteDatabase.execSQL(createTable);
+
 
     }
 
@@ -230,6 +198,43 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists " + TABLE_NAME_RECORD);
 
         onCreate(sqLiteDatabase);
+    }
+
+    //авторизация
+    public Boolean insertData(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(USERNAME, username);
+        values.put(PASSWORD, password);
+
+        long result = db.insert(USERS, null, values);
+        if (result == -1) return false;
+        else
+            return true;
+
+
+    }
+
+    public Boolean checkusername(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + USERS + " where " + USERNAME + "=?", new String[]{username});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
+    }
+
+    public Boolean checkusernamepassword(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select * from " + USERS + " where " + USERNAME + " =? and " + PASSWORD + "=?", new String[]{username, password});
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
     }
 
 
@@ -321,42 +326,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     }
 
 
-
-    public List<Note> getNoteWithUserDate(String userDate) {
-        SQLiteDatabase db = getReadableDatabase();
-        ArrayList<Note> dataList = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT " + ID_NOTE + " ," + TITLE_NODE + " ," + DESC_NODE + " ," +DATE_NODE+
-                " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
-                + " where " + USERNAME_USERS + " =?" + " and " +DATE_NODE + " =?" , new String[]{USER_REMEMBER, userDate});
-        if (cursor.moveToFirst()) {
-            do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_NOTE));
-                @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(TITLE_NODE));
-                @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DESC_NODE));
-                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_NODE));
-
-                //Log.d("--Help--", " id =" + id + " title=" +title + " desc=" +desc + " date=" + date);
-                Note note = new Note(id, title, desc, date);
-                dataList.add(note);
-
-            } while (cursor.moveToNext());
-            for (int i = 0; i < dataList.size(); i++) {
-                Note note = dataList.get(i);
-                Log.d("NoteList", "Note " + (i + 1) + ": " + note.getTitle() + " (" + note.getDate() + ")");
-            }
-        } else {
-            Log.d("--Help--", "Error getNoteWithUserDate()");
-        }
-        cursor.close();
-
-        return dataList;
-
-
-
-    }
-
-
     public void updateNoteInDB(Note note) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -423,42 +392,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
         }
     }
 
-    //авторизация
-    public Boolean insertData(String username, String password) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(USERNAME, username);
-        values.put(PASSWORD, password);
-
-        long result = db.insert(USERS, null, values);
-        if (result == -1) return false;
-        else
-            return true;
-
-
-    }
-
-    public Boolean checkusername(String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from " + USERS + " where " + USERNAME + "=?", new String[]{username});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
-
-    }
-
-    public Boolean checkusernamepassword(String username, String password) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery("select * from " + USERS + " where " + USERNAME + " =? and " + PASSWORD + "=?", new String[]{username, password});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
-
-    }
 
 
 //    @Override
@@ -481,7 +414,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_RECORD, rec.getId());
-        contentValues.put(TITLE_RECORD, rec.getTitle());
+        contentValues.put(FEELINGS_RECORD, rec.getFeeling());
+        contentValues.put(EVENTS_RECORD, rec.getEvents());
         contentValues.put(DESC_RECORD, rec.getDescription());
         contentValues.put(SMILE_RECORD, rec.getSmile());
         contentValues.put(DATE_RECORD, rec.getDate());
@@ -499,21 +433,22 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateRecordListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", "+ EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
                 ", "+ DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER})) {
             Record.noteDayArrayList.clear();
             if (result.getCount() != 0) {
                 while (result.moveToNext()) {
                     int id = result.getInt(1);
-                    String title = result.getString(2);
-                    String desc = result.getString(3);
-                    String smile = result.getString(4);
-                    String date = result.getString(5);
-                    String stringDeleted = result.getString(6);
+                    String feelings = result.getString(2);
+                    String events = result.getString(3);
+                    String desc = result.getString(4);
+                    String smile = result.getString(5);
+                    String date = result.getString(6);
+                    String stringDeleted = result.getString(7);
                     Date deleted = getDateFromString(stringDeleted);
 
-                    Record rec = new Record(id, title, desc, smile, date, deleted);
+                    Record rec = new Record(id, feelings, events, desc, smile, date, deleted);
                     Record.noteDayArrayList.add(rec);
                 }
 
@@ -524,7 +459,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void recordFromDB() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + TITLE_RECORD + ", " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", "+ TIME_RECORD + ", "
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", "+ EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", "+ TIME_RECORD + ", "
                 + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
@@ -539,22 +474,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
         cursor.close();
     }
 
-//    public void getTimeAndSmileFromDB() {
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT "  + ID_RECORD + "," + SMILE_RECORD + ", "+ TIME_RECORD + ", "
-//                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
-//                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
-//        if (cursor.moveToFirst()) {
-//            do {
-//                String data = "";
-//                for (int i = 0; i < cursor.getColumnCount(); i++) {
-//                    data += cursor.getString(i) + " ";
-//                }
-//                Log.d("--Help--", "DB= "+data);
-//            } while (cursor.moveToNext());
-//        }
-//        cursor.close();
-//    }
 
 
     public void updateRecordInDB(Record rec) {
@@ -564,7 +483,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_RECORD, rec.getId());
-        contentValues.put(TITLE_RECORD, rec.getTitle());
+        contentValues.put(FEELINGS_RECORD, rec.getFeeling());
+        contentValues.put(EVENTS_RECORD, rec.getEvents());
         contentValues.put(DESC_RECORD, rec.getDescription());
         contentValues.put(SMILE_RECORD, rec.getSmile());
         contentValues.put(TIME_RECORD, currentTime);
@@ -573,15 +493,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
-    public void updateSmileInDB(Record rec) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(SMILE_RECORD, rec.getSmile());
-
-        sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
-
-    }
 
 
     public void deleteRecordFromDB(Record rec) {
@@ -597,21 +508,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
-    @SuppressLint("Range")
-    public String checkSmile(int recordId) {
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-
-
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
-                + " where " + USERNAME_USERS_RECORD + " =?" + " AND " + ID_RECORD + " = " + recordId, new String[]{USER_REMEMBER});
-        String smiley = "";
-        if (cursor.moveToFirst()) {
-            smiley = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
-        }
-        cursor.close();
-        sqLiteDatabase.close();
-        return smiley;
-    }
 
     //вывод всех дат из дневника для графика
 
@@ -872,6 +768,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return pairList;
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void getTimeAndSmileFromDB() {
 
         SQLiteDatabase db = getReadableDatabase();

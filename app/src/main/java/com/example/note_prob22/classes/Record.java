@@ -10,18 +10,20 @@ public class Record
     public static String NOTE_EDIT_EXTRA =  "recordEdit";
 
     private int id;
-    private String title;
+    private String feeling;
+    private String events;
     private String description;
     private Date deleted;
     private String date;
-    private String time;
+
     private String smile;
 
 
-    public Record(int id, String title, String description,   String smile, String date, Date deleted)
+    public Record(int id, String feeling, String events, String description,   String smile, String date, Date deleted)
     {
         this.id = id;
-        this.title = title;
+        this.feeling = feeling;
+        this.events = events;
         this.description = description;
         this.smile = smile;
         this.date = date;
@@ -31,10 +33,11 @@ public class Record
     }
 
 
-    public Record(int id, String title, String description, String smile, String date)
+    public Record(int id, String feeling, String events, String description, String smile, String date)
     {
         this.id = id;
-        this.title = title;
+        this.feeling = feeling;
+        this.events = events;
         this.description = description;
         this.smile=smile;
         this.date = date;
@@ -82,14 +85,14 @@ public class Record
         this.id = id;
     }
 
-    public String getTitle()
+    public String getFeeling()
     {
-        return title;
+        return feeling;
     }
 
-    public void setTitle(String title)
+    public void setFeeling(String feeling)
     {
-        this.title = title;
+        this.feeling = feeling;
     }
 
     public String getDescription()
@@ -132,5 +135,8 @@ public class Record
     {
         this.smile = smile;
     }
+
+    public  String getEvents(){return events; }
+    public void setEvents(String events){ this.events = events;}
 
 }

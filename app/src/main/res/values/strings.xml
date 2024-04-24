@@ -21,7 +21,7 @@
     <string name="selectDate">Выбрать дату:</string>
     <string name="del">УДАЛИТЬ</string>
     <string name="story">ИСТОРИЯ</string>
-    <string name="rateDay">oцени свой день ⬆️</string>
+    <string name="rateDay">выберите эмоцию,\nкоторую сейчас \nиспытываете ⬆️</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
@@ -32,5 +32,8 @@
         изменения ваших эмоций 📊</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="yourFeeling">Как Вы себя чувствуете?</string>
+    <string name="yourЕvents">Какие события или обстоятельства привели к тому, что Вы почувствовали эту эмоцию?</string>
+    <string name="yourDescrDay">Опишите свой день</string>
 
 </resources>

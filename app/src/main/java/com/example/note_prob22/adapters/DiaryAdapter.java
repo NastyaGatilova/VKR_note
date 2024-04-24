@@ -1,17 +1,14 @@
 package com.example.note_prob22.adapters;
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.note_prob22.R;
-import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.classes.Record;
 
 import java.util.ArrayList;
@@ -71,7 +68,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
     public void onBindViewHolder(@NonNull RecordViewHolder holder, int position)
     {
         Record rec = mRecords.get(position);
-        holder.mTitleTextView.setText(rec.getTitle());
+        holder.mTitleTextView.setText(rec.getFeeling());
         holder.mDescTextView.setText(rec.getDescription());
         holder.mDateTextView.setText(rec.getDate());
         holder.mSmileTextView.setText(rec.getSmile());

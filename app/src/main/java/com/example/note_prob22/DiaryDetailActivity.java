@@ -23,7 +23,7 @@ public class DiaryDetailActivity extends DiaryActivity {
     public static int delet = 0;
     private Record selectedDayNote;
     private Button saveButton2;
-    private EditText titleEditText2, descEditText2;
+    private EditText yourFeelingsEditText, yourdescDayEditText, yourEventsEditText;
     private Button deleteButton2,smileBtn;
 
     SQLiteManager sqDB;
@@ -42,9 +42,11 @@ public class DiaryDetailActivity extends DiaryActivity {
 
         if (savedInstanceState != null) {
             String editTextValue = savedInstanceState.getString("titleEditText2");
-            titleEditText2.setText(editTextValue);
+            yourFeelingsEditText.setText(editTextValue);
             String descEditText2 = savedInstanceState.getString("descEditText2");
-            titleEditText2.setText(descEditText2);
+            yourdescDayEditText.setText(descEditText2);
+            String eventsEditText2 = savedInstanceState.getString("eventsEditText2");
+            yourEventsEditText.setText(eventsEditText2);
         }
         sqDB = new SQLiteManager(this);
 
@@ -74,13 +76,10 @@ public class DiaryDetailActivity extends DiaryActivity {
         if (selectedDayNote != null)
         {
 
-          //  Log.d("--Help--", "Процесс обновления записи");;
+            yourFeelingsEditText.setText(selectedDayNote.getFeeling());
+            yourEventsEditText.setText(selectedDayNote.getEvents());
+            yourdescDayEditText.setText(selectedDayNote.getDescription());
 
-
-            titleEditText2.setText(selectedDayNote.getTitle());
-            descEditText2.setText(selectedDayNote.getDescription());
-
-          //  Log.d("--Help--", "selectsmile!!!!!="+selectSmilePicture);
 
             if ((selectSmilePicture != "+")) smileBtn.setText(selectSmilePicture);
 
@@ -89,8 +88,6 @@ public class DiaryDetailActivity extends DiaryActivity {
         }
         else
         {
-         //   Log.d("--Help--", "Запись новая");
-         //   Log.d("--Help--", "selectSmile="+selectSmilePicture);
             smileBtn.setText(selectSmilePicture);
             dateNowForTextView();
             deleteButton2.setVisibility(View.INVISIBLE);
@@ -107,13 +104,15 @@ public class DiaryDetailActivity extends DiaryActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("titleEditText2", titleEditText2.getText().toString());
-        outState.putString("descEditText2", descEditText2.getText().toString());
+        outState.putString("titleEditText2", yourFeelingsEditText.getText().toString());
+        outState.putString("descEditText2", yourdescDayEditText.getText().toString());
+        outState.putString("eventsEditText2", yourEventsEditText.getText().toString());
     }
 
     private void initWg(){
-    titleEditText2 = findViewById(R.id.titleEditText2);
-    descEditText2 = findViewById(R.id.descriptionEditText2);
+    yourFeelingsEditText = findViewById(R.id.yourFeeling);
+    yourdescDayEditText = findViewById(R.id.yourDescrDay);
+    yourEventsEditText = findViewById(R.id.yourEvents);
     deleteButton2 = findViewById(R.id.deleteButton2);
     dateTV = findViewById(R.id.dateTV);
     smileBtn = findViewById(R.id.smileBtn);
@@ -132,9 +131,9 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
 
-    public void saveRecord(View view) throws ParseException {
+    public void saveRecord(View view)  {
 
-        if ((titleEditText2.getText().toString().trim().length()== 0)  && (descEditText2.getText().toString().trim().length() == 0) && (smileBtn.getText()=="+")){
+        if ((yourFeelingsEditText.getText().toString().trim().length()== 0)  && (yourdescDayEditText.getText().toString().trim().length() == 0)  && (yourEventsEditText.getText().toString().trim().length() == 0) && (smileBtn.getText()=="+")){
             Toast.makeText(getApplicationContext(), "Нельзя сохранить пустую запись!", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -148,8 +147,9 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
             SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-            String title = String.valueOf(titleEditText2.getText());
-            String desc = String.valueOf(descEditText2.getText());
+            String feelings = String.valueOf(yourFeelingsEditText.getText());
+            String events = String.valueOf(yourEventsEditText.getText());
+            String desc = String.valueOf(yourdescDayEditText.getText());
 
 
 
@@ -173,7 +173,7 @@ public class DiaryDetailActivity extends DiaryActivity {
             if(selectedDayNote == null)
             {
                 int id = Record.noteDayArrayList.size();
-                Record newRec = new Record(id, title, desc, smile, date);
+                Record newRec = new Record(id, feelings, events, desc, smile, date);
                 Record.noteDayArrayList.add(newRec);
                 sqLiteManager.addRecordToDatabase(newRec);
 
@@ -181,7 +181,8 @@ public class DiaryDetailActivity extends DiaryActivity {
             else
             {
 
-                selectedDayNote.setTitle(title);
+                selectedDayNote.setFeeling(feelings);
+                selectedDayNote.setEvents(events);
                 selectedDayNote.setDescription(desc);
                 selectedDayNote.setSmile(smile);
 
