@@ -56,9 +56,7 @@ public class NoteAdapterForCalendar extends RecyclerView.Adapter<NoteAdapterForC
             Calendar currentCalendar = Calendar.getInstance();
             currentCalendar.add(Calendar.DATE, -1); // вычитаем один день из текущей даты
 
-            if (inputCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
-                    inputCalendar.get(Calendar.MONTH) == currentCalendar.get(Calendar.MONTH) &&
-                    inputCalendar.get(Calendar.DAY_OF_MONTH) == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
+            if (inputCalendar.before(currentCalendar)) {
                 holder.noteCalendarCardView.setCardBackgroundColor(Color.parseColor("#E2E2E2"));
                 holder.dateTextView.setTextColor(Color.parseColor("#F08080"));
                 holder.titleTextView.setTextColor(Color.parseColor("#4C4E4B"));

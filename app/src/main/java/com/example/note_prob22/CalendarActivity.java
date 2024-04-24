@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import android.widget.CalendarView;
@@ -22,6 +21,8 @@ import java.util.Locale;
 public class CalendarActivity extends AppCompatActivity {
     SQLiteManager sqLiteManager;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,6 @@ public class CalendarActivity extends AppCompatActivity {
         NoteAdapterForCalendar adapter = new NoteAdapterForCalendar(Note.noteArrayListWithForCalendar);
 
         CalendarView calendarView = findViewById(R.id.calendarView);
-
 
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -54,7 +54,28 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
 
 
 
