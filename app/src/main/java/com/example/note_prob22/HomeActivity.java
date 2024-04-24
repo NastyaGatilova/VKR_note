@@ -118,29 +118,29 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    public void ActShowStory(View view) {
-
-        androidx.appcompat.app.AlertDialog.Builder a_builder = new androidx.appcompat.app.AlertDialog.Builder(HomeActivity.this);
-        a_builder.setMessage("Вы хотите просмотреть историю записей?")
-                .setCancelable(false)
-                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent newNoteIntent = new Intent(getApplicationContext(), StoryActivity.class);
-                        startActivity(newNoteIntent);
-                    }
-                })
-                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-        androidx.appcompat.app.AlertDialog alert = a_builder.create();
-        alert.setTitle("История записей");
-        alert.show();
-
-
-    }
+//    public void ActShowStory(View view) {
+//
+//        androidx.appcompat.app.AlertDialog.Builder a_builder = new androidx.appcompat.app.AlertDialog.Builder(HomeActivity.this);
+//        a_builder.setMessage("Вы хотите просмотреть историю записей?")
+//                .setCancelable(false)
+//                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent newNoteIntent = new Intent(getApplicationContext(), StoryActivity.class);
+//                        startActivity(newNoteIntent);
+//                    }
+//                })
+//                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        androidx.appcompat.app.AlertDialog alert = a_builder.create();
+//        alert.setTitle("История записей");
+//        alert.show();
+//
+//
+//    }
 
 
     public void delNote(View view) {

@@ -83,9 +83,8 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_baseline_account_circle_24"
             app:tint = "@color/white"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="300dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="100dp"
             android:layout_marginBottom="15dp"
             android:backgroundTint="#2AA398"
             android:onClick="exitAcc"
@@ -94,42 +93,39 @@
             />
 
 
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/showStory"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:tint = "@color/white"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:layout_marginLeft="230dp"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:layout_marginBottom="15dp"-->
+<!--            android:backgroundTint="@color/head"-->
+<!--            android:onClick="ActShowStory"-->
+<!--            app:srcCompat="@drawable/ic_baseline_remove_red_eye_24"-->
+<!--            />-->
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/calendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tint = "@color/white"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="160dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="start|bottom"
+            android:layout_marginStart="100dp"
             android:layout_marginBottom="15dp"
             android:backgroundTint="@color/head"
             android:onClick="showCalendar"
             app:srcCompat="@drawable/ic_baseline_calendar_month_24"
-            />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/showStory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tint = "@color/white"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="230dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:backgroundTint="@color/head"
-            android:onClick="ActShowStory"
-            app:srcCompat="@drawable/ic_baseline_remove_red_eye_24"
-            />
+            app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/dayInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:tint = "@color/white"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="90dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="center|bottom"
+
             android:layout_marginBottom="15dp"
             android:backgroundTint="@color/head"
             android:onClick="showDaysActivity"

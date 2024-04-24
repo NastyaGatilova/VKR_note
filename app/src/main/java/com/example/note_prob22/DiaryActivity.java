@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -39,12 +40,15 @@ public class DiaryActivity extends AppCompatActivity
         setContentView(R.layout.activity_diary);
         initWidgets();
         loadFromDBToMemory();
-       // setNoteDaysAdapter();
-        //setOnClickListener();
+
 
         dbm = new SQLiteManager(this);
         //  dbm.deleteRecordInDB();
         //dbm.recordFromDB();
+
+
+//        dbm.getMostUsedSmiley();
+
         dbm.getTimeAndSmileFromDB();
         dbm.getTimeAndSmileForGrafikHours();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

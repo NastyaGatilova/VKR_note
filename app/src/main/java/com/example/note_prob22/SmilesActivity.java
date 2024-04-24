@@ -4,18 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.note_prob22.classes.Record;
+import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 import com.github.jinatonic.confetti.CommonConfetti;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class SmilesActivity extends AppCompatActivity {
 
     public static int selectSmile = 0;
     public static String selectSmilePicture = "+";
+
+    public static List<SmileyEvent> smileyEvents = new ArrayList<>();
     private int currentSmile =0;
     private String currentSmilePicture = "+";
 
@@ -23,12 +32,14 @@ public class SmilesActivity extends AppCompatActivity {
     SQLiteManager sqDB;
     private Button btn1_alarming, btn2_verysad, btn3_sad, btn4_neutral, btn5_angry, btn6_happy, btn7_surprised, btn8_varyhappy, btn9_besthappy, btn_ok;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smiles);
         initwg();
+
 
 
 
@@ -218,6 +229,8 @@ public class SmilesActivity extends AppCompatActivity {
         btn9_besthappy.setEnabled(false);
 
 
+
+
         final View confettiContainer = findViewById(R.id.confetti_container);
         CommonConfetti.rainingConfetti((ViewGroup) confettiContainer, new int[] {Color.RED, Color.GREEN, Color.BLUE})
                 .infinite();
@@ -225,6 +238,12 @@ public class SmilesActivity extends AppCompatActivity {
         currentSmile = 9;
 //        Log.d("--Help--", ""+currentSmile);
         currentSmilePicture = btn9_besthappy.getText().toString();
+
+
+        long currentTimestamp = System.currentTimeMillis();
+        smileyEvents.add(new SmileyEvent(currentTimestamp));
+        Log.d("--Help--", "Smiley selected at: " + currentTimestamp);
+
     }
 
     public void btnOk(View view) {
@@ -241,7 +260,6 @@ public class SmilesActivity extends AppCompatActivity {
 
 
     }
-
 
 
 

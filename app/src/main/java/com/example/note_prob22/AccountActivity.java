@@ -1,5 +1,7 @@
 package com.example.note_prob22;
 
+import static com.example.note_prob22.SmilesActivity.smileyEvents;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -10,11 +12,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
 import com.example.note_prob22.graph.HourGraphViewHelper;
@@ -22,13 +26,18 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class AccountActivity extends AppCompatActivity {
     SQLiteManager sqLiteManager;
     SQLiteDatabase db;
     Cursor cursor;
     Button btnChoosePeriod;
+    TextView happyHour;
 
     //  private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[0]);
 
@@ -53,6 +62,8 @@ public class AccountActivity extends AppCompatActivity {
         GraphView graphView = findViewById(R.id.graph);
         ViewPager2 viewPager2 = findViewById(R.id.viewPager);
 
+        happyHour = findViewById(R.id.happyHour);
+
 
 
         sqLiteManager = new SQLiteManager(this);
@@ -74,7 +85,7 @@ public class AccountActivity extends AppCompatActivity {
         HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
 
 
-
+        findHappiestHour();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,45 +110,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
 
-//        PopupMenu popupMenu2 = new PopupMenu(this,btnChoosePeriod);
-//        popupMenu2.getMenuInflater().inflate(R.menu.popup_menu, popupMenu2.getMenu());
-//        popupMenu2.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.week:
-//                       // graphView.removeAllSeries();
-//                       graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getBaseContext()));
-//                        GraphViewHelper.fillGraphViewWithData(graphView,  sqLiteManager.dateAndSmileFromTableRecordForGrafikLastWeek());
-//                        return true;
-//                    case R.id.month:
-////                        graphView.removeAllSeries();
-//                        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getBaseContext()));
-//                       GraphViewHelper.fillGraphViewWithData(graphView,  sqLiteManager.dateAndSmileFromTableRecordForGrafikLastMounth());
-//                        return true;
-//                    case R.id.year:
-////                        graphView.removeAllSeries();
-//                       GraphViewHelper.fillGraphViewWithData(graphView,  sqLiteManager.dateAndSmileFromTableRecordForGrafik());
-//                        return true;
-//                    default:
-//                        return false;
-//                }
-//            }
-//        });
-//
-//
-//
-//        btnChoosePeriod.setOnClickListener(v -> popupMenu2.show());
-
-
-
-
     }
-
-
-
-
-
 
 
 
@@ -170,6 +143,42 @@ public class AccountActivity extends AppCompatActivity {
 
 
     }
+
+
+    private void findHappiestHour() {
+        Map<Integer, Integer> hourCountMap = countSmileyEventsPerHour(smileyEvents);
+
+        int maxCount = 0;
+        int happiestHour = -1;
+        for (Map.Entry<Integer, Integer> entry : hourCountMap.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                happiestHour = entry.getKey();
+            }
+        }
+
+        if (happiestHour != -1) {
+            Log.d("--Help--", "The happiest hour is: " + happiestHour);
+            happyHour.setText("\uD83E\uDD29 Ваш счастливый час —\t "+ happiestHour + "ч.");
+        }
+    }
+
+    private Map<Integer, Integer> countSmileyEventsPerHour(List<SmileyEvent> smileyEvents) {
+        Map<Integer, Integer> hourCountMap = new HashMap<>();
+        for (int i = 0; i < 24; i++) {
+            hourCountMap.put(i, 0);
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        for (SmileyEvent event : smileyEvents) {
+            calendar.setTimeInMillis(event.getTimestamp());
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            hourCountMap.put(hour, hourCountMap.get(hour) + 1);
+        }
+
+        return hourCountMap;
+    }
+
 
 
     @Override

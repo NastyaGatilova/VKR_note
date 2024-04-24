@@ -4,14 +4,16 @@
     android:id="@+id/popup_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/selected_date"
-        android:layout_width="wrap_content"
+        android:id="@+id/smileMost"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text=";poiuygfyuuy"
-        android:padding="10dp" />
+        android:text=""
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp" />
 
 </LinearLayout>

@@ -41,85 +41,89 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100sp"
-        android:layout_marginTop="15dp"
-        android:gravity="left"
-        android:text="@string/login"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100sp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="100sp"
-        android:background="@drawable/edittextbackground"
-        android:gravity="center_horizontal"
-        android:inputType="textPassword"
-        android:text="**********"
-        android:textColor="@color/teal_700"
-        android:textSize="20sp"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100sp"
+                android:layout_marginTop="15dp"
+                android:gravity="left"
+                android:text="@string/login"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
-        />
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100sp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="100sp"
+                android:background="@drawable/edittextbackground"
+                android:gravity="center_horizontal"
+                android:inputType="textPassword"
+                android:text="**********"
+                android:textColor="@color/teal_700"
+                android:textSize="20sp"
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100sp"
-        android:layout_marginTop="9dp"
-        android:gravity="left"
-        android:text="@string/pass"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        android:textStyle="bold" />
+                />
 
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100sp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="100sp"
-        android:background="@drawable/edittextbackground"
-        android:gravity="center_horizontal"
-        android:inputType="textPassword"
-        android:text="**********"
-        android:textColor="@color/teal_700"
-        android:textSize="20sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100sp"
+                android:layout_marginTop="9dp"
+                android:gravity="left"
+                android:text="@string/pass"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100sp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="100sp"
+                android:background="@drawable/edittextbackground"
+                android:gravity="center_horizontal"
+                android:inputType="textPassword"
+                android:text="**********"
+                android:textColor="@color/teal_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/happyHour"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textColor="@color/purple_200"
+                android:textSize="20sp"/>
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginEnd="4dp"
                 android:padding="4dp" />
 
 
-        <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="20dp" />
-
-
-
-
-
-
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="20dp" />
 
 
         </LinearLayout>

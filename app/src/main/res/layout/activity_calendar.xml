@@ -25,11 +25,33 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/mostUsedSmile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="2dp"
+        android:text="😡"
+        android:textColor="@color/white"
+        android:background="@android:color/transparent"
+        android:textSize="45sp"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/textForSmile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="-30dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:text="самая частая эмоция за 21 мар. 2024 - 11 апр. 2024"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:textSize="12sp"/>-->
+
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
+        android:layout_marginTop="10dp"
         android:selectedWeekBackgroundColor="@color/red"
         android:weekNumberColor="@color/purple_500"
         android:weekSeparatorLineColor="@color/salad" />
