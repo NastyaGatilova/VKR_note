@@ -201,10 +201,13 @@ public class DiaryDetailActivity extends DiaryActivity {
 
     public void deleteRecord(View view)
     {
-        delet = 1;
+        //delet = 1;
         selectedDayNote.setDeleted(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+        diaryAdapter.removeItem(selectedDayNote.getId());
         sqLiteManager.deleteRecordFromDB(selectedDayNote);
+
+
         finish();
     }
 

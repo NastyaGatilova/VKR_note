@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
@@ -51,7 +52,6 @@ public class DiaryActivity extends AppCompatActivity
 
         diaryAdapter = new DiaryAdapter(Record.noteDayArrayList);
         dayInfoListRc.setAdapter(diaryAdapter);
-
 
 
         dayInfoListRc.addOnItemTouchListener(new RecyclerViewItemClickListener(this, dayInfoListRc, new RecyclerViewItemClickListener.OnItemClickListener() {
@@ -252,6 +252,7 @@ public class DiaryActivity extends AppCompatActivity
         super.onStop();
 
             dbm.getDateAndSmileFromTableRecordForGrafik();
+            diaryAdapter.notifyDataSetChanged();
 
 //        String inputDate = "02 февр. 2024";
 //        String outputFormat = "dd.MM.yyyy";
@@ -275,6 +276,7 @@ public class DiaryActivity extends AppCompatActivity
 
 
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onResume()
     {

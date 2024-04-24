@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.note_prob22.classes.Note;
@@ -20,9 +21,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class SQLiteManager extends SQLiteOpenHelper {
@@ -392,7 +396,11 @@ public class SQLiteManager extends SQLiteOpenHelper {
         }
     }
 
-
+    public void deleteNoteFromDB(Note note) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete(TABLE_NAME_NOTE, ID_NOTE + " =? and " + USERNAME_USERS + " =? ", new String[]{String.valueOf(note.getId()), USER_REMEMBER});
+        sqLiteDatabase.close();
+    }
 
 //    @Override
 //    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion){
@@ -500,6 +508,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_NAME_RECORD, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
         sqLiteDatabase.close();
     }
+
+
 
 
     public void deleteRecordInDB() {
@@ -766,6 +776,134 @@ public class SQLiteManager extends SQLiteOpenHelper {
 //        }
         cursor.close();
         return pairList;
+    }
+
+
+    // вывести самые частые смайлики
+//    public String getCountSmile() {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        List<Integer> countSmileList = new ArrayList<>();
+//        countSmileList.clear();
+//        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " where "+ USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
+//        Cursor cursor = db.rawQuery(query,  new String[]{USER_REMEMBER});
+//
+//
+//        int countSmile1 = 0;
+//        int countSmile2 = 0;
+//        int countSmile3 = 0;
+//        int countSmile4 = 0;
+//        int countSmile5 = 0;
+//        int countSmile6 = 0;
+//        int countSmile7 = 0;
+//        int countSmile8 = 0;
+//        int countSmile9 = 0;
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+//                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+//
+//
+//                switch (smile) {
+//                    case "\uD83D\uDE30":
+//                        countSmile1= countSmile1+1;
+//                        break;
+//                    case "\uD83D\uDE41":
+//                        countSmile2=countSmile2+1;
+//                        break;
+//                    case "\uD83D\uDE14":
+//                        countSmile3=countSmile3+1;
+//                        break;
+//                    case "\uD83D\uDE10":
+//                        countSmile4=countSmile4+1;
+//                        break;
+//                    case "\uD83D\uDE21":
+//                        countSmile5=countSmile5+1;
+//                        break;
+//                    case "\uD83D\uDE42":
+//                        countSmile6=countSmile6+1;
+//                        break;
+//                    case "\uD83D\uDE31":
+//                        countSmile7=countSmile7+1;
+//                        break;
+//                    case "\uD83D\uDE03":
+//                        countSmile8=countSmile8+1;
+//                        break;
+//                    case "\uD83E\uDD29":
+//                        countSmile9=countSmile9+1;
+//                        break;
+//                }
+//
+//
+//            } while (cursor.moveToNext());
+//        } else {
+//            Log.d("--Help--", "Error get7UniqRecordFromDb");
+//        }
+//        countSmileList.add(countSmile1);
+//        countSmileList.add(countSmile2);
+//        countSmileList.add(countSmile3);
+//        countSmileList.add(countSmile4);
+//        countSmileList.add(countSmile5);
+//        countSmileList.add(countSmile6);
+//        countSmileList.add(countSmile7);
+//        countSmileList.add(countSmile8);
+//        countSmileList.add(countSmile9);
+//
+//
+//
+//
+//
+////        for (PairSmileAndDate pair : pairList) {
+////            Log.d("--Help--", "Uni 7 dates: " + pair.getDates() + ", Smile: " + pair.getSmile());
+////        }
+//        cursor.close();
+//        return pairList;
+//    }
+
+
+    public String getMostUsedSmiley() {
+
+        SQLiteDatabase db = sqLiteManager.getReadableDatabase();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -7); // Вычитаем 7 дней из текущей даты
+        Date oneWeekAgo = calendar.getTime();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM. yyyy");
+        String oneWeekAgoString = dateFormat.format(oneWeekAgo);
+
+      //  String query = "SELECT smiley_text FROM smileys WHERE timestamp >= ?";
+        // Cursor cursor = db.rawQuery(query, new String[]{oneWeekAgoString});
+     //   String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " where "+ USERNAME_USERS_RECORD + " =?" + " and "+ DATE_RECORD +  " >=?" ;
+       //Cursor cursor = db.rawQuery(query,  new String[]{USER_REMEMBER, oneWeekAgoString});
+
+        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " where "+ USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
+        Cursor cursor = db.rawQuery(query,  new String[]{USER_REMEMBER});
+        HashMap<String, Integer> smileyCountMap = new HashMap<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String smiley = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    smileyCountMap.put(smiley, smileyCountMap.getOrDefault(smiley, 0) + 1);
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        String mostUsedSmiley = "";
+        int maxCount = 0;
+
+        for (Map.Entry<String, Integer> entry : smileyCountMap.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostUsedSmiley = entry.getKey();
+            }
+        }
+        Log.d("--Help--", "Самый частый смайлик = " + mostUsedSmiley);
+        return mostUsedSmiley;
     }
 
     @SuppressLint("SuspiciousIndentation")

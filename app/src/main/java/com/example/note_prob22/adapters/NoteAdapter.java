@@ -131,11 +131,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
     @SuppressLint("NotifyDataSetChanged")
     public void clearData() {
-        // Clear the list or dataset that the adapter is using to display the data
         mNotes.clear();
-
-        // Notify the adapter that the data set has changed
         notifyDataSetChanged();
+    }
+
+    public void removeNote(int position) {
+        mNotes.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void sortItemsByDate() {

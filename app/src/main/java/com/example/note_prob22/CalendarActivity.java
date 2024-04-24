@@ -37,6 +37,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         CalendarView calendarView = findViewById(R.id.calendarView);
 
+        //
+        sqLiteManager.getMostUsedSmiley();
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override

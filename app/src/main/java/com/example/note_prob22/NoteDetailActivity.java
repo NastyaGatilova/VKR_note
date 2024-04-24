@@ -20,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class NoteDetailActivity extends AppCompatActivity
+public class NoteDetailActivity extends HomeActivity
 {
 
 
@@ -105,8 +105,6 @@ public class NoteDetailActivity extends AppCompatActivity
                 Note.noteArrayList.add(newNote);
                 sqLiteManager.addNoteToDatabase(newNote);
 
-               ;
-
 
             }
             else
@@ -124,12 +122,15 @@ public class NoteDetailActivity extends AppCompatActivity
 
     public void deleteNote(View view)
     {
-        delet = 1;
+       // delet = 1;
         selectedNote.setDeleted(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.updateNoteInDB(selectedNote);
+        sqLiteManager.deleteNoteFromDB(selectedNote);
+        noteAdapter.removeNote(selectedNote.getId());
         finish();
     }
+
 
 
 

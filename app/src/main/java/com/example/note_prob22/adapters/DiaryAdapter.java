@@ -82,15 +82,11 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
     public Record getItem(int position) {
         return mRecords.get(position);
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void clearData() {
-        // Clear the list or dataset that the adapter is using to display the data
-        mRecords.clear();
-
-        // Notify the adapter that the data set has changed
-        notifyDataSetChanged();
+    public void removeItem(int position) {
+        mRecords.remove(position);
+        notifyItemRemoved(position);
     }
+
 
     public static class RecordViewHolder extends RecyclerView.ViewHolder
     {

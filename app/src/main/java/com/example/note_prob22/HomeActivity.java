@@ -58,33 +58,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // dbm.deleteRecordInDB();
 
-        for (Note el : Note.noteArrayList) {
 
-//            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-//
-//            try {
-//                Date inputDate = formatter.parse(el.getDate());
-//                Calendar inputCalendar = Calendar.getInstance();
-//                inputCalendar.setTime(inputDate);
-//
-//                Calendar currentCalendar = Calendar.getInstance();
-//                currentCalendar.add(Calendar.DATE, -1); // вычитаем один день из текущей даты
-//
-//                if (inputCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
-//                        inputCalendar.get(Calendar.MONTH) == currentCalendar.get(Calendar.MONTH) &&
-//                        inputCalendar.get(Calendar.DAY_OF_MONTH) == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
-//                    Log.d("Date", "Введенная дата является предыдущей для текущей даты");
-//                    cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-//                }
-////                 else {
-////                    Log.d("Date", "Введенная дата не является предыдущей для текущей даты");
-////                }
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-
-            Log.d("--Help--", "Из списка: " + el.getId() + " " + el.getDate());
-        }
 
         recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this, recyclerView, new RecyclerViewItemClickListener.OnItemClickListener() {
             @Override
@@ -180,11 +154,7 @@ public class HomeActivity extends AppCompatActivity {
                         noteAdapter.clearData();
                         // Очистка списка записей
                         Note.noteArrayList.clear();
-
-                        // Уведомление адаптера об изменениях
                         noteAdapter.notifyDataSetChanged();
-
-                        // Удаление записей из базы данных
                         dbm.deleteNoteInDB();
                     }
                 })
