@@ -208,11 +208,11 @@ public class DiaryActivity extends AppCompatActivity implements OnItemClickListe
 
     public void newInfo(View view)
     {
-        //Intent newNoteIntent = new Intent(this, DiaryDetailActivity.class);
-       // startActivity(newNoteIntent);
+        Intent newNoteIntent = new Intent(this, DiaryDetailActivity.class);
+       startActivity(newNoteIntent);
 
-       // dbm.deleteRecordInDB();
-       addRecImitation();
+      // dbm.deleteRecordInDB();
+        // addRecImitation();
     }
 
 
