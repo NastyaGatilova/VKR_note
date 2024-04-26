@@ -14,15 +14,15 @@ import android.widget.ListView;
 
 import com.example.note_prob22.adapters.DiaryAdapter;
 import com.example.note_prob22.adapters.NoteAdapter;
+import com.example.note_prob22.adapters.OnItemClickListener;
 import com.example.note_prob22.adapters.RecyclerViewItemClickListener;
 import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.db.SQLiteManager;
 
 
-public class DiaryActivity extends AppCompatActivity
+public class DiaryActivity extends AppCompatActivity implements OnItemClickListener
 {
-    //private ListView dayInfoList;
 
     RecyclerView dayInfoListRc;
     DiaryAdapter diaryAdapter;
@@ -54,32 +54,25 @@ public class DiaryActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         dayInfoListRc.setLayoutManager(layoutManager);
 
-        diaryAdapter = new DiaryAdapter(Record.noteDayArrayList);
+        diaryAdapter = new DiaryAdapter(Record.noteDayArrayList, this);
         dayInfoListRc.setAdapter(diaryAdapter);
-
-
-        dayInfoListRc.addOnItemTouchListener(new RecyclerViewItemClickListener(this, dayInfoListRc, new RecyclerViewItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Record selectedRec = (Record) diaryAdapter.getItem(position);
-                Intent editNoteIntent = new Intent(getApplicationContext(), DiaryDetailActivity.class);
-                editNoteIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
-                editNoteIntent.putExtra("date", selectedRec.getDate());
-                startActivity(editNoteIntent);
-            }
-        }));
-
 
 
 
 
     }
-
+    @Override
+    public void onItemClick(int position) {
+        Record selectedRec = (Record) diaryAdapter.getItem(position);
+        Intent editRecordIntent = new Intent(this, DiaryDetailActivity.class);
+        editRecordIntent.putExtra(Record.NOTE_EDIT_EXTRA, selectedRec.getId());
+        editRecordIntent.putExtra("date", selectedRec.getDate());
+        startActivity(editRecordIntent);
+    }
 
     private void initWidgets()
     {
 
-   //  dayInfoList = findViewById(R.id.dayInfoList);
         dayInfoListRc = findViewById(R.id.dayInfoListRc);
     }
 
@@ -258,21 +251,6 @@ public class DiaryActivity extends AppCompatActivity
             dbm.getDateAndSmileFromTableRecordForGrafik();
             diaryAdapter.notifyDataSetChanged();
 
-//        String inputDate = "02 февр. 2024";
-//        String outputFormat = "dd.MM.yyyy";
-//        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MMM. yyyy", new Locale("ru")); // Укажите соответствующий язык
-//        SimpleDateFormat outputFormat2 = new SimpleDateFormat(outputFormat);
-//
-//        try {
-//            Date date = inputFormat.parse(inputDate);
-//            String outputDate = outputFormat2.format(date);
-//            Log.d("--Help--", outputDate);
-//
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            Log.d("--Help--", "error");
-//
-//        }
 
     }
 
@@ -287,13 +265,6 @@ public class DiaryActivity extends AppCompatActivity
         super.onResume();
 //        setNoteDaysAdapter();
         diaryAdapter.notifyDataSetChanged();
-
-//        NoteDaysAdapter adapter = (NoteDaysAdapter) dayInfoList.getAdapter();
-//        int count = adapter.getCount();
-//        for (int i = 0; i < count; i++) {
-//            Record data = (Record) adapter.getItem(i);
-//            Log.d("--Help--", "Записи: Title: " + data.getTitle() + ", Description: " + data.getDescription());
-//        }
 
 
 

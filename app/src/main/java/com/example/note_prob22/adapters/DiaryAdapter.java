@@ -17,19 +17,23 @@ import java.util.List;
 
 public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHolder>
 {
+    private OnItemClickListener listener;
     private List<Record> mRecords;
 
-    public DiaryAdapter(ArrayList<Record> records)
+    public DiaryAdapter(ArrayList<Record> records, OnItemClickListener listener)
     {
+
         mRecords = records;
+        this.listener = listener;
     }
+
 
     @NonNull
     @Override
     public RecordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.record_cell, parent, false);
-        return new RecordViewHolder(view);
+        return new RecordViewHolder(view, listener);
     }
 
     @Override
@@ -59,13 +63,14 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
     }
 
 
-    public static class RecordViewHolder extends RecyclerView.ViewHolder
+    public static class RecordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
+        private OnItemClickListener listener;
         public TextView mTitleTextView;
         public TextView mDescTextView;
         public TextView mDateTextView, mSmileTextView;
 
-        public RecordViewHolder(View itemView)
+        public RecordViewHolder(View itemView, OnItemClickListener listener)
         {
             super(itemView);
             mTitleTextView = itemView.findViewById(R.id.cellTitle2);
@@ -73,6 +78,13 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
             mDateTextView = itemView.findViewById(R.id.cellDate2);
             mSmileTextView = itemView.findViewById(R.id.cellSmile2);
 
+            this.listener = listener;
+            itemView.setOnClickListener(this);
+
+        }
+        @Override
+        public void onClick(View view) {
+            listener.onItemClick(getAdapterPosition());
         }
     }
 }
