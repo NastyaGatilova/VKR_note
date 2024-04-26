@@ -31,25 +31,20 @@ public class GraphYearFragment extends Fragment {
         TextView noData = view.findViewById(R.id.noDataYear);
 
 
-      //  graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
-        //GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.dateAndSmileFromTableRecordForGrafik());
-
-        if (sqLiteManager.isTableEmpty()){
+        if (sqLiteManager.isTableEmpty()) {
 
             graphView.setVisibility(View.GONE);
             noData.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
 
             graphView.setVisibility(View.VISIBLE);
             noData.setVisibility(View.GONE);
-           graphView.setTitle("Cтатистика за год ☀");
-           graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
-           GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndSmileFromTableRecordForGrafik());
+            graphView.setTitle("Cтатистика за год ☀");
+            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
+         //   GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndSmileFromTableRecordForGrafik());
+            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileFromTableRecordForGraphik());
+
         }
-
-
-
 
 
         return view;

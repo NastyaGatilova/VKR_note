@@ -73,6 +73,14 @@ public class Record
         return nonDeleted;
     }
 
+    public static int getPositionForID(int id) {
+        for (int i = 0; i < noteDayArrayList.size(); i++) {
+            if (noteDayArrayList.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
     public int getId()

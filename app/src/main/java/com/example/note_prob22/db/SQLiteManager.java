@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.note_prob22.classes.Data;
 import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.graph.PairSmileAndDate;
@@ -21,7 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_26";
+    private static final String DATABASE_NAME = "TODO_28";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
@@ -293,7 +294,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Date deleted = getDateFromString(stringDeleted);
 
                     Note note = new Note(id, title, desc, date, deleted);
-                    Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
+              //      Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
                     Note.noteArrayList.add(note);
                 }
 
@@ -454,6 +455,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Date deleted = getDateFromString(stringDeleted);
 
                     Record rec = new Record(id, feelings, events, desc, smile, date, deleted);
+                    Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
                     Record.noteDayArrayList.add(rec);
                 }
 
@@ -473,7 +475,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
                     data += cursor.getString(i) + " ";
                 }
-                Log.d("--Help--", "DB= " + data);
+               // Log.d("--Help--", "DB= " + data);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -501,7 +503,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void deleteRecordFromDB(Record rec) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(TABLE_NAME_RECORD, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
-        sqLiteDatabase.close();
+
     }
 
 
@@ -517,7 +519,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public List<PairSmileAndDate> getDateAndSmileFromTableRecordForGrafik() {
         SQLiteDatabase db = getReadableDatabase();
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        int smileNum = 0;
+        double smileNum = 0;
 
         Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
@@ -575,7 +577,107 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return pairList;
     }
 
+    public List<PairSmileAndDate> getDateAndAverageSmileFromTableRecordForGraphik() {
+        SQLiteDatabase db = getReadableDatabase();
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
+        List<Data> dataList = new ArrayList<>();
 
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+                " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                Log.d("--Help--", "СМайлики с датами "+ " id =" + id + " smile=" + smile + " date= " + date);
+
+
+
+
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+                Date d1 = null;
+                try {
+                    d1 = sdf.parse(date);
+                   // pairList.add(new PairSmileAndDate(d1, smileNum));
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                Data data = new Data(smileNum, d1);
+                dataList.add(data);
+            } while (cursor.moveToNext());
+        } else {
+            //Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+        }
+        cursor.close();
+
+
+        // Отсортировать данные по дате
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dataList.sort(Comparator.comparing(d -> d.date));
+        }
+
+        // Рассчитать среднее значение номеров для каждой даты
+        Map<Date, List<Integer>> dateToNumbersMap = new HashMap<>();
+        for (Data data : dataList) {
+            if (dateToNumbersMap.containsKey(data.date)) {
+                dateToNumbersMap.get(data.date).add(data.number);
+            } else {
+                List<Integer> numbers = new ArrayList<>();
+                numbers.add(data.number);
+                dateToNumbersMap.put(data.date, numbers);
+            }
+        }
+
+        for (Map.Entry<Date, List<Integer>> entry : dateToNumbersMap.entrySet()) {
+            Date date = entry.getKey();
+            List<Integer> numbers = entry.getValue();
+
+            // Рассчет среднего значения
+            double average = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0);
+            }
+
+            Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
+            pairList.add(new PairSmileAndDate(date, average));
+        }
+
+        return pairList;
+    }
     public boolean checkLastMonthQuery() {
         Calendar calendar = Calendar.getInstance();
         SQLiteDatabase db = getReadableDatabase();
@@ -601,16 +703,126 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
+
+    public List<PairSmileAndDate> getDateAndAverageSmileForMounth() {
+        SQLiteDatabase db = getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -31);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
+        String lastMonthDate = sdf.format(calendar.getTime());
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
+        List<Data> dataList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+                " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+
+                Date d1 = null;
+                Date lastD = null;
+                try {
+                    d1 = sdf.parse(date);
+                    lastD =sdf.parse(lastMonthDate);
+                    // pairList.add(new PairSmileAndDate(d1, smileNum));
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if (d1.after(lastD) ){
+                    Data data = new Data(smileNum, d1);
+                    dataList.add(data);
+                }
+
+            } while (cursor.moveToNext());
+        } else {
+            //Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+        }
+        cursor.close();
+
+
+        // Отсортировать данные по дате
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dataList.sort(Comparator.comparing(d -> d.date));
+        }
+
+        // Рассчитать среднее значение номеров для каждой даты
+        Map<Date, List<Integer>> dateToNumbersMap = new HashMap<>();
+        for (Data data : dataList) {
+            if (dateToNumbersMap.containsKey(data.date)) {
+                dateToNumbersMap.get(data.date).add(data.number);
+            } else {
+                List<Integer> numbers = new ArrayList<>();
+                numbers.add(data.number);
+                dateToNumbersMap.put(data.date, numbers);
+            }
+        }
+
+        for (Map.Entry<Date, List<Integer>> entry : dateToNumbersMap.entrySet()) {
+            Date date = entry.getKey();
+            List<Integer> numbers = entry.getValue();
+
+            // Рассчет среднего значения
+            double average = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0);
+            }
+
+            Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
+            pairList.add(new PairSmileAndDate(date, average));
+        }
+
+        return pairList;
+    }
+
+
+
+
     public boolean checkLastWeekQuery() {
         Calendar calendar = Calendar.getInstance();
         SQLiteDatabase db = getReadableDatabase();
         calendar.add(Calendar.DAY_OF_YEAR, -7);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        String lastMonthDate = sdf.format(calendar.getTime());
+        String lastWeekDate = sdf.format(calendar.getTime());
 
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_RECORD +
                         " WHERE " + DATE_RECORD + " >= ?" + " and " + USERNAME_USERS_RECORD + " =?",
-                new String[]{lastMonthDate, USER_REMEMBER});
+                new String[]{lastWeekDate, USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
@@ -625,6 +837,116 @@ public class SQLiteManager extends SQLiteOpenHelper {
         }
 
     }
+
+    public List<PairSmileAndDate> getDateAndAverageSmileForWeek() {
+        SQLiteDatabase db = getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -8);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String lastWeekDate = sdf.format(calendar.getTime());
+        List<PairSmileAndDate> pairList = new ArrayList<>();
+        int smileNum = 0;
+        List<Data> dataList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+                " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
+                switch (smile) {
+                    case "\uD83D\uDE30":
+                        smileNum = 1;
+                        break;
+                    case "\uD83D\uDE41":
+                        smileNum = 2;
+                        break;
+                    case "\uD83D\uDE14":
+                        smileNum = 3;
+                        break;
+                    case "\uD83D\uDE10":
+                        smileNum = 4;
+                        break;
+                    case "\uD83D\uDE21":
+                        smileNum = 5;
+                        break;
+                    case "\uD83D\uDE42":
+                        smileNum = 6;
+                        break;
+                    case "\uD83D\uDE31":
+                        smileNum = 7;
+                        break;
+                    case "\uD83D\uDE03":
+                        smileNum = 8;
+                        break;
+                    case "\uD83E\uDD29":
+                        smileNum = 9;
+                        break;
+                }
+
+                Date d1 = null;
+                Date lastD = null;
+                try {
+                    d1 = sdf.parse(date);
+                    lastD = sdf.parse(lastWeekDate);
+                    // pairList.add(new PairSmileAndDate(d1, smileNum));
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                if (d1.after(lastD) ){
+                    Data data = new Data(smileNum, d1);
+                    dataList.add(data);
+                }
+
+            } while (cursor.moveToNext());
+        } else {
+            //Log.d("--Help--", "Error getDateAndSmileFromTableRecordForGrafik()");
+        }
+        cursor.close();
+
+
+        // Отсортировать данные по дате
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dataList.sort(Comparator.comparing(d -> d.date));
+        }
+
+        // Рассчитать среднее значение номеров для каждой даты
+        Map<Date, List<Integer>> dateToNumbersMap = new HashMap<>();
+        for (Data data : dataList) {
+            if (dateToNumbersMap.containsKey(data.date)) {
+                dateToNumbersMap.get(data.date).add(data.number);
+            } else {
+                List<Integer> numbers = new ArrayList<>();
+                numbers.add(data.number);
+                dateToNumbersMap.put(data.date, numbers);
+            }
+        }
+
+        for (Map.Entry<Date, List<Integer>> entry : dateToNumbersMap.entrySet()) {
+            Date date = entry.getKey();
+            List<Integer> numbers = entry.getValue();
+
+            // Рассчет среднего значения
+            double average = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0);
+            }
+
+            Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
+            pairList.add(new PairSmileAndDate(date, average));
+        }
+
+        return pairList;
+    }
+
+
+
+
+
 
     public boolean isTableEmpty() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -650,7 +972,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
 
     public List<PairSmileAndDate> get30UniqRecordFromDb() {
-        int smileNum = 0;
+        double smileNum = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
@@ -710,12 +1032,20 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return pairList;
     }
 
+
+
+
+
+
+
+
+
     public List<PairSmileAndDate> get7UniqRecordFromDb() {
-        int smileNum = 0;
+        double smileNum = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 7";
+        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + DATE_RECORD + " DESC LIMIT 7";
         Cursor cursor = db.rawQuery(query, new String[]{USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
@@ -723,6 +1053,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
+
 
                 switch (smile) {
                     case "\uD83D\uDE30":
@@ -816,7 +1147,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
             }
         }
        // String resultString = mostUsedSmiley +  " самая частая эмоция за "+oneWeekAgoString + " — " + dateNow;
-        Log.d("--Help--", "Самый частый смайлик = " + " Дата1=" + oneWeekAgoString + " Дата2=" + dateNow + " " + mostUsedSmiley);
+      //  Log.d("--Help--", "Самый частый смайлик = " + " Дата1=" + oneWeekAgoString + " Дата2=" + dateNow + " " + mostUsedSmiley);
         return mostUsedSmiley;
     }
 
@@ -857,7 +1188,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         String date = dateFormat.format(currentDate);
 
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        int smileNum = 0;
+        double smileNum = 0;
 
         Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME

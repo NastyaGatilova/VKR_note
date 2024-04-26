@@ -30,7 +30,7 @@ public class GraphViewHelper {
 
         for (PairSmileAndDate pair : data) {
             Date date = pair.getDates();
-            Integer value = pair.getSmile();
+            Double value = pair.getSmile();
 
             DataPoint dataPoint = new DataPoint(date.getTime(), value);
 

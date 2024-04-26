@@ -37,12 +37,10 @@ public class HourGraphViewHelper {
 
 
 
-
-
         for (PairSmileAndDate pair : data) {
 
             Date date = pair.getDates();
-            Integer value = pair.getSmile();
+            Double value = pair.getSmile();
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -57,7 +55,7 @@ public class HourGraphViewHelper {
             String roundedTime = format.format(calendar.getTime());
 
 
-            Log.d("--Help--", "roundedTime ="+roundedTime  + " Полное время = " + date + " Смайл =" + value);
+        //    Log.d("--Help--", "roundedTime ="+roundedTime  + " Полное время = " + date + " Смайл =" + value);
 
 
             switch (roundedTime) {

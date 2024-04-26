@@ -51,16 +51,14 @@ public class Note
         return null;
     }
 
-//    public static Note getNoteDayForID(int passedNoteID)
-//    {
-//        for (Note note : noteDayArrayList)
-//        {
-//            if(note.getId() == passedNoteID)
-//                return note;
-//        }
-//
-//        return null;
-//    }
+    public static int getPositionForID(int id) {
+        for (int i = 0; i < noteArrayList.size(); i++) {
+            if (noteArrayList.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public static ArrayList<Note> nonDeletedNotes()
     {

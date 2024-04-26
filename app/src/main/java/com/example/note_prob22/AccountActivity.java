@@ -36,13 +36,9 @@ public class AccountActivity extends AppCompatActivity {
     SQLiteManager sqLiteManager;
     SQLiteDatabase db;
     Cursor cursor;
-    Button btnChoosePeriod;
+
     TextView happyHour;
 
-    //  private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[0]);
-
-    //    private LineGraphSeries<DataPoint> series2;
-    //private XYPlot plot;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     @SuppressLint("MissingInflatedId")
@@ -51,10 +47,6 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-
-        // PanZoom.attach(plot, PanZoom.Pan.HORIZONTAL, PanZoom.Zoom.STRETCH_HORIZONTAL);
-//        Button button = findViewById(R.id.button);
-//        final View confettiContainer = findViewById(R.id.confetti_container);
 
         TextView login = findViewById(R.id.login);
         TextView pass = findViewById(R.id.password);
@@ -158,7 +150,7 @@ public class AccountActivity extends AppCompatActivity {
         }
 
         if (happiestHour != -1) {
-            Log.d("--Help--", "The happiest hour is: " + happiestHour);
+            // Log.d("--Help--", "The happiest hour is: " + happiestHour);
             happyHour.setText("\uD83E\uDD29 Ваш счастливый час —\t "+ happiestHour + "ч.");
         }
     }

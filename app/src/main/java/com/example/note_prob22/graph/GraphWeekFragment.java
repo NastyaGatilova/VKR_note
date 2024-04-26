@@ -39,7 +39,8 @@ public class GraphWeekFragment extends Fragment {
             graphView.setTitle("Cтатистика за неделю \uD83C\uDF25");
 
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
-            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get7UniqRecordFromDb());
+           // GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get7UniqRecordFromDb());
+            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileForWeek());
 
         }
         else{

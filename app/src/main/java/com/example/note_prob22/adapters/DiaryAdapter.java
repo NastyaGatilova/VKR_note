@@ -58,8 +58,11 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
         return mRecords.get(position);
     }
     public void removeItem(int position) {
+//        mRecords.remove(position);
+//        notifyItemRemoved(position);
         mRecords.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
 

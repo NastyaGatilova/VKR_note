@@ -2,9 +2,11 @@ package com.example.note_prob22;
 
 
 import static com.example.note_prob22.SmilesActivity.selectSmilePicture;
+import static com.example.note_prob22.SmilesActivity.smileyEvents;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,23 +14,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.note_prob22.classes.Record;
+import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DiaryDetailActivity extends DiaryActivity {
     public static int delet = 0;
     private Record selectedDayNote;
-    private Button saveButton2;
+
     private EditText yourFeelingsEditText, yourdescDayEditText, yourEventsEditText;
     private Button deleteButton2,smileBtn;
+     private TextView cellSmile2;
+
 
     SQLiteManager sqDB;
 
-    private boolean saveBtnFlag=false;
 
 
 
@@ -39,6 +47,10 @@ public class DiaryDetailActivity extends DiaryActivity {
 
         setContentView(R.layout.activity_diary_detail);
         initWg();
+
+
+        ////
+
 
         if (savedInstanceState != null) {
             String editTextValue = savedInstanceState.getString("titleEditText2");
@@ -62,7 +74,20 @@ public class DiaryDetailActivity extends DiaryActivity {
         dateTV.setText(date);
         chechEmptyRecordOrNot();
 
+//        if (cellSmile2.getText() == "🤩") {
+//            long timestamp = System.currentTimeMillis();
+//            String smileyType = "happiness"; // или любой другой тип смайлика
+//            SmileyEvent event = new SmileyEvent(timestamp, smileyType);
+//            smileyEvents.add(event);
+//        }
+
+
+
+
     }
+
+
+
 
     private void chechEmptyRecordOrNot()
     {
@@ -71,6 +96,8 @@ public class DiaryDetailActivity extends DiaryActivity {
         int passedNoteID = previousIntent.getIntExtra(Record.NOTE_EDIT_EXTRA, -1);
 
         selectedDayNote = Record.getNoteDayForID(passedNoteID);
+
+       // Log.d("--Help--", "DiaryDetail id = " + selectedDayNote.getId());
 
 
         if (selectedDayNote != null)
@@ -117,6 +144,8 @@ public class DiaryDetailActivity extends DiaryActivity {
     dateTV = findViewById(R.id.dateTV);
     smileBtn = findViewById(R.id.smileBtn);
 
+    cellSmile2 = dayInfoListRc.findViewById(R.id.cellSmile2);
+
 }
 
     private void dateNowForTextView(){
@@ -138,8 +167,6 @@ public class DiaryDetailActivity extends DiaryActivity {
             finish();
         }
         else{
-            saveBtnFlag = true;
-
             Date currentDate = new Date();
 
             // задаем формат вывода даты
@@ -201,11 +228,21 @@ public class DiaryDetailActivity extends DiaryActivity {
 
     public void deleteRecord(View view)
     {
-        //delet = 1;
-        selectedDayNote.setDeleted(new Date());
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        diaryAdapter.removeItem(selectedDayNote.getId());
-        sqLiteManager.deleteRecordFromDB(selectedDayNote);
+//        selectedDayNote.setDeleted(new Date());
+//        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+//
+//        sqLiteManager.deleteRecordFromDB(selectedDayNote);
+//        diaryAdapter.removeItem(selectedDayNote.getId());
+//        diaryAdapter.notifyItemRemoved(selectedDayNote.getId());
+
+        int position = Record.getPositionForID(selectedDayNote.getId());
+        if (position != -1) {
+            selectedDayNote.setDeleted(new Date());
+            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+            sqLiteManager.deleteRecordFromDB(selectedDayNote);
+            diaryAdapter.removeItem(position);
+            diaryAdapter.notifyItemRemoved(position);
+        }
 
 
         finish();

@@ -3,16 +3,16 @@ package com.example.note_prob22.graph;
 import java.util.Date;
 
 public class PairSmileAndDate {
-    private Integer smile;
+    private Double smile;
     private Date dates;
 
-    public PairSmileAndDate(Date dates, Integer smile) {
+    public PairSmileAndDate(Date dates, Double smile) {
         this.dates = dates;
         this.smile = smile;
 
     }
 
-    public Integer getSmile() {
+    public Double getSmile() {
         return smile;
     }
 

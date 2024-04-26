@@ -240,9 +240,7 @@ public class SmilesActivity extends AppCompatActivity {
         currentSmilePicture = btn9_besthappy.getText().toString();
 
 
-        long currentTimestamp = System.currentTimeMillis();
-        smileyEvents.add(new SmileyEvent(currentTimestamp));
-        Log.d("--Help--", "Smiley selected at: " + currentTimestamp);
+
 
     }
 

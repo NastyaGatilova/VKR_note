@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.note_prob22.classes.Note;
+import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.db.SQLiteManager;
 
 import java.text.SimpleDateFormat;
@@ -122,12 +123,14 @@ public class NoteDetailActivity extends HomeActivity
 
     public void deleteNote(View view)
     {
-       // delet = 1;
-        selectedNote.setDeleted(new Date());
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.updateNoteInDB(selectedNote);
-        sqLiteManager.deleteNoteFromDB(selectedNote);
-        noteAdapter.removeNote(selectedNote.getId());
+        int position = Note.getPositionForID(selectedNote.getId());
+        if (position != -1) {
+            selectedNote.setDeleted(new Date());
+            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+            sqLiteManager.deleteNoteFromDB(selectedNote);
+            noteAdapter.removeNote(position);
+            noteAdapter.notifyItemRemoved(position);
+        }
         finish();
     }
 
