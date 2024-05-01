@@ -20,7 +20,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.note_prob22.adapters.NoteAdapterForCalendar;
+import com.example.note_prob22.adapters.SmilesAdapterForCalendar;
 import com.example.note_prob22.classes.Note;
+import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewHelper;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -42,32 +44,25 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         RecyclerView recyclerView = findViewById(R.id.rcView);
+        RecyclerView recyclerViewSmiles = findViewById(R.id.rcViewSmiles);
         sqLiteManager = new SQLiteManager(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+
         recyclerView.setLayoutManager(layoutManager);
+        recyclerViewSmiles.setLayoutManager(layoutManager2);
 
         NoteAdapterForCalendar adapter = new NoteAdapterForCalendar(Note.noteArrayListWithForCalendar);
+   SmilesAdapterForCalendar smilesAdapter = new SmilesAdapterForCalendar(Record.recordArrayListWithForCalendar);
+
 
         CalendarView calendarView = findViewById(R.id.calendarView);
          mostUsedSmile = findViewById(R.id.mostUsedSmile);
 
 
 
-//        if (sqLiteManager.checkLastWeekQuery()){
-//            graphView.setVisibility(View.VISIBLE);
-//            noData.setVisibility(View.GONE);
-//            graphView.setTitle("Cтатистика за неделю \uD83C\uDF25");
-//
-//            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
-//            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get7UniqRecordFromDb());
-//
-//        }
-//        else{
-//            graphView.setVisibility(View.GONE);
-//            noData.setVisibility(View.VISIBLE);
-//
-//        }
 
         mostUsedSmile.setText( sqLiteManager.getMostUsedSmiley());
 
@@ -80,9 +75,11 @@ public class CalendarActivity extends AppCompatActivity {
 
 
                 sqLiteManager.populateNoteListArrayForCalendar(date);
+                sqLiteManager.populateSmilesListArrayForCalendar(date);
                 sqLiteManager.showSmileForDate(date);
 
                 recyclerView.setAdapter(adapter);
+                recyclerViewSmiles.setAdapter(smilesAdapter);
                // Toast.makeText(getApplicationContext(), date, Toast.LENGTH_SHORT).show();
             }
         });

@@ -7,6 +7,7 @@ public class Record
 {
 
     public static ArrayList<Record> noteDayArrayList = new ArrayList<Record>();
+    public static ArrayList<Record> recordArrayListWithForCalendar = new ArrayList<>();
     public static String NOTE_EDIT_EXTRA =  "recordEdit";
 
     private int id;

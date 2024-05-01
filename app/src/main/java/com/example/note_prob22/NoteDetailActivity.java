@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,6 +20,7 @@ import com.example.note_prob22.db.SQLiteManager;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class NoteDetailActivity extends HomeActivity
@@ -94,6 +96,9 @@ public class NoteDetailActivity extends HomeActivity
             SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
             String title = String.valueOf(titleEditText.getText());
             String desc = String.valueOf(descEditText.getText());
+
+
+            Log.d("--Help--", "Date111 ="+ descEditText.getText().toString());
             String date = String.valueOf(dateButton.getText());
 
 
@@ -102,6 +107,7 @@ public class NoteDetailActivity extends HomeActivity
             if(selectedNote == null)
             {
                 int id = Note.noteArrayList.size();
+                Log.d("--Help--", "Date ="+ date);
                 Note newNote = new Note(id, title, desc, date);
                 Note.noteArrayList.add(newNote);
                 sqLiteManager.addNoteToDatabase(newNote);
@@ -216,10 +222,20 @@ public class NoteDetailActivity extends HomeActivity
     }
 
 
-    private String makeDateString(int day, int month, int year)
-    {
-        return  day + " " + getMonthFormat(month) + " " + year;
+//    private String makeDateString(int day, int month, int year)
+//    {
+//        return  day + " " + getMonthFormat(month) + " " + year;
+//    }
+private String makeDateString(int day, int month, int year)
+{
+    return getFormattedNumber(day) + " " + getMonthFormat(month) + " " + year;
+}
+
+    private String getFormattedNumber(int number) {
+        return number < 10 ? "0" + number : String.valueOf(number);
     }
+
+
 
 
     private String getMonthFormat(int month)
@@ -233,7 +249,7 @@ public class NoteDetailActivity extends HomeActivity
         if(month == 4)
             return "апр.";
         if(month == 5)
-            return "май";
+            return "мая";
         if(month == 6)
             return "июн.";
         if(month == 7)

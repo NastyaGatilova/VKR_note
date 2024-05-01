@@ -2,7 +2,7 @@
     <string name="app_name">Настин Ежедневник</string>
     <string name="title">Название</string>
     <string name="descr">Описание</string>
-    <string name="tasks">ЗАДАЧИ</string>
+    <string name="tasks">ЗАПЛАНИРОВАННЫЕ ДЕЛА</string>
     <string name="yourAccount">ВАШ АККАУНТ</string>
     <string name="login">Логин:</string>
     <string name="pass">Пароль:</string>

@@ -1273,6 +1273,33 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return "";
     }
 
+    public void populateSmilesListArrayForCalendar(String userDate) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + SMILE_RECORD + ", " + DATE_RECORD + ", "
+                + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?" + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER, userDate})) {
+
+            Record.recordArrayListWithForCalendar.clear();
+
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+                    int id = result.getInt(1);
+                    String smile = result.getString(2);
+                    String date = result.getString(3);
+
+
+                    Record rec = new Record(id, "", "", "", smile, date);
+                    // Log.d("--Help--", "Пользовательская дата= " + userDate + " ; Записи = "+ id + " "+ " "+ title + " ; " +date);
+                    Record.recordArrayListWithForCalendar.add(rec);
+                }
+
+            }
+        }
+    }
+
+
+
 
     public void deleteLastRecord() {
         String query = "DELETE FROM " + TABLE_NAME_RECORD + " WHERE " + ID_RECORD + " = (SELECT MAX(" + ID_RECORD + ") FROM " + TABLE_NAME_RECORD + ")";

@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 //public class NoteAdapter extends ArrayAdapter<Note>
 //{
@@ -104,15 +105,29 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
                 holder.mDateTextView.setTextColor(Color.parseColor("#F08080"));
                 holder.mTitleTextView.setTextColor(Color.parseColor("#4C4E4B"));
                 holder.mDescTextView.setTextColor(Color.parseColor("#939592"));
+
+//                holder.noteCardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+//                holder.mDateTextView.setTextColor(Color.parseColor("#009688"));
+//                holder.mTitleTextView.setTextColor(Color.parseColor("#FF4CAF50"));
+//                holder.mDescTextView.setTextColor(Color.parseColor("#6D000000"));
             }
                  else {
                 holder.noteCardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
                 holder.mDateTextView.setTextColor(Color.parseColor("#009688"));
                 holder.mTitleTextView.setTextColor(Color.parseColor("#FF4CAF50"));
                 holder.mDescTextView.setTextColor(Color.parseColor("#6D000000"));
+
+
+//                Log.d("Date", "Введенная дата является предыдущей для текущей даты");
+//                holder.noteCardView.setCardBackgroundColor(Color.parseColor("#E2E2E2"));
+//                holder.mDateTextView.setTextColor(Color.parseColor("#F08080"));
+//                holder.mTitleTextView.setTextColor(Color.parseColor("#4C4E4B"));
+//                holder.mDescTextView.setTextColor(Color.parseColor("#939592"));
                 }
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+          //  throw new RuntimeException(e);
+            Log.d("--Help--", "Error NoteAdapter");
+
         }
 
 
@@ -140,15 +155,33 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         notifyItemRemoved(position);
     }
 
-    public void sortItemsByDate() {
-        Collections.sort(mNotes, new Comparator<Note>() {
-            @Override
-            public int compare(Note item1, Note item2) {
-                return item1.getDate().compareTo(item2.getDate());
+//    public void sortItemsByDate() {
+//        Collections.sort(mNotes, new Comparator<Note>() {
+//            @Override
+//            public int compare(Note item1, Note item2) {
+//                return item1.getDate().compareTo(item2.getDate());
+//            }
+//        });
+//        notifyDataSetChanged();
+//    }
+public void sortItemsByDate() {
+    Collections.sort(mNotes, new Comparator<Note>() {
+        @Override
+        public int compare(Note item1, Note item2) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+            try {
+                Date date1 = dateFormat.parse(item1.getDate());
+                Date date2 = dateFormat.parse(item2.getDate());
+                return date1.compareTo(date2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return 0;
             }
-        });
-        notifyDataSetChanged();
-    }
+        }
+    });
+    notifyDataSetChanged();
+}
+
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder
     {
