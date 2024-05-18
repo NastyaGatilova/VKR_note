@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -38,7 +40,7 @@ public class AccountActivity extends AppCompatActivity {
     Cursor cursor;
 
     TextView happyHour;
-
+    SharedPreferences sharedPreferences;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     @SuppressLint("MissingInflatedId")
@@ -47,6 +49,7 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        sharedPreferences = this.getSharedPreferences("Note", Context.MODE_PRIVATE);
 
         TextView login = findViewById(R.id.login);
         TextView pass = findViewById(R.id.password);
@@ -106,17 +109,46 @@ public class AccountActivity extends AppCompatActivity {
 
 
 
+//    public void click_del_users(View view) {
+//
+//        androidx.appcompat.app.AlertDialog.Builder a_builder = new androidx.appcompat.app.AlertDialog.Builder(AccountActivity.this);
+//        a_builder.setMessage("Вы хотите удалить свой аккаунт?")
+//                .setCancelable(false)
+//                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        db.delete(SQLiteManager.USERS, SQLiteManager.USERNAME + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
+//                        db.delete(SQLiteManager.TABLE_NAME_NOTE, SQLiteManager.USERNAME_USERS + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
+//                        db.delete(SQLiteManager.TABLE_STORY, SQLiteManager.USERNAME_USERS_STORY + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
+//                        Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        startActivity(intent);
+//
+//                    }
+//                })
+//                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        androidx.appcompat.app.AlertDialog alert = a_builder.create();
+//        alert.setTitle("\uD83D\uDE22⛔");
+//        alert.show();
+//
+//
+//    }
+
+
     public void click_del_users(View view) {
 
         androidx.appcompat.app.AlertDialog.Builder a_builder = new androidx.appcompat.app.AlertDialog.Builder(AccountActivity.this);
-        a_builder.setMessage("Вы хотите удалить свой аккаунт?")
+        a_builder.setMessage("Хотите выйти из аккаунта?")
                 .setCancelable(false)
                 .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        db.delete(SQLiteManager.USERS, SQLiteManager.USERNAME + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
-                        db.delete(SQLiteManager.TABLE_NAME_NOTE, SQLiteManager.USERNAME_USERS + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
-                        db.delete(SQLiteManager.TABLE_STORY, SQLiteManager.USERNAME_USERS_STORY + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
+                        userLoggedOut();
                         Intent intent = new Intent(AccountActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -134,6 +166,15 @@ public class AccountActivity extends AppCompatActivity {
         alert.show();
 
 
+    }
+    public void userLoggedOut() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("isLoggedIn");
+        editor.remove("UserRemember");
+        editor.remove("PassRemember");
+        SQLiteManager.USER_REMEMBER = "";
+        SQLiteManager.PASS_REMEMBER = "";
+        editor.apply();
     }
 
 

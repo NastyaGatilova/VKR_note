@@ -294,11 +294,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Date deleted = getDateFromString(stringDeleted);
 
                     Note note = new Note(id, title, desc, date, deleted);
-              //      Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
+                   // Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
                     Note.noteArrayList.add(note);
                 }
 
             }
+           ;
         }
     }
 
@@ -455,7 +456,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Date deleted = getDateFromString(stringDeleted);
 
                     Record rec = new Record(id, feelings, events, desc, smile, date, deleted);
-                    Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
+                   // Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
                     Record.noteDayArrayList.add(rec);
                 }
 

@@ -1,6 +1,9 @@
 package com.example.note_prob22;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -17,11 +20,15 @@ public class MainActivity extends AppCompatActivity {
     Button signin, signup;
     SQLiteManager DB;
     public static String USER_REG = "";
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = this.getSharedPreferences("Note", Context.MODE_PRIVATE);
+
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         signup = findViewById(R.id.signup);
         DB = new SQLiteManager(this);
 
+       checkIsUserLoggedIn();
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Вы зарегистрировались успешно", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
                                 startActivity(intent);
+                                 rememberUserLoggedIn(user,pass);
                                 finish();
 
 
@@ -83,4 +92,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+    public void rememberUserLoggedIn(String userRemember, String passRemember) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isLoggedIn", true);
+        editor.putString("UserRemember", userRemember);
+        editor.putString("PassRemember", passRemember);
+        editor.apply();
+    }
+
+    public void checkIsUserLoggedIn() {
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        if (isLoggedIn) {
+            SQLiteManager.USER_REMEMBER = sharedPreferences.getString("UserRemember", "DefaultValue");
+            SQLiteManager.PASS_REMEMBER = sharedPreferences.getString("PassRemember", "DefaultValue");
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
 }
