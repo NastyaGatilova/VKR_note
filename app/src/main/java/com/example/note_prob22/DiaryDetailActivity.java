@@ -112,8 +112,8 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
         if (selectedDayNote != null) {
-            // Log.d("--Help--", " Id Не НОВОЙ записи из DiaryDetailActivity =" + selectedDayNote.getId());
-            //Log.d("--Help--", " Текст НЕ НОВОЙ записи из DiaryDetailActivity =" + selectedDayNote.getFeeling());
+
+            Log.d("--Help--", " id НЕ НОВОЙ записи из DiaryDetailActivity =" + selectedDayNote.getId());
             yourFeelingsEditText.setText(selectedDayNote.getFeeling());
             yourEventsEditText.setText(selectedDayNote.getEvents());
             yourdescDayEditText.setText(selectedDayNote.getDescription());
@@ -274,20 +274,24 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
             if (selectedDayNote == null) {
+//                int id = 0;
+//                if (sqLiteManager.populateRecordList().size() == 0) {
+//                    id = 0;
+//                }
+//                else {
+//                     id = sqLiteManager.populateRecordList().size()+1;
+//                }
+                //int id = Record.noteDayArrayList.size();
                 int id = 0;
-                if (sqLiteManager.populateRecordList().size() == 0) {
-                    id = 0;
-                }
-                else {
-                     id = sqLiteManager.populateRecordList().size();
-                }
+                if (sqLiteManager.getRecordCount() > 0)
+                 id = sqLiteManager.getRecordCount()+2;
+               Log.d("--Help--", "ID =" + id);
 
-                Log.d("--Help--", "ID =" + id);
-                Record newRec = new Record(id, feelings, events, desc, smile, date);
-                diaryAdapter.addItem(newRec);
+              //  diaryAdapter.addItem(newRec);
               // Record.noteDayArrayList.add(newRec);
                // recViewModel.addRecord(newRec);
-                sqLiteManager.addRecordToDatabase(newRec);
+
+                sqLiteManager.addRecordToDatabase(feelings,events,desc,smile, date);
 
 
 
@@ -309,91 +313,17 @@ public class DiaryDetailActivity extends DiaryActivity {
 
     }
 
-///корявая
-//    public void deleteRecord(View view) {
-////        selectedDayNote.setDeleted(new Date());
-////        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-////
-////        sqLiteManager.deleteRecordFromDB(selectedDayNote);
-////        diaryAdapter.removeItem(selectedDayNote.getId());
-////        diaryAdapter.notifyItemRemoved(selectedDayNote.getId());
-//
-//        int position = Record.getPositionForID(selectedDayNote.getId());
-//        if (position != -1) {
-////            selectedDayNote.setDeleted(new Date());
-////
-////
-////
-////            for (int i = position; i < Record.noteDayArrayList.size(); i++) {
-////                Record rec = Record.noteDayArrayList.get(i);
-////                rec.setId(i);
-////            }
-////            diaryAdapter.removeItem(selectedDayNote.getId());
-////            //  diaryAdapter.removeItem(position);
-////
-////
-////
-////
-////           // diaryAdapter.notifyItemRangeChanged(position, diaryAdapter.getItemCount());
-////            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-////            sqLiteManager.deleteRecordFromDB(selectedDayNote);
-//
-//
-//
-//
-//            selectedDayNote.setDeleted(new Date());
-//            diaryAdapter.removeItem(position);
-//            // обновляем значения ID для последующих элементов в списке
-////            for (int i = position; i < Record.noteDayArrayList.size(); i++) {
-////                Record rec = Record.noteDayArrayList.get(i);
-////                rec.setId(i);
-////            }
-//            //
-//            // diaryAdapter.notifyItemRangeChanged(position, diaryAdapter.getItemCount());
-//            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-//            sqLiteManager.deleteRecordFromDB(selectedDayNote);
-//            // обновляем список из базы данных
-//
-////            List<Record> records = sqLiteManager.populateRecordList();
-////            Record.noteDayArrayList.clear();
-////            Record.noteDayArrayList.addAll(records);
-////            for (Record rec : records) {
-////                if (!rec.isDeleted()) {
-////                    Record.noteDayArrayList.add(rec);
-////                }
-////            }
-//            // diaryAdapter.notifyDataSetChanged();
-//
-//
-////            diaryAdapter.notifyDataSetChanged();
-//
-//        }
-//
-//
-//        finish();
-//    }
-
 
     public void deleteRecord(View view) {
 
 
-//        int position = Record.getPositionForID(selectedDayNote.getId());
-//        if (position != -1) {
-//
-//            selectedDayNote.setDeleted(new Date());
-//            diaryAdapter.removeItem(position);
-//
-//            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-//            sqLiteManager.deleteRecordFromDB(selectedDayNote);
-//
-//
-//        }
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.deleteRecordFromDB(selectedDayNote);
-        diaryAdapter.deleteItem(selectedDayNote);
+      //  diaryAdapter.deleteItem(selectedDayNote);
 
         diaryAdapter.updateAdapter(sqLiteManager.populateRecordList());
-
+        Log.d("--Help--", "После удаления:" );
+        sqLiteManager.populateRecordListArray();
 
         finish();
     }

@@ -44,7 +44,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_28";
+    private static final String DATABASE_NAME = "TODO_31";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
@@ -86,7 +86,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String DESC_RECORD = "descr";
 
     public static final String SMILE_RECORD = "smile";
-    public static final String DELETED_RECORD = "deleted";
+  //  public static final String DELETED_RECORD = "deleted";
     public static final String DATE_RECORD = "date";
 
     public static final String TIME_RECORD = "time";
@@ -179,7 +179,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(COUNTER_RECORD)
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_RECORD)
-                .append(" INT, ")
+                .append(" INT AUTOINCREMENT, ")
                 .append(FEELINGS_RECORD)
                 .append(" TEXT, ")
                 .append(EVENTS_RECORD)
@@ -192,8 +192,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append(TIME_RECORD)
                 .append(" DATETIME, ")
-                .append(DELETED_RECORD)
-                .append(" TEXT, ")
+//                .append(DELETED_RECORD)
+//                .append(" TEXT, ")
                 .append(USERNAME_USERS_RECORD)
                 .append(" TEXT) ");
 
@@ -422,7 +422,33 @@ public class SQLiteManager extends SQLiteOpenHelper {
     //дневник
 
 
-    public void addRecordToDatabase(Record rec) {
+//    public void addRecordToDatabase(Record rec) {
+//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+//
+//
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
+//        String currentTime = timeFormat.format(new Date());
+//
+//
+//
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(ID_RECORD, rec.getId());
+//        contentValues.put(FEELINGS_RECORD, rec.getFeeling());
+//        contentValues.put(EVENTS_RECORD, rec.getEvents());
+//        contentValues.put(DESC_RECORD, rec.getDescription());
+//        contentValues.put(SMILE_RECORD, rec.getSmile());
+//        contentValues.put(DATE_RECORD, rec.getDate());
+//        contentValues.put(TIME_RECORD, currentTime);
+//        contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
+//        contentValues.put(USERNAME_USERS_RECORD, USER_REMEMBER);
+//
+//
+//        sqLiteDatabase.insert(TABLE_NAME_RECORD, null, contentValues);
+//
+//
+//    }
+
+    public void addRecordToDatabase(String feel, String ev, String des, String smile, String date) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
 
@@ -432,14 +458,14 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_RECORD, rec.getId());
-        contentValues.put(FEELINGS_RECORD, rec.getFeeling());
-        contentValues.put(EVENTS_RECORD, rec.getEvents());
-        contentValues.put(DESC_RECORD, rec.getDescription());
-        contentValues.put(SMILE_RECORD, rec.getSmile());
-        contentValues.put(DATE_RECORD, rec.getDate());
+     //   contentValues.put(ID_RECORD, rec.getId());
+        contentValues.put(FEELINGS_RECORD, feel);
+        contentValues.put(EVENTS_RECORD, ev);
+        contentValues.put(DESC_RECORD, des);
+        contentValues.put(SMILE_RECORD, smile);
+        contentValues.put(DATE_RECORD, date);
         contentValues.put(TIME_RECORD, currentTime);
-        contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
+    //    contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
         contentValues.put(USERNAME_USERS_RECORD, USER_REMEMBER);
 
 
@@ -448,27 +474,29 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
-
     public void populateRecordListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
-                ", " + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD +
+                "," + ID_RECORD +
+                "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+                "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER})) {
             Record.noteDayArrayList.clear();
             if (result.getCount() != 0) {
                 while (result.moveToNext()) {
-                    int id = result.getInt(1);
+                 int id = result.getInt(0);
+                //    int id = result.getInt(0);
                     String feelings = result.getString(2);
                     String events = result.getString(3);
                     String desc = result.getString(4);
                     String smile = result.getString(5);
                     String date = result.getString(6);
                     String stringDeleted = result.getString(7);
-                    Date deleted = getDateFromString(stringDeleted);
+                  //  Date deleted = getDateFromString(stringDeleted);
 
-                    Record rec = new Record(id, feelings, events, desc, smile, date, deleted);
-                   // Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
+                    Record rec = new Record(id,feelings, events, desc, smile, date);
+                   Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
                     Record.noteDayArrayList.add(rec);
                 }
 
@@ -480,22 +508,25 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         List<Record> dataList = new ArrayList<>();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
-                ", " + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + ","
+                + ID_RECORD + ","
+                + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+                 "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER})) {
 
             if (result.getCount() != 0) {
                 while (result.moveToNext()) {
-                    int id = result.getInt(1);
+                  int id = result.getInt(0);
+                  //  int id = result.getInt(0);
                     String feelings = result.getString(2);
                     String events = result.getString(3);
                     String desc = result.getString(4);
                     String smile = result.getString(5);
                     String date = result.getString(6);
                     String stringDeleted = result.getString(7);
-                    Date deleted = getDateFromString(stringDeleted);
+                    //Date deleted = getDateFromString(stringDeleted);
 
-                    Record rec = new Record(id, feelings, events, desc, smile, date);
+                    Record rec = new Record(id,feelings, events, desc, smile, date);
                     // Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
                     dataList.add(rec);
                 }
@@ -508,23 +539,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
 
 
-    public void recordFromDB() {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", " + TIME_RECORD + ", "
-                + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
-                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
-        if (cursor.moveToFirst()) {
-            do {
-                String data = "";
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    data += cursor.getString(i) + " ";
-                }
-               // Log.d("--Help--", "DB= " + data);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-    }
-
 
     public void updateRecordInDB(Record rec) {
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
@@ -532,22 +546,37 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_RECORD, rec.getId());
+       contentValues.put(ID_RECORD, rec.getId());
         contentValues.put(FEELINGS_RECORD, rec.getFeeling());
         contentValues.put(EVENTS_RECORD, rec.getEvents());
         contentValues.put(DESC_RECORD, rec.getDescription());
         contentValues.put(SMILE_RECORD, rec.getSmile());
         contentValues.put(TIME_RECORD, currentTime);
-        contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
-        sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
+       // contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
+        sqLiteDatabase.update(TABLE_NAME_RECORD, contentValues, COUNTER_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
 
     }
 
 
     public void deleteRecordFromDB(Record rec) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(TABLE_NAME_RECORD, ID_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
+        sqLiteDatabase.delete(TABLE_NAME_RECORD, COUNTER_RECORD + " =? and " + USERNAME_USERS_RECORD + " =? ", new String[]{String.valueOf(rec.getId()), USER_REMEMBER});
 
+    }
+
+    public int getRecordCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT  COUNT(*) FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER});
+
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+        return count;
     }
 
 
@@ -565,12 +594,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         List<PairSmileAndDate> pairList = new ArrayList<>();
         double smileNum = 0;
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -627,12 +656,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         int smileNum = 0;
         List<Data> dataList = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -758,12 +787,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         int smileNum = 0;
         List<Data> dataList = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+             //   @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -892,12 +921,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         int smileNum = 0;
         List<Data> dataList = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + " ," + SMILE_RECORD + " ," + DATE_RECORD +
                 " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " ORDER BY " + DATE_RECORD, new String[]{USER_REMEMBER});
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                //@SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -1020,12 +1049,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + ID_RECORD + " DESC LIMIT 30";
+        String query = "SELECT " + COUNTER_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + COUNTER_RECORD + " DESC LIMIT 30";
         Cursor cursor = db.rawQuery(query, new String[]{USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+             //   @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -1089,12 +1118,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         List<PairSmileAndDate> pairList = new ArrayList<>();
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + DATE_RECORD + " DESC LIMIT 7";
+        String query = "SELECT " + COUNTER_RECORD + ", " + SMILE_RECORD + "," + DATE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " GROUP BY " + DATE_RECORD + " ORDER BY " + DATE_RECORD + " DESC LIMIT 7";
         Cursor cursor = db.rawQuery(query, new String[]{USER_REMEMBER});
 
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+                //  @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
@@ -1163,7 +1192,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         Date currentDate = new Date();
         String dateNow = dateFormat.format(currentDate);
 
-        String query = "SELECT " + ID_RECORD + ", " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " and " + DATE_RECORD + " >=?";
+        String query = "SELECT " + COUNTER_RECORD + ", " + SMILE_RECORD + " FROM " + TABLE_NAME_RECORD + " where " + USERNAME_USERS_RECORD + " =?" + " and " + DATE_RECORD + " >=?";
         Cursor cursor = db.rawQuery(query, new String[]{USER_REMEMBER, oneWeekAgoString});
 
 
@@ -1206,7 +1235,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", new Locale("ru"));
         String date = dateFormat.format(currentDate);
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME
                 + " WHERE " + USERNAME_USERS_RECORD + " = ? AND  " + DATE_RECORD + " = ?", new String[]{USER_REMEMBER, date});
 
@@ -1234,12 +1263,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
         List<PairSmileAndDate> pairList = new ArrayList<>();
         double smileNum = 0;
 
-        Cursor cursor = db.rawQuery("SELECT " + ID_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
+        Cursor cursor = db.rawQuery("SELECT " + COUNTER_RECORD + "," + SMILE_RECORD + ", " + TIME_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " INNER JOIN " + USERS + " ON " + USERNAME_USERS_RECORD + " = " + USERNAME
                 + " WHERE " + USERNAME_USERS_RECORD + " = ? AND  " + DATE_RECORD + " = ?", new String[]{USER_REMEMBER, date});
         if (cursor.moveToFirst()) {
             do {
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
+           //     @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex(TIME_RECORD));
 
@@ -1297,7 +1326,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public String showSmileForDate(String userDate) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + DATE_RECORD + ", " + SMILE_RECORD + ", "
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," +
+              //  ID_RECORD + "," +
+                DATE_RECORD + ", " + SMILE_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS + " =?" + " and " + DATE_RECORD + " =?" + " ORDER BY " + SMILE_RECORD + " DESC LIMIT 1", new String[]{USER_REMEMBER, userDate})) {
 
@@ -1320,7 +1351,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateSmilesListArrayForCalendar(String userDate) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + SMILE_RECORD + ", " + DATE_RECORD + ", "
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," +
+              //  ID_RECORD + "," +
+                SMILE_RECORD + ", " + DATE_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER, userDate})) {
 
@@ -1333,7 +1366,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String date = result.getString(3);
 
 
-                    Record rec = new Record(id, "", "", "", smile, date);
+                    Record rec = new Record( id, "", "", "", smile, date);
                     // Log.d("--Help--", "Пользовательская дата= " + userDate + " ; Записи = "+ id + " "+ " "+ title + " ; " +date);
                     Record.recordArrayListWithForCalendar.add(rec);
                 }
@@ -1349,7 +1382,9 @@ public ArrayList<Record> populateRecordEventsListArrayForCalendar(String userDat
     SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
     ArrayList<Record> dataList = new ArrayList<>();
-    try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", " +
+    try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + ","
+         //  + ID_RECORD + ","
+            + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", " +
               USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " = " + USERNAME
             + " where " + USERNAME_USERS_RECORD + " =? " + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER,userDate })) {
 
@@ -1364,7 +1399,7 @@ public ArrayList<Record> populateRecordEventsListArrayForCalendar(String userDat
 
 
 
-                Record rec = new Record(id, feelings, events, desc, smile, date);
+                Record rec = new Record(id,feelings, events, desc, smile, date);
                 Log.d("--Help--", "Точка = userDate ="+ userDate + id + " "+ ""+smile  + " "+date);
                 dataList.add(rec);
             }
@@ -1379,7 +1414,7 @@ public ArrayList<Record> populateRecordEventsListArrayForCalendar(String userDat
 
 
     public void deleteLastRecord() {
-        String query = "DELETE FROM " + TABLE_NAME_RECORD + " WHERE " + ID_RECORD + " = (SELECT MAX(" + ID_RECORD + ") FROM " + TABLE_NAME_RECORD + ")";
+        String query = "DELETE FROM " + TABLE_NAME_RECORD + " WHERE " + COUNTER_RECORD + " = (SELECT MAX(" + COUNTER_RECORD + ") FROM " + TABLE_NAME_RECORD + ")";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(query);
     }

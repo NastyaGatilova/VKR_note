@@ -85,6 +85,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
 
     public void deleteItem(Record model){
         mRecords.remove(model);
+        Record.noteDayArrayList.remove(model);
         notifyDataSetChanged();
     }
 

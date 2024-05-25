@@ -21,7 +21,7 @@ public class Record
     private String smile;
 
 
-    public Record(int id, String feeling, String events, String description,   String smile, String date, Date deleted)
+    public Record (int id,String feeling, String events, String description,   String smile, String date, Date deleted)
     {
         this.id = id;
         this.feeling = feeling;
@@ -33,6 +33,18 @@ public class Record
 
 
     }
+
+//    public Record(String feeling, String events, String description, String smile, String date)
+//    {
+//
+//        this.feeling = feeling;
+//        this.events = events;
+//        this.description = description;
+//        this.smile=smile;
+//        this.date = date;
+//        deleted = null;
+//
+//    }
 
 
     public Record(int id, String feeling, String events, String description, String smile, String date)
@@ -47,9 +59,9 @@ public class Record
 
     }
 
-    public Record(int id, String events, String date)
+    public Record(int id,String events, String date)
     {
-        this.id = id;
+      this.id = id;
         this.events = events;
         this.date = date;
 
@@ -75,17 +87,7 @@ public class Record
 
 
 
-    public static ArrayList<Record> nonDeletedDayNotes()
-    {
-        ArrayList<Record> nonDeleted = new ArrayList<>();
-        for(Record rec : noteDayArrayList)
-        {
-            if(rec.getDeleted() == null)
-                nonDeleted.add(rec);
-        }
 
-        return nonDeleted;
-    }
 
     public static int getPositionForID(int id) {
         for (int i = 0; i < noteDayArrayList.size(); i++) {
@@ -127,15 +129,15 @@ public class Record
         this.description = description;
     }
 
-    public Date getDeleted()
-    {
-        return deleted;
-    }
-
-    public void setDeleted(Date deleted)
-    {
-        this.deleted = deleted;
-    }
+//    public Date getDeleted()
+//    {
+//        return deleted;
+//    }
+//
+//    public void setDeleted(Date deleted)
+//    {
+//        this.deleted = deleted;
+//    }
 
     public String getDate()
     {
