@@ -128,8 +128,14 @@ public class CalendarActivity extends AppCompatActivity {
 
         Date currentDate = new Date();
         String dateNow = dateFormat.format(currentDate);
-        String srt = "Вы испытали эту эмоцию чаще всего за\n" + oneWeekAgoString + " —\t " + dateNow;
-        tv.setText(srt);
+        String srt1 = getString(R.string.mostEmotion);
+        String str2 = oneWeekAgoString;
+        String str3 = "-\t";
+        String str4 = dateNow;
+
+        String str =srt1 + str2 + str3 + str4;
+
+        tv.setText(str);
         popupWindow.setContentView(popupView);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -137,7 +143,8 @@ public class CalendarActivity extends AppCompatActivity {
         final int[] textViewPosition = new int[2];
         mostUsedSmile.getLocationOnScreen(textViewPosition);
 
-        popupWindow.showAtLocation(mostUsedSmile, Gravity.END, 100, -850);
+//        popupWindow.showAtLocation(mostUsedSmile, Gravity.END, 0, -);
+        popupWindow.showAsDropDown(mostUsedSmile);
 
 
 

@@ -44,7 +44,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_41";
+    private static final String DATABASE_NAME = "TODO_43";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";

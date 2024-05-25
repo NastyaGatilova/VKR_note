@@ -111,7 +111,8 @@ public class AccountActivity extends AppCompatActivity {
         HourGraphViewHelper.fillGraphViewWithHour(graphView, sqLiteManager.getTimeAndSmileForGrafikHours());
 
 
-        findHappiestHour();
+
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,105 +155,143 @@ public class AccountActivity extends AppCompatActivity {
 
         switch (day){
             case 1:{
-                String jsonRecords = sharedPreferences.getString("mondayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    averageHappyTimeMonday = setAverageTime(sunday);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeMonday", averageHappyTimeMonday);
-                    editor.apply();
+               try {
+                   String jsonRecords = sharedPreferences.getString("mondayHappyList", null);
+                   if (jsonRecords != null) {
+                       Gson gson = new Gson();
+                       Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                       ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                       averageHappyTimeMonday = setAverageTime(sunday);
+
+                       SharedPreferences.Editor editor = sharedPreferences.edit();
+                       editor.putString("averageHappyTimeMonday", averageHappyTimeMonday);
+                       editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "mondayHappyList список = " + i + " " +sunday.get(i));
 //                    }
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
-                }
+                   } else {
+                       Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                   }
+               }
+               catch(Exception error1) {
+                   Log.e("--Help--", error1.getMessage());
+
+               }
+
                 break;
             }
             case 2:{
-                String jsonRecords = sharedPreferences.getString("tuesdayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+                try {
+                    String jsonRecords = sharedPreferences.getString("tuesdayHappyList", null);
+                    if (jsonRecords != null) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
+                        ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    averageHappyTimeTuesday = setAverageTime(sunday);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeTuesday", averageHappyTimeTuesday);
-                    editor.apply();
+                        averageHappyTimeTuesday = setAverageTime(sunday);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("averageHappyTimeTuesday", averageHappyTimeTuesday);
+                        editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "tuesdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                    } else {
+                        Log.d("--Help--", "Ошибка Проверки списка  " + day);
+                    }
+                }
+                catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
                 }
                 break;
             }
             case 3:{
-                String jsonRecords = sharedPreferences.getString("wednesdayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+                try {
+                    String jsonRecords = sharedPreferences.getString("wednesdayHappyList", null);
+                    if (jsonRecords != null) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
+                        ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    averageHappyTimeWednesday = setAverageTime(sunday);
+                        averageHappyTimeWednesday = setAverageTime(sunday);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeWednesday", averageHappyTimeWednesday);
-                    editor.apply();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("averageHappyTimeWednesday", averageHappyTimeWednesday);
+                        editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "wednesdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                    } else {
+                        Log.d("--Help--", "Ошибка Проверки списка  " + day);
+                    }
+                }
+                catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
                 }
                 break;
             }
             case 4:{
-                String jsonRecords = sharedPreferences.getString("thursdayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+                try {
+                    String jsonRecords = sharedPreferences.getString("thursdayHappyList", null);
+                    if (jsonRecords != null) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
+                        ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    averageHappyTimeThursday = setAverageTime(sunday);
+                        averageHappyTimeThursday = setAverageTime(sunday);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeThursday", averageHappyTimeThursday);
-                    editor.apply();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("averageHappyTimeThursday", averageHappyTimeThursday);
+                        editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "thursdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                    } else {
+                        Log.d("--Help--", "Ошибка Проверки списка  " + day);
+                    }
+                }
+                catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
                 }
                 break;
             }
             case 5:{
-                String jsonRecords = sharedPreferences.getString("fridayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+                try {
+                    String jsonRecords = sharedPreferences.getString("fridayHappyList", null);
+                    if (jsonRecords != null) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
+                        ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    averageHappyTimeFriday = setAverageTime(sunday);
+                        averageHappyTimeFriday = setAverageTime(sunday);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeFriday", averageHappyTimeFriday);
-                    editor.apply();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("averageHappyTimeFriday", averageHappyTimeFriday);
+                        editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "fridayHappyList список = " + i + " " +sunday.get(i));
 //                    }
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                    } else {
+                        Log.d("--Help--", "Ошибка Проверки списка  " + day);
+                    }
+                }
+                catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
                 }
                 break;
             }
             case 6:{
+                try{
                 String jsonRecords = sharedPreferences.getString("saturdayHappyList", null);
                 if (jsonRecords != null) {
                     Gson gson = new Gson();
@@ -271,91 +310,110 @@ public class AccountActivity extends AppCompatActivity {
                 } else {
                     Log.d("--Help--", "Ошибка Проверки списка  " + day  );
                 }
-                //убрать
-                String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
-                String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
-                String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
-                String th = sharedPreferences.getString("averageHappyTimeThursday", null);
-                String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
-                String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
-                String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
-                ArrayList<String> happylist = new ArrayList<>();
-                if (mon != null) happylist.add(mon);
-                if (tue != null) happylist.add(tue);
-                if (wen != null) happylist.add(wen);
-                if (th != null) happylist.add(th);
-                if (fr != null) happylist.add(fr);
-                if (sat != null) happylist.add(sat);
-                if (sun != null) happylist.add(sun);
+                    //убрать
+                    String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
+                    String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
+                    String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
+                    String th = sharedPreferences.getString("averageHappyTimeThursday", null);
+                    String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
+                    String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
+                    String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
+                    ArrayList<String> happylist = new ArrayList<>();
+                    if (mon != null) happylist.add(mon);
+                    if (tue != null) happylist.add(tue);
+                    if (wen != null) happylist.add(wen);
+                    if (th != null) happylist.add(th);
+                    if (fr != null) happylist.add(fr);
+                    if (sat != null) happylist.add(sat);
+                    if (sun != null) happylist.add(sun);
 
-                String happy = setAverageTime(happylist);
-                Log.w("--Help--", "HappyHour=" +happy);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
-                try {
-                    Date date = dateFormat.parse(happy);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
-                    int minute = calendar.get(Calendar.MINUTE);
+                    String happy = setAverageTime(happylist);
+                    Log.w("--Help--", "HappyHour=" +happy);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+                    try {
+                        Date date = dateFormat.parse(happy);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
+                        int minute = calendar.get(Calendar.MINUTE);
 
-                    happyHour.setText("Ваш счастливый час - "+ hour +":" + minute);
+                        String str = getString(R.string.happyHour);
+                        happyHour.setText(str + hour +" ч.");
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }  catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
+
+
                 }
+
 
 
 
                 break;
             }
             case 7:{
-                String jsonRecords = sharedPreferences.getString("sundayHappyList", null);
-                if (jsonRecords != null) {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
-                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
-
-                    averageHappyTimeSunday = setAverageTime(sunday);
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("averageHappyTimeSunday", averageHappyTimeSunday);
-                    editor.apply();
-
-                } else {
-                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
-                }
-
-                String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
-                String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
-                String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
-                String th = sharedPreferences.getString("averageHappyTimeThursday", null);
-                String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
-                String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
-                String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
-                ArrayList<String> happylist = new ArrayList<>();
-                if (mon != null) happylist.add(mon);
-                if (tue != null) happylist.add(tue);
-                if (wen != null) happylist.add(wen);
-                if (th != null) happylist.add(th);
-                if (fr != null) happylist.add(fr);
-                if (sat != null) happylist.add(sat);
-                if (sun != null) happylist.add(sun);
-
-                String happy = setAverageTime(happylist);
-                Log.w("--Help--", "HappyHour=" +happy);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
                 try {
-                    Date date = dateFormat.parse(happy);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
-                    int minute = calendar.get(Calendar.MINUTE);
+                    String jsonRecords = sharedPreferences.getString("sundayHappyList", null);
+                    if (jsonRecords != null) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ArrayList<String>>() {
+                        }.getType();
+                        ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    happyHour.setText("Ваш счастливый час - "+ hour +":" + minute);
+                        averageHappyTimeSunday = setAverageTime(sunday);
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("averageHappyTimeSunday", averageHappyTimeSunday);
+                        editor.apply();
+
+                    } else {
+                        Log.d("--Help--", "Ошибка Проверки списка  " + day);
+                    }
+
+                    String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
+                    String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
+                    String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
+                    String th = sharedPreferences.getString("averageHappyTimeThursday", null);
+                    String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
+                    String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
+                    String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
+                    ArrayList<String> happylist = new ArrayList<>();
+                    if (mon != null) happylist.add(mon);
+                    if (tue != null) happylist.add(tue);
+                    if (wen != null) happylist.add(wen);
+                    if (th != null) happylist.add(th);
+                    if (fr != null) happylist.add(fr);
+                    if (sat != null) happylist.add(sat);
+                    if (sun != null) happylist.add(sun);
+
+                    String happy = setAverageTime(happylist);
+                    Log.w("--Help--", "HappyHour=" +happy);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+                    try {
+                        Date date = dateFormat.parse(happy);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
+                        int minute = calendar.get(Calendar.MINUTE);
+
+                        happyHour.setText("Ваш счастливый час - "+ hour +":" + minute);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
+                catch(Exception error1) {
+                    Log.e("--Help--", error1.getMessage());
+
+                }
+
+
                 break;
             }
             default: Log.d("--Help--", "Ошибка"  );
@@ -438,39 +496,9 @@ public class AccountActivity extends AppCompatActivity {
     }
 
 
-    private void findHappiestHour() {
-        Map<Integer, Integer> hourCountMap = countSmileyEventsPerHour(smileyEvents);
 
-        int maxCount = 0;
-        int happiestHour = -1;
-        for (Map.Entry<Integer, Integer> entry : hourCountMap.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                happiestHour = entry.getKey();
-            }
-        }
 
-        if (happiestHour != -1) {
-            // Log.d("--Help--", "The happiest hour is: " + happiestHour);
-            happyHour.setText("\uD83E\uDD29 Ваш счастливый час —\t "+ happiestHour + "ч.");
-        }
-    }
 
-    private Map<Integer, Integer> countSmileyEventsPerHour(List<SmileyEvent> smileyEvents) {
-        Map<Integer, Integer> hourCountMap = new HashMap<>();
-        for (int i = 0; i < 24; i++) {
-            hourCountMap.put(i, 0);
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        for (SmileyEvent event : smileyEvents) {
-            calendar.setTimeInMillis(event.getTimestamp());
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            hourCountMap.put(hour, hourCountMap.get(hour) + 1);
-        }
-
-        return hourCountMap;
-    }
 
 
 

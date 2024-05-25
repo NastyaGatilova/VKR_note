@@ -11,8 +11,9 @@
         android:id="@+id/smileMost"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="@string/mostEmotion2"
         android:layout_gravity="center"
+        android:textColor="@color/greyTitle"
         android:gravity="center"
         android:padding="5dp" />
 

@@ -35,5 +35,9 @@
     <string name="yourFeeling">Как Вы себя чувствуете?</string>
     <string name="yourЕvents">Какие события или обстоятельства привели к тому, что Вы почувствовали эту эмоцию?</string>
     <string name="yourDescrDay">Опишите свой день</string>
+    <string name="mostEmotion"><font color="#008080">Вы испытали эту эмоцию чаще всего за\n</font></string>
+    <string name="happyHour"><font color="#DDA0DD">Ваш счатливый час - </font></string>
+    <string name="mostEmotion2"><font color="#008080">Вы испытывали эту эмоцию чаще всего за неделю</font></string>
+
 
 </resources>
