@@ -55,21 +55,12 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
         return mRecords.size();
     }
 
-    public void setMyDataList(List<Record> myDataList) {
-        this.mRecords = myDataList;
-        notifyDataSetChanged();
-    }
+
     public Record getItem(int position) {
         return mRecords.get(position);
     }
     @SuppressLint("NotifyDataSetChanged")
-    public void removeItem(int position) {
-//        mRecords.remove(position);
-//        notifyItemRemoved(position);
-        mRecords.remove(position);
-        notifyItemRemoved(position);
-        notifyDataSetChanged();
-    }
+
 
     public void updateAdapter(List<Record> list){
         this.mRecords.clear();

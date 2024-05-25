@@ -274,24 +274,10 @@ public class DiaryDetailActivity extends DiaryActivity {
 
 
             if (selectedDayNote == null) {
-//                int id = 0;
-//                if (sqLiteManager.populateRecordList().size() == 0) {
-//                    id = 0;
-//                }
-//                else {
-//                     id = sqLiteManager.populateRecordList().size()+1;
-//                }
-                //int id = Record.noteDayArrayList.size();
-                int id = 0;
-                if (sqLiteManager.getRecordCount() > 0)
-                 id = sqLiteManager.getRecordCount()+2;
-               Log.d("--Help--", "ID =" + id);
 
-              //  diaryAdapter.addItem(newRec);
-              // Record.noteDayArrayList.add(newRec);
-               // recViewModel.addRecord(newRec);
 
                 sqLiteManager.addRecordToDatabase(feelings,events,desc,smile, date);
+                diaryAdapter.updateAdapter(sqLiteManager.populateRecordList());
 
 
 

@@ -44,7 +44,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "TODO_31";
+    private static final String DATABASE_NAME = "TODO_41";
     private static final int DATABASE_VERSION = 1;
 
     public static final String USERS = "Users";
@@ -60,20 +60,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String ID_NOTE = "id";
     public static final String TITLE_NODE = "title";
     public static final String DESC_NODE = "descr";
-    public static final String DELETED_NODE = "deleted";
     public static final String DATE_NODE = "date";
     public static final String USERNAME_USERS = "username_users";
 
 
-    public static final String TABLE_STORY = "Story";
-    public static final String COUNTER_STORY = "counter_story";
-    public static final String ID_STORY = "id_story";
-    public static final String TITLE_STORY = "title_story";
-    public static final String DESC_STORY = "desc_story";
-    public static final String DELETED_STORY = "deleted_story";
-    public static final String DATE_STORY = "date_story";
-    public static final String USERNAME_USERS_STORY = "username_users_story";
-    public static final String STORY_STATUS = "story_status";//
 
 
     //Таблица информация в дневнике
@@ -86,7 +76,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String DESC_RECORD = "descr";
 
     public static final String SMILE_RECORD = "smile";
-  //  public static final String DELETED_RECORD = "deleted";
     public static final String DATE_RECORD = "date";
 
     public static final String TIME_RECORD = "time";
@@ -131,43 +120,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(COUNTER_NOTE)
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_NOTE)
-                .append(" INT, ")
+                .append(" INT AUTOINCREMENT, ")
                 .append(TITLE_NODE)
                 .append(" TEXT, ")
                 .append(DESC_NODE)
                 .append(" TEXT, ")
                 .append(DATE_NODE)
                 .append(" TEXT, ")
-                .append(DELETED_NODE)
-                .append(" TEXT, ")
                 .append(USERNAME_USERS)
                 .append(" TEXT) ");
 
         sqLiteDatabase.execSQL(sql.toString());
-        //Создание таблицы "Story"
-        StringBuilder sql2;
-        sql2 = new StringBuilder()
-                .append("CREATE TABLE if not exists  ")
-                .append(TABLE_STORY)
-                .append("(")
-                .append(COUNTER_STORY)
-                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .append(ID_STORY)
-                .append(" INT, ")
-                .append(TITLE_STORY)
-                .append(" TEXT, ")
-                .append(DESC_STORY)
-                .append(" TEXT, ")
-                .append(DATE_STORY)
-                .append(" TEXT, ")
-                .append(STORY_STATUS)//
-                .append(" TEXT, ")//
-                .append(DELETED_STORY)
-                .append(" datetime, ")
-                .append(USERNAME_USERS_STORY)
-                .append(" TEXT) ");
-
-        sqLiteDatabase.execSQL(sql2.toString());
 
         //Создание таблицы "Record"
         StringBuilder sql3;
@@ -179,7 +142,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(COUNTER_RECORD)
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_RECORD)
-                .append(" INT AUTOINCREMENT, ")
+                .append(" INT , ")
                 .append(FEELINGS_RECORD)
                 .append(" TEXT, ")
                 .append(EVENTS_RECORD)
@@ -192,8 +155,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append(TIME_RECORD)
                 .append(" DATETIME, ")
-//                .append(DELETED_RECORD)
-//                .append(" TEXT, ")
                 .append(USERNAME_USERS_RECORD)
                 .append(" TEXT) ");
 
@@ -205,7 +166,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
-        sqLiteDatabase.execSQL("drop table if exists " + TABLE_STORY);
         sqLiteDatabase.execSQL("drop table if exists " + TABLE_NAME_NOTE);
         sqLiteDatabase.execSQL("drop table if exists " + USERS);
         sqLiteDatabase.execSQL("drop table if exists " + TABLE_NAME_RECORD);
@@ -254,36 +214,44 @@ public class SQLiteManager extends SQLiteOpenHelper {
 //записи
 
 
-    public void addNoteToDatabase(Note note) {
+    public void addNoteToDatabase(String title, String desc, String date) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_NOTE, note.getId());
-        contentValues.put(TITLE_NODE, note.getTitle());
-        contentValues.put(DESC_NODE, note.getDescription());
-        contentValues.put(DATE_NODE, note.getDate());
-        contentValues.put(DELETED_NODE, getStringFromDate(note.getDeleted()));
+      //  contentValues.put(ID_NOTE, note.getId());
+        contentValues.put(TITLE_NODE, title);
+        contentValues.put(DESC_NODE, desc);
+        contentValues.put(DATE_NODE, date);
         contentValues.put(USERNAME_USERS, USER_REMEMBER);
 
 
         sqLiteDatabase.insert(TABLE_NAME_NOTE, null, contentValues);
 
-        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
-        String date1 = df.format(Calendar.getInstance().getTime());
-
-        ContentValues contentValues2 = new ContentValues();
-        contentValues2.put(ID_STORY, note.getId());
-        contentValues2.put(TITLE_STORY, note.getTitle());
-        contentValues2.put(DESC_STORY, note.getDescription());
-        contentValues2.put(DATE_STORY, note.getDate());
-        contentValues2.put(STORY_STATUS, "Добавлено:");
-        contentValues2.put(DELETED_STORY, date1);
-        contentValues2.put(USERNAME_USERS_STORY, USER_REMEMBER);
 
 
-        sqLiteDatabase.insert(TABLE_STORY, null, contentValues2);
+
+    }
+
+    public void showUsers() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT *  FROM " + USERS, null)) {
+
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+
+                    String user = result.getString(0);
+                    String pass = result.getString(1);
 
 
+
+                     Log.d("--Help--", "Db = " + user + " " + pass );
+
+                }
+
+            }
+            ;
+        }
     }
 
 
@@ -291,19 +259,19 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_NOTE + "," + ID_NOTE + "," + TITLE_NODE + ", " + DESC_NODE + ", " + DATE_NODE + ", "
-                + DELETED_NODE + "," + USERNAME_USERS + " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
+               + USERNAME_USERS + " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
                 + " where " + USERNAME_USERS + " =?", new String[]{USER_REMEMBER})) {
             Note.noteArrayList.clear();
             if (result.getCount() != 0) {
                 while (result.moveToNext()) {
-                    int id = result.getInt(1);
+                    int id = result.getInt(0);
                     String title = result.getString(2);
                     String desc = result.getString(3);
                     String date = result.getString(4);
-                    String stringDeleted = result.getString(5);
-                    Date deleted = getDateFromString(stringDeleted);
 
-                    Note note = new Note(id, title, desc, date, deleted);
+
+
+                    Note note = new Note(id, title, desc, date);
                    // Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
                     Note.noteArrayList.add(note);
                 }
@@ -311,6 +279,35 @@ public class SQLiteManager extends SQLiteOpenHelper {
             }
            ;
         }
+    }
+
+    public List<Note> populateNoteList() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<Note> dataList = new ArrayList<>();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_NOTE + "," + ID_NOTE + "," + TITLE_NODE + ", " + DESC_NODE + ", " + DATE_NODE + ", "
+                + USERNAME_USERS + " FROM " + TABLE_NAME_NOTE + " inner join " + USERS + " on " + USERNAME_USERS + " =" + USERNAME
+                + " where " + USERNAME_USERS + " =?", new String[]{USER_REMEMBER})) {
+
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+                    int id = result.getInt(0);
+                    String title = result.getString(2);
+                    String desc = result.getString(3);
+                    String date = result.getString(4);
+                    String stringDeleted = result.getString(5);
+                    Date deleted = getDateFromString(stringDeleted);
+
+                    Note note = new Note(id, title, desc, date, deleted);
+                    // Log.d("--Help--", "Db = " + id + " " + title + " " + desc + " " + date);
+                    dataList.add(note);
+                }
+
+            }
+
+        }
+        sqLiteDatabase.close();
+        return dataList;
     }
 
 
@@ -345,40 +342,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(ID_NOTE, note.getId());
         contentValues.put(TITLE_NODE, note.getTitle());
         contentValues.put(DESC_NODE, note.getDescription());
-        contentValues.put(DELETED_NODE, getStringFromDate(note.getDeleted()));
         contentValues.put(DATE_NODE, note.getDate());
 
-        sqLiteDatabase.update(TABLE_NAME_NOTE, contentValues, ID_NOTE + " =? and " + USERNAME_USERS + " =? ", new String[]{String.valueOf(note.getId()), USER_REMEMBER});
+        sqLiteDatabase.update(TABLE_NAME_NOTE, contentValues, COUNTER_NOTE + " =? and " + USERNAME_USERS + " =? ", new String[]{String.valueOf(note.getId()), USER_REMEMBER});
 
-
-        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
-        String date1 = df.format(Calendar.getInstance().getTime());
-
-        ContentValues contentValues2 = new ContentValues();
-        contentValues2.put(ID_STORY, note.getId());
-        contentValues2.put(TITLE_STORY, note.getTitle());
-        contentValues2.put(DESC_STORY, note.getDescription());
-        contentValues2.put(DATE_STORY, note.getDate());
-        contentValues2.put(STORY_STATUS, "Обновлено:");
-        contentValues2.put(DELETED_STORY, date1);
-        contentValues2.put(USERNAME_USERS_STORY, USER_REMEMBER);
-
-        sqLiteDatabase.insert(TABLE_STORY, null, contentValues2);
-
-        if (delet == 1) {
-            ContentValues contentValues3 = new ContentValues();
-            contentValues3.put(ID_STORY, note.getId());
-            contentValues3.put(TITLE_STORY, note.getTitle());
-            contentValues3.put(DESC_STORY, note.getDescription());
-            contentValues3.put(DATE_STORY, note.getDate());
-            contentValues3.put(STORY_STATUS, "Удалено:");
-            contentValues3.put(DELETED_STORY, date1);
-            contentValues3.put(USERNAME_USERS_STORY, USER_REMEMBER);
-
-            sqLiteDatabase.insert(TABLE_STORY, null, contentValues3);
-            delet = 0;
-
-        }
 
 
     }
@@ -387,7 +354,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void deleteNoteInDB() {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(TABLE_NAME_NOTE, USERNAME_USERS + " =? ", new String[]{USER_REMEMBER});
-        sqLiteDatabase.delete(TABLE_STORY, USERNAME_USERS_STORY + " =? ", new String[]{USER_REMEMBER});
     }
 
 
@@ -407,7 +373,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void deleteNoteFromDB(Note note) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(TABLE_NAME_NOTE, ID_NOTE + " =? and " + USERNAME_USERS + " =? ", new String[]{String.valueOf(note.getId()), USER_REMEMBER});
+        sqLiteDatabase.delete(TABLE_NAME_NOTE, COUNTER_NOTE + " =? and " + USERNAME_USERS + " =? ", new String[]{String.valueOf(note.getId()), USER_REMEMBER});
         sqLiteDatabase.close();
     }
 
@@ -421,32 +387,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     //дневник
 
-
-//    public void addRecordToDatabase(Record rec) {
-//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-//
-//
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
-//        String currentTime = timeFormat.format(new Date());
-//
-//
-//
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(ID_RECORD, rec.getId());
-//        contentValues.put(FEELINGS_RECORD, rec.getFeeling());
-//        contentValues.put(EVENTS_RECORD, rec.getEvents());
-//        contentValues.put(DESC_RECORD, rec.getDescription());
-//        contentValues.put(SMILE_RECORD, rec.getSmile());
-//        contentValues.put(DATE_RECORD, rec.getDate());
-//        contentValues.put(TIME_RECORD, currentTime);
-//        contentValues.put(DELETED_RECORD, getStringFromDate(rec.getDeleted()));
-//        contentValues.put(USERNAME_USERS_RECORD, USER_REMEMBER);
-//
-//
-//        sqLiteDatabase.insert(TABLE_NAME_RECORD, null, contentValues);
-//
-//
-//    }
 
     public void addRecordToDatabase(String feel, String ev, String des, String smile, String date) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -1268,7 +1208,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 + " WHERE " + USERNAME_USERS_RECORD + " = ? AND  " + DATE_RECORD + " = ?", new String[]{USER_REMEMBER, date});
         if (cursor.moveToFirst()) {
             do {
-           //     @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(ID_RECORD));
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex(TIME_RECORD));
 
@@ -1352,7 +1291,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," +
-              //  ID_RECORD + "," +
+               ID_RECORD + "," +
                 SMILE_RECORD + ", " + DATE_RECORD + ", "
                 + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
                 + " where " + USERNAME_USERS_RECORD + " =?" + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER, userDate})) {
@@ -1383,7 +1322,7 @@ public ArrayList<Record> populateRecordEventsListArrayForCalendar(String userDat
 
     ArrayList<Record> dataList = new ArrayList<>();
     try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + ","
-         //  + ID_RECORD + ","
+           + ID_RECORD + ","
             + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", " +
               USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " = " + USERNAME
             + " where " + USERNAME_USERS_RECORD + " =? " + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER,userDate })) {

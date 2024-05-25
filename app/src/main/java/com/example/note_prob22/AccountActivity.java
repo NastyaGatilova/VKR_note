@@ -4,7 +4,6 @@ import static com.example.note_prob22.SmilesActivity.smileyEvents;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -17,13 +16,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-
-import com.example.note_prob22.adapters.DiaryAdapter;
-import com.example.note_prob22.adapters.EventsAdapter;
-import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;

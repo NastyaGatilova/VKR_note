@@ -23,10 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class NoteDetailActivity extends HomeActivity
-{
-
-
+public class NoteDetailActivity extends HomeActivity {
 
 
     private DatePickerDialog datePickerDialog;
@@ -39,8 +36,7 @@ public class NoteDetailActivity extends HomeActivity
     SQLiteManager sqDB;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_detail);
         initWidgets();
@@ -49,11 +45,9 @@ public class NoteDetailActivity extends HomeActivity
         sqDB = new SQLiteManager(this);
 
 
-
     }
 
-    private void initWidgets()
-    {
+    private void initWidgets() {
         titleEditText = findViewById(R.id.titleEditText);
         descEditText = findViewById(R.id.descriptionEditText);
         deleteButton = findViewById(R.id.deleteNoteButton);
@@ -61,38 +55,31 @@ public class NoteDetailActivity extends HomeActivity
         dateButton.setText(getTodaysDate());
     }
 
-    private void checkForEditNote()
-    {
+    private void checkForEditNote() {
         Intent previousIntent = getIntent();
 
         int passedNoteID = previousIntent.getIntExtra(Note.NOTE_EDIT_EXTRA, -1);
         selectedNote = Note.getNoteForID(passedNoteID);
 
 
-        if (selectedNote != null)
-        {
+        if (selectedNote != null) {
             titleEditText.setText(selectedNote.getTitle());
             descEditText.setText(selectedNote.getDescription());
             dateButton.setText(selectedNote.getDate());
 
 
-        }
-        else
-        {
+        } else {
 
             deleteButton.setVisibility(View.INVISIBLE);
         }
     }
 
 
-
-    public void saveNote(View view)
-    {
-        if ((titleEditText.getText().toString().trim().length()== 0)  && (descEditText.getText().toString().trim().length() == 0)){
+    public void saveNote(View view) {
+        if ((titleEditText.getText().toString().trim().length() == 0) && (descEditText.getText().toString().trim().length() == 0)) {
             Toast.makeText(getApplicationContext(), "Нельзя сохранить пустую запись!", Toast.LENGTH_SHORT).show();
             finish();
-        }
-        else {
+        } else {
             SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
             String title = String.valueOf(titleEditText.getText());
             String desc = String.valueOf(descEditText.getText());
@@ -100,49 +87,43 @@ public class NoteDetailActivity extends HomeActivity
             String date = String.valueOf(dateButton.getText());
 
 
+            if (selectedNote == null) {
+              //  int id = Note.noteArrayList.size();
+              //  Note newNote = new Note(id, title, desc, date);
+              //  Note.noteArrayList.add(newNote);
+                sqDB.addNoteToDatabase(title, desc, date);
+                noteAdapter.updateNoteAdapter(sqDB.populateNoteList());
 
 
-            if(selectedNote == null)
-            {
-                int id = Note.noteArrayList.size();
-                Note newNote = new Note(id, title, desc, date);
-                Note.noteArrayList.add(newNote);
-                sqLiteManager.addNoteToDatabase(newNote);
-
-
-            }
-            else
-            {
+            } else {
                 selectedNote.setTitle(title);
                 selectedNote.setDescription(desc);
                 selectedNote.setDate(date);
 
-                sqLiteManager.updateNoteInDB(selectedNote);
+                sqDB.updateNoteInDB(selectedNote);
             }
             finish();
         }
     }
 
 
-    public void deleteNote(View view)
-    {
-        int position = Note.getPositionForID(selectedNote.getId());
-        if (position != -1) {
-            selectedNote.setDeleted(new Date());
-            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-            sqLiteManager.deleteNoteFromDB(selectedNote);
-            noteAdapter.removeNote(position);
-            noteAdapter.notifyItemRemoved(position);
-        }
+    public void deleteNote(View view) {
+//        int position = Note.getPositionForID(selectedNote.getId());
+//        if (position != -1) {
+//            selectedNote.setDeleted(new Date());
+//            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+//            sqLiteManager.deleteNoteFromDB(selectedNote);
+//            noteAdapter.removeNote(position);
+//            noteAdapter.notifyItemRemoved(position);
+//        }
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+        sqLiteManager.deleteNoteFromDB(selectedNote);
+        noteAdapter.updateNoteAdapter(sqLiteManager.populateNoteList());
         finish();
     }
 
 
-
-
-
-    private String getTodaysDate()
-    {
+    private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -151,27 +132,23 @@ public class NoteDetailActivity extends HomeActivity
         return makeDateString(day, month, year);
     }
 
-    public void initDatePicker()
-    {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
-        {
+    public void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
-            {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
                 month = month + 1;
 
                 String Mydate = day + "." + month + "." + year;
-;
+                ;
 
 
                 Calendar cal = Calendar.getInstance();
                 int year1 = cal.get(Calendar.YEAR);
                 int month1 = cal.get(Calendar.MONTH);
                 int day1 = cal.get(Calendar.DAY_OF_MONTH);
-                int month2 = month1+1;
-                String tek_data = day1 + "." + month2+ "." +  year1;
-
+                int month2 = month1 + 1;
+                String tek_data = day1 + "." + month2 + "." + year1;
 
 
                 try {
@@ -188,10 +165,10 @@ public class NoteDetailActivity extends HomeActivity
                     if (days <= 0) {
                         String date = makeDateString(day, month, year);
                         dateButton.setText(date);
-                    }else{
+                    } else {
                         String choisedata = makeDateString(day, month, year);
                         Toast toast = Toast.makeText(getApplicationContext(),
-                            "Дату "+ choisedata  +" выбрать нельзя!", Toast.LENGTH_SHORT);
+                                "Дату " + choisedata + " выбрать нельзя!", Toast.LENGTH_SHORT);
                         toast.show();
 
                     }
@@ -203,8 +180,6 @@ public class NoteDetailActivity extends HomeActivity
 
             }
         };
-
-
 
 
         Calendar cal = Calendar.getInstance();
@@ -219,47 +194,43 @@ public class NoteDetailActivity extends HomeActivity
     }
 
 
-//    private String makeDateString(int day, int month, int year)
+    //    private String makeDateString(int day, int month, int year)
 //    {
 //        return  day + " " + getMonthFormat(month) + " " + year;
 //    }
-private String makeDateString(int day, int month, int year)
-{
-    return getFormattedNumber(day) + " " + getMonthFormat(month) + " " + year;
-}
+    private String makeDateString(int day, int month, int year) {
+        return getFormattedNumber(day) + " " + getMonthFormat(month) + " " + year;
+    }
 
     private String getFormattedNumber(int number) {
         return number < 10 ? "0" + number : String.valueOf(number);
     }
 
 
-
-
-    private String getMonthFormat(int month)
-    {
-        if(month == 1)
+    private String getMonthFormat(int month) {
+        if (month == 1)
             return "янв.";
-        if(month == 2)
+        if (month == 2)
             return "фев.";
-        if(month == 3)
+        if (month == 3)
             return "мар.";
-        if(month == 4)
+        if (month == 4)
             return "апр.";
-        if(month == 5)
+        if (month == 5)
             return "мая";
-        if(month == 6)
+        if (month == 6)
             return "июн.";
-        if(month == 7)
+        if (month == 7)
             return "июл.";
-        if(month == 8)
+        if (month == 8)
             return "авг.";
-        if(month == 9)
+        if (month == 9)
             return "сен.";
-        if(month == 10)
+        if (month == 10)
             return "окт.";
-        if(month == 11)
+        if (month == 11)
             return "ноя.";
-        if(month == 12)
+        if (month == 12)
             return "дек.";
 
 
@@ -267,8 +238,7 @@ private String makeDateString(int day, int month, int year)
     }
 
 
-    public void openDatePicker(View view)
-    {
+    public void openDatePicker(View view) {
         datePickerDialog.show();
     }
 

@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.R;
+import com.example.note_prob22.classes.Record;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -155,6 +156,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         notifyItemRemoved(position);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateNoteAdapter(List<Note> list){
+        this.mNotes.clear();
+        this.mNotes.addAll(list);
+        notifyDataSetChanged();
+    }
 //    public void sortItemsByDate() {
 //        Collections.sort(mNotes, new Comparator<Note>() {
 //            @Override

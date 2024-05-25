@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         signup = findViewById(R.id.signup);
         DB = new SQLiteManager(this);
 
+        DB.showUsers();
+
        checkIsUserLoggedIn();
         signup.setOnClickListener(new View.OnClickListener() {
             @Override

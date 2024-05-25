@@ -112,7 +112,7 @@ public class DiaryActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        diaryAdapter.updateAdapter(dbm.populateRecordList());
+
         diaryAdapter.notifyDataSetChanged();
 
 
