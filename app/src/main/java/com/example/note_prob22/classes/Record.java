@@ -8,6 +8,7 @@ public class Record
 
     public static ArrayList<Record> noteDayArrayList = new ArrayList<Record>();
     public static ArrayList<Record> recordArrayListWithForCalendar = new ArrayList<>();
+    public static ArrayList<Record> eventsArrayList = new ArrayList<>();
     public static String NOTE_EDIT_EXTRA =  "recordEdit";
 
     private int id;
@@ -46,6 +47,18 @@ public class Record
 
     }
 
+    public Record(int id, String events, String date)
+    {
+        this.id = id;
+        this.events = events;
+        this.date = date;
+
+
+    }
+
+    public boolean isDeleted() {
+        return deleted != null;
+    }
 
 
 

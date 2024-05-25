@@ -42,7 +42,11 @@ public class GraphYearFragment extends Fragment {
             graphView.setTitle("Cтатистика за год ☀");
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
          //   GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndSmileFromTableRecordForGrafik());
-            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileFromTableRecordForGraphik());
+            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileFromTableRecordForGraphik(),requireContext());
+
+
+
+
 
         }
 

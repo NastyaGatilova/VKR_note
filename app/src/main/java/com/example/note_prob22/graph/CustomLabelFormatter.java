@@ -18,6 +18,7 @@ public class CustomLabelFormatter extends DefaultLabelFormatter {
         this.format = new DecimalFormat("0");
     }
 
+
     @Override
     public String formatLabel(double value, boolean isValueX) {
         if (isValueX) {

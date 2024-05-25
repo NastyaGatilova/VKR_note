@@ -40,7 +40,7 @@ public class GraphWeekFragment extends Fragment {
 
             graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
            // GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get7UniqRecordFromDb());
-            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileForWeek());
+            GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileForWeek(),requireContext());
 
         }
         else{

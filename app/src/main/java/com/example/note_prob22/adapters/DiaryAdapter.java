@@ -20,7 +20,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
     private OnItemClickListener listener;
     private List<Record> mRecords;
 
-    public DiaryAdapter(ArrayList<Record> records, OnItemClickListener listener)
+    public DiaryAdapter(List <Record> records, OnItemClickListener listener)
     {
 
         mRecords = records;
@@ -54,9 +54,15 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
     {
         return mRecords.size();
     }
+
+    public void setMyDataList(List<Record> myDataList) {
+        this.mRecords = myDataList;
+        notifyDataSetChanged();
+    }
     public Record getItem(int position) {
         return mRecords.get(position);
     }
+    @SuppressLint("NotifyDataSetChanged")
     public void removeItem(int position) {
 //        mRecords.remove(position);
 //        notifyItemRemoved(position);
@@ -64,6 +70,29 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.RecordViewHo
         notifyItemRemoved(position);
         notifyDataSetChanged();
     }
+
+    public void updateAdapter(List<Record> list){
+        this.mRecords.clear();
+        this.mRecords.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void deleteItemByPosition(int position){
+        mRecords.remove(position);
+        notifyDataSetChanged();
+    }
+
+
+    public void deleteItem(Record model){
+        mRecords.remove(model);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Record model){
+        mRecords.add(model);
+        notifyDataSetChanged();
+    }
+
 
 
     public static class RecordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener

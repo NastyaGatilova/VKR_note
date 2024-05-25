@@ -97,8 +97,6 @@ public class NoteDetailActivity extends HomeActivity
             String title = String.valueOf(titleEditText.getText());
             String desc = String.valueOf(descEditText.getText());
 
-
-            Log.d("--Help--", "Date111 ="+ descEditText.getText().toString());
             String date = String.valueOf(dateButton.getText());
 
 
@@ -107,7 +105,6 @@ public class NoteDetailActivity extends HomeActivity
             if(selectedNote == null)
             {
                 int id = Note.noteArrayList.size();
-                Log.d("--Help--", "Date ="+ date);
                 Note newNote = new Note(id, title, desc, date);
                 Note.noteArrayList.add(newNote);
                 sqLiteManager.addNoteToDatabase(newNote);

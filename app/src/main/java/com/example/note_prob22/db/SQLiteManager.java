@@ -1,11 +1,19 @@
 package com.example.note_prob22.db;
 
 
+import static com.example.note_prob22.AccountActivity.fridayHappyList;
+import static com.example.note_prob22.AccountActivity.mondayHappyList;
+import static com.example.note_prob22.AccountActivity.saturdayHappyList;
+import static com.example.note_prob22.AccountActivity.sundayHappyList;
+import static com.example.note_prob22.AccountActivity.thursdayHappyList;
+import static com.example.note_prob22.AccountActivity.tuesdayHappyList;
+import static com.example.note_prob22.AccountActivity.wednesdayHappyList;
 import static com.example.note_prob22.NoteDetailActivity.delet;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -20,6 +28,8 @@ import com.example.note_prob22.graph.PairSmileAndDate;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -419,6 +429,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", new Locale("ru"));
         String currentTime = timeFormat.format(new Date());
 
+
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_RECORD, rec.getId());
         contentValues.put(FEELINGS_RECORD, rec.getFeeling());
@@ -463,6 +475,37 @@ public class SQLiteManager extends SQLiteOpenHelper {
             }
         }
     }
+
+    public List<Record> populateRecordList() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<Record> dataList = new ArrayList<>();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD +
+                ", " + DELETED_RECORD + "," + USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " =" + USERNAME
+                + " where " + USERNAME_USERS_RECORD + " =?", new String[]{USER_REMEMBER})) {
+
+            if (result.getCount() != 0) {
+                while (result.moveToNext()) {
+                    int id = result.getInt(1);
+                    String feelings = result.getString(2);
+                    String events = result.getString(3);
+                    String desc = result.getString(4);
+                    String smile = result.getString(5);
+                    String date = result.getString(6);
+                    String stringDeleted = result.getString(7);
+                    Date deleted = getDateFromString(stringDeleted);
+
+                    Record rec = new Record(id, feelings, events, desc, smile, date);
+                    // Log.d("--Help--", "From db = "+ id + " "+ ""+smile  + " "+date);
+                    dataList.add(rec);
+                }
+
+            }
+        }
+        sqLiteDatabase.close();
+        return dataList;
+    }
+
 
 
     public void recordFromDB() {
@@ -593,7 +636,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 @SuppressLint("Range") String smile = cursor.getString(cursor.getColumnIndex(SMILE_RECORD));
                 @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(DATE_RECORD));
 
-                Log.d("--Help--", "СМайлики с датами "+ " id =" + id + " smile=" + smile + " date= " + date);
+              //  Log.d("--Help--", "СМайлики с датами "+ " id =" + id + " smile=" + smile + " date= " + date);
 
 
 
@@ -673,7 +716,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0);
             }
 
-            Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
+           // Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
             pairList.add(new PairSmileAndDate(date, average));
         }
 
@@ -804,7 +847,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0);
             }
 
-            Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
+            //  Log.d("--Help--", "Среднее = Date: " + date + ", Average: " + average);
             pairList.add(new PairSmileAndDate(date, average));
         }
 
@@ -1299,7 +1342,40 @@ public class SQLiteManager extends SQLiteOpenHelper {
         }
     }
 
+//вывод в графике событий соответвующей точке
+public ArrayList<Record> populateRecordEventsListArrayForCalendar(String userDate) {
 
+
+    SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+    ArrayList<Record> dataList = new ArrayList<>();
+    try (Cursor result = sqLiteDatabase.rawQuery("SELECT " + COUNTER_RECORD + "," + ID_RECORD + "," + FEELINGS_RECORD + ", " + EVENTS_RECORD + " , " + DESC_RECORD + ", " + SMILE_RECORD + ", " + DATE_RECORD + ", " +
+              USERNAME_USERS_RECORD + " FROM " + TABLE_NAME_RECORD + " inner join " + USERS + " on " + USERNAME_USERS_RECORD + " = " + USERNAME
+            + " where " + USERNAME_USERS_RECORD + " =? " + " and " + DATE_RECORD + " =?", new String[]{USER_REMEMBER,userDate })) {
+
+        if (result.getCount() != 0) {
+            while (result.moveToNext()) {
+                int id = result.getInt(1);
+                String feelings = result.getString(2);
+                String events = result.getString(3);
+                String desc = result.getString(4);
+                String smile = result.getString(5);
+                String date = result.getString(6);
+
+
+
+                Record rec = new Record(id, feelings, events, desc, smile, date);
+                Log.d("--Help--", "Точка = userDate ="+ userDate + id + " "+ ""+smile  + " "+date);
+                dataList.add(rec);
+            }
+
+        }
+    }
+
+
+
+    return dataList;
+}
 
 
     public void deleteLastRecord() {

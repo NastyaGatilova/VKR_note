@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:text="@string/tasks"
             android:textColor="@color/white"
-            android:textSize="19sp"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
         <Button

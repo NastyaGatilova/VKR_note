@@ -4,6 +4,7 @@ import static com.example.note_prob22.SmilesActivity.smileyEvents;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -20,27 +21,59 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.note_prob22.adapters.DiaryAdapter;
+import com.example.note_prob22.adapters.EventsAdapter;
+import com.example.note_prob22.classes.Record;
 import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
 import com.example.note_prob22.graph.HourGraphViewHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 
+import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class AccountActivity extends AppCompatActivity {
+    public static ArrayList<String> mondayHappyList = new ArrayList<>();
+    public static ArrayList<String> tuesdayHappyList = new ArrayList<>();
+    public static ArrayList<String> wednesdayHappyList = new ArrayList<>();
+    public static ArrayList<String> thursdayHappyList = new ArrayList<>();
+    public static ArrayList<String> fridayHappyList = new ArrayList<>();
+    public static ArrayList<String> saturdayHappyList = new ArrayList<>();
+    public static ArrayList<String> sundayHappyList = new ArrayList<>();
     SQLiteManager sqLiteManager;
     SQLiteDatabase db;
     Cursor cursor;
 
     TextView happyHour;
     SharedPreferences sharedPreferences;
+
+    private String averageHappyTimeInDay = "";
+
+    private String averageHappyTimeMonday = "";
+    private String averageHappyTimeTuesday = "";
+    private String averageHappyTimeWednesday = "";
+    private String averageHappyTimeThursday = "";
+    private String averageHappyTimeFriday= "";
+    private String averageHappyTimeSaturday= "";
+    private String averageHappyTimeSunday = "";
+
+
+
+
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     @SuppressLint("MissingInflatedId")
@@ -68,6 +101,9 @@ public class AccountActivity extends AppCompatActivity {
 
         GraphViewPagerAdapter graphViewPagerAdapter = new GraphViewPagerAdapter(this);
         viewPager2.setAdapter(graphViewPagerAdapter);
+
+
+
 
        // viewPager2.setUserInputEnabled(false);
 
@@ -105,8 +141,173 @@ public class AccountActivity extends AppCompatActivity {
         });
 
 
+        LocalDate today = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            today = LocalDate.now();
+            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            int dayOfWeekNumber = dayOfWeek.getValue();
+            //searchAverageHappytimeDay(dayOfWeekNumber);
+        }
+
+
     }
 
+
+
+    private void searchAverageHappytimeDay(int day){
+        SharedPreferences sharedPreferences = getSharedPreferences("Note", Context.MODE_PRIVATE);
+
+        switch (day){
+            case 1:{
+                String jsonRecords = sharedPreferences.getString("mondayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                    setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "mondayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 2:{
+                String jsonRecords = sharedPreferences.getString("tuesdayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                  setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "tuesdayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 3:{
+                String jsonRecords = sharedPreferences.getString("wednesdayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                    setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "wednesdayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 4:{
+                String jsonRecords = sharedPreferences.getString("thursdayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                 setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "thursdayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 5:{
+                String jsonRecords = sharedPreferences.getString("fridayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                    setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "fridayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 6:{
+                String jsonRecords = sharedPreferences.getString("saturdayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                     setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "saturdayHappyList список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            case 7:{
+                String jsonRecords = sharedPreferences.getString("sundayHappyList", null);
+                if (jsonRecords != null) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
+
+                    setAverageTime(sunday);
+//                    for (int i = 0; i < sunday.size(); i++) {
+//                        Log.d("--Help--", "Воскресенье список = " + i + " " +sunday.get(i));
+//                    }
+                } else {
+                    Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+                break;
+            }
+            default: Log.d("--Help--", "Ошибка"  );
+        }
+
+
+
+    }
+
+    private long calculateAverageTime(ArrayList<String> list) {
+        long[] timeArray = convertTimeListToLongArray(list);
+        long sum = 0;
+        for (int i = 0; i < timeArray.length; i++) {
+            sum += timeArray[i];
+        }
+        return sum / timeArray.length;
+    }
+
+    private String setAverageTime(ArrayList<String> list) {
+        long averageTimeInMillis = calculateAverageTime(list);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+        Date date = new Date(averageTimeInMillis);
+        averageHappyTimeInDay = dateFormat.format(date);
+        Log.d("--Help--", "Cр время = "+averageHappyTimeInDay );
+        return averageHappyTimeInDay;
+    }
+
+    private long[] convertTimeListToLongArray(ArrayList<String> listDay) {
+        long[] timeArray = new long[listDay.size()];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+        for (int i = 0; i < listDay.size(); i++) {
+            try {
+                Date date = dateFormat.parse(listDay.get(i));
+                timeArray[i] = date.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return timeArray;
+    }
 
 
 //    public void click_del_users(View view) {

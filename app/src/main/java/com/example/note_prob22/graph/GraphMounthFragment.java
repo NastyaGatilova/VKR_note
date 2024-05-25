@@ -37,7 +37,7 @@ public class GraphMounthFragment extends Fragment {
            graphView.setTitle("Статистика за месяц \uD83C\uDF24");
            graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(requireContext()));
          //  GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.get30UniqRecordFromDb());
-           GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileForMounth());
+           GraphViewHelper.fillGraphViewWithData(graphView, sqLiteManager.getDateAndAverageSmileForMounth(), requireContext());
 
        }else {
            graphView.setVisibility(View.GONE);
