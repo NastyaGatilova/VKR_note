@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.note_prob22.classes.Note;
 import com.example.note_prob22.classes.SmileyEvent;
 import com.example.note_prob22.db.SQLiteManager;
 import com.example.note_prob22.graph.GraphViewPagerAdapter;
@@ -140,7 +141,7 @@ public class AccountActivity extends AppCompatActivity {
             today = LocalDate.now();
             DayOfWeek dayOfWeek = today.getDayOfWeek();
             int dayOfWeekNumber = dayOfWeek.getValue();
-            //searchAverageHappytimeDay(dayOfWeekNumber);
+            searchAverageHappytimeDay(dayOfWeekNumber);
         }
 
 
@@ -159,7 +160,11 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    setAverageTime(sunday);
+                    averageHappyTimeMonday = setAverageTime(sunday);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeMonday", averageHappyTimeMonday);
+                    editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "mondayHappyList список = " + i + " " +sunday.get(i));
 //                    }
@@ -175,7 +180,10 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                  setAverageTime(sunday);
+                    averageHappyTimeTuesday = setAverageTime(sunday);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeTuesday", averageHappyTimeTuesday);
+                    editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "tuesdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
@@ -191,7 +199,11 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    setAverageTime(sunday);
+                    averageHappyTimeWednesday = setAverageTime(sunday);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeWednesday", averageHappyTimeWednesday);
+                    editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "wednesdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
@@ -207,7 +219,11 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                 setAverageTime(sunday);
+                    averageHappyTimeThursday = setAverageTime(sunday);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeThursday", averageHappyTimeThursday);
+                    editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "thursdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
@@ -223,7 +239,11 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    setAverageTime(sunday);
+                    averageHappyTimeFriday = setAverageTime(sunday);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeFriday", averageHappyTimeFriday);
+                    editor.apply();
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "fridayHappyList список = " + i + " " +sunday.get(i));
 //                    }
@@ -239,13 +259,53 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                     setAverageTime(sunday);
+                    averageHappyTimeSaturday= setAverageTime(sunday);
 //                    for (int i = 0; i < sunday.size(); i++) {
 //                        Log.d("--Help--", "saturdayHappyList список = " + i + " " +sunday.get(i));
 //                    }
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeSaturday", averageHappyTimeSaturday);
+                    editor.apply();
+                    Log.w("--Help--", "averageHappyTimeSaturday  = " + averageHappyTimeSaturday);
                 } else {
                     Log.d("--Help--", "Ошибка Проверки списка  " + day  );
                 }
+                //убрать
+                String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
+                String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
+                String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
+                String th = sharedPreferences.getString("averageHappyTimeThursday", null);
+                String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
+                String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
+                String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
+                ArrayList<String> happylist = new ArrayList<>();
+                if (mon != null) happylist.add(mon);
+                if (tue != null) happylist.add(tue);
+                if (wen != null) happylist.add(wen);
+                if (th != null) happylist.add(th);
+                if (fr != null) happylist.add(fr);
+                if (sat != null) happylist.add(sat);
+                if (sun != null) happylist.add(sun);
+
+                String happy = setAverageTime(happylist);
+                Log.w("--Help--", "HappyHour=" +happy);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+                try {
+                    Date date = dateFormat.parse(happy);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
+                    int minute = calendar.get(Calendar.MINUTE);
+
+                    happyHour.setText("Ваш счастливый час - "+ hour +":" + minute);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+
                 break;
             }
             case 7:{
@@ -255,12 +315,46 @@ public class AccountActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> sunday = gson.fromJson(jsonRecords, listType);
 
-                    setAverageTime(sunday);
-//                    for (int i = 0; i < sunday.size(); i++) {
-//                        Log.d("--Help--", "Воскресенье список = " + i + " " +sunday.get(i));
-//                    }
+                    averageHappyTimeSunday = setAverageTime(sunday);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("averageHappyTimeSunday", averageHappyTimeSunday);
+                    editor.apply();
+
                 } else {
                     Log.d("--Help--", "Ошибка Проверки списка  " + day  );
+                }
+
+                String mon = sharedPreferences.getString("averageHappyTimeMonday", null);
+                String tue = sharedPreferences.getString("averageHappyTimeTuesday", null);
+                String wen = sharedPreferences.getString("averageHappyTimeWednesday", null);
+                String th = sharedPreferences.getString("averageHappyTimeThursday", null);
+                String fr = sharedPreferences.getString("averageHappyTimeFriday", null);
+                String sat = sharedPreferences.getString("averageHappyTimeSaturday", null);
+                String sun = sharedPreferences.getString("averageHappyTimeSunday", null);
+                ArrayList<String> happylist = new ArrayList<>();
+                if (mon != null) happylist.add(mon);
+                if (tue != null) happylist.add(tue);
+                if (wen != null) happylist.add(wen);
+                if (th != null) happylist.add(th);
+                if (fr != null) happylist.add(fr);
+                if (sat != null) happylist.add(sat);
+                if (sun != null) happylist.add(sun);
+
+                String happy = setAverageTime(happylist);
+                Log.w("--Help--", "HappyHour=" +happy);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+                try {
+                    Date date = dateFormat.parse(happy);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY); // 24-часовой формат
+                    int minute = calendar.get(Calendar.MINUTE);
+
+                    happyHour.setText("Ваш счастливый час - "+ hour +":" + minute);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
                 break;
             }
@@ -285,7 +379,7 @@ public class AccountActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
         Date date = new Date(averageTimeInMillis);
         averageHappyTimeInDay = dateFormat.format(date);
-        Log.d("--Help--", "Cр время = "+averageHappyTimeInDay );
+        Log.w("--Help--", "Cр время = "+averageHappyTimeInDay );
         return averageHappyTimeInDay;
     }
 
@@ -304,35 +398,6 @@ public class AccountActivity extends AppCompatActivity {
     }
 
 
-//    public void click_del_users(View view) {
-//
-//        androidx.appcompat.app.AlertDialog.Builder a_builder = new androidx.appcompat.app.AlertDialog.Builder(AccountActivity.this);
-//        a_builder.setMessage("Вы хотите удалить свой аккаунт?")
-//                .setCancelable(false)
-//                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        db.delete(SQLiteManager.USERS, SQLiteManager.USERNAME + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
-//                        db.delete(SQLiteManager.TABLE_NAME_NOTE, SQLiteManager.USERNAME_USERS + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
-//                        db.delete(SQLiteManager.TABLE_STORY, SQLiteManager.USERNAME_USERS_STORY + " =? ", new String[]{SQLiteManager.USER_REMEMBER});
-//                        Intent intent = new Intent(AccountActivity.this, MainActivity.class);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        startActivity(intent);
-//
-//                    }
-//                })
-//                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//        androidx.appcompat.app.AlertDialog alert = a_builder.create();
-//        alert.setTitle("\uD83D\uDE22⛔");
-//        alert.show();
-//
-//
-//    }
 
 
     public void click_del_users(View view) {
