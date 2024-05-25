@@ -120,7 +120,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(COUNTER_NOTE)
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_NOTE)
-                .append(" INT AUTOINCREMENT, ")
+                .append(" INT, ")
                 .append(TITLE_NODE)
                 .append(" TEXT, ")
                 .append(DESC_NODE)
